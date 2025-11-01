@@ -65,7 +65,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
                 <PopoverTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="border-0 bg-transparent text-base focus:ring-0 px-3 justify-start font-normal hover:bg-transparent"
+                    className="border-0 bg-transparent text-base focus:ring-0 px-3 justify-start font-normal hover:bg-transparent hover:text-muted-foreground"
                   >
                     {filters.month ? `${filters.month} ${filters.year}` : "When?"}
                   </Button>

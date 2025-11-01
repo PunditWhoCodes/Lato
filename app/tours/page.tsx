@@ -6,7 +6,6 @@ import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -27,25 +26,28 @@ import {
   Grid3X3,
   List,
   Building2,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  ArrowRight,
   ChevronDown,
   Check,
-  Globe,
+  Calendar,
 } from "lucide-react"
 import Link from "next/link"
 import { ChatButton } from "@/components/chat-button"
+import { SearchBar } from "@/components/home/search-bar"
 import { tours } from "@/lib/data"
-import type { Tour } from "@/types"
+import type { Tour, SearchFilters } from "@/types"
 
 const mockTours: Tour[] = tours
 
 export default function ToursPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    destination: "",
+    month: "",
+    year: new Date().getFullYear(),
+    duration: "",
+    travelStyle: "",
+  })
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [selectedDestination, setSelectedDestination] = useState("all")
   const [selectedTravelStyle, setSelectedTravelStyle] = useState("all")
@@ -56,9 +58,6 @@ export default function ToursPage() {
   const [selectedTourTypes, setSelectedTourTypes] = useState<string[]>([])
   const [viewMode, setViewMode] = useState<"grid" | "list">("list")
   const [showFilters, setShowFilters] = useState(false)
-  const [selectedMonth, setSelectedMonth] = useState("")
-  const [selectedYear, setSelectedYear] = useState(2025)
-  const [showMonthSelector, setShowMonthSelector] = useState(false)
   const [chatResponses, setChatResponses] = useState<Record<string, string>>({})
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [priceRange, setPriceRange] = useState([0, 50000])
@@ -122,6 +121,11 @@ export default function ToursPage() {
       setSelectedTravelStyle(travelStyle)
     }
   }, [searchParams])
+
+  const handleSearch = (filters: SearchFilters) => {
+    setSearchFilters(filters)
+    // You can add additional search logic here if needed
+  }
 
   // Mock user - in real app this would come from auth context
   const user = undefined
@@ -226,9 +230,10 @@ export default function ToursPage() {
 
   const filteredTours = mockTours.filter((tour) => {
     const matchesSearch =
-      tour.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tour.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tour.company.toLowerCase().includes(searchQuery.toLowerCase())
+      !searchFilters.destination ||
+      tour.title.toLowerCase().includes(searchFilters.destination.toLowerCase()) ||
+      tour.location.toLowerCase().includes(searchFilters.destination.toLowerCase()) ||
+      tour.company.toLowerCase().includes(searchFilters.destination.toLowerCase())
 
     const matchesCategory = selectedCategory === "all" || tour.category === selectedCategory
     const matchesDestination = selectedDestinations.length === 0 || selectedDestinations.includes(tour.destination)
@@ -238,6 +243,27 @@ export default function ToursPage() {
     const matchesPrice = tour.price >= priceRange[0] && tour.price <= priceRange[1]
     const matchesOperatorCountry =
       selectedOperatorCountries.length === 0 || selectedOperatorCountries.includes(tour.companyCountry)
+
+    // Match duration from SearchBar filters
+    const matchesSearchBarDuration =
+      !searchFilters.duration ||
+      searchFilters.duration === "all" ||
+      (() => {
+        const tourDays = Number.parseInt(tour.duration)
+        switch (searchFilters.duration) {
+          case "2-3-days":
+            return tourDays >= 2 && tourDays <= 3
+          case "4-7-days":
+            return tourDays >= 4 && tourDays <= 7
+          case "1-2-weeks":
+            return tourDays >= 8 && tourDays <= 14
+          case "2-weeks-plus":
+            return tourDays > 14
+          default:
+            return true
+        }
+      })()
+
     const matchesDuration =
       selectedDuration.length === 0 ||
       selectedDuration.some((duration) => {
@@ -265,6 +291,7 @@ export default function ToursPage() {
       matchesTravelStyle &&
       matchesOperator &&
       matchesPrice &&
+      matchesSearchBarDuration &&
       matchesDuration &&
       matchesOperatorCountry &&
       matchesGroupSize &&
@@ -495,136 +522,8 @@ export default function ToursPage() {
             </p>
           </div>
 
-          {/* Multi-field Search Bar */}
-          <div className="max-w-4xl mx-auto">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-linear-to-r from-primary to-secondary rounded-3xl md:rounded-full opacity-20 blur-xl group-hover:opacity-30 transition-opacity"></div>
-              <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl md:rounded-full p-2 shadow-2xl border border-white/20">
-                <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
-                  {/* Destination Field */}
-                  <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-                    <MapPin className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-                    <Input
-                      placeholder="Where to?"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="border-0 bg-transparent text-base placeholder:text-muted-foreground/70 focus-visible:ring-0 px-3 py-2 md:py-1"
-                    />
-                  </div>
-
-                  {/* Separator */}
-                  <div className="hidden md:block w-px h-8 bg-border"></div>
-
-                  {/* Date Field */}
-                  <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-                    <Calendar className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="border-0 bg-transparent text-base focus:ring-0 px-3 justify-start font-normal text-muted-foreground/70 hover:bg-transparent"
-                        >
-                          When?
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-80 p-0" align="start">
-                        <div className="p-6">
-                          {/* Year Header with Navigation */}
-                          <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-2xl font-bold text-foreground">{selectedYear}</h3>
-                            <div className="flex items-center gap-2">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 w-8 p-0"
-                                onClick={() => setSelectedYear(selectedYear - 1)}
-                              >
-                                <ChevronLeft className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 w-8 p-0"
-                                onClick={() => setSelectedYear(selectedYear + 1)}
-                              >
-                                <ChevronRight className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-
-                          {/* Month Grid */}
-                          <div className="grid grid-cols-3 gap-3">
-                            {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map(
-                              (month, index) => (
-                                <Button
-                                  key={month}
-                                  variant={month === selectedMonth ? "default" : "outline"}
-                                  className={`h-12 text-sm font-medium ${month === selectedMonth
-                                    ? "bg-foreground text-background hover:bg-foreground/90"
-                                    : "bg-muted/30 text-muted-foreground hover:bg-muted/50 border-muted"
-                                    }`}
-                                  onClick={() => setSelectedMonth(month)}
-                                >
-                                  {month}
-                                </Button>
-                              ),
-                            )}
-                          </div>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-
-                  {/* Separator */}
-                  <div className="hidden md:block w-px h-8 bg-border"></div>
-
-                  <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-                    <Clock className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-                    <Select>
-                      <SelectTrigger className="border-0 bg-transparent text-base focus:ring-0 px-3 py-2 md:py-1">
-                        <SelectValue placeholder="Duration" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">Any duration</SelectItem>
-                        <SelectItem value="2-3-days">2-3 days</SelectItem>
-                        <SelectItem value="4-7-days">4-7 days</SelectItem>
-                        <SelectItem value="1-2-weeks">1-2 weeks</SelectItem>
-                        <SelectItem value="2-weeks-plus">2+ weeks</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Separator */}
-                  <div className="hidden md:block w-px h-8 bg-border"></div>
-
-                  {/* Travel Style Field */}
-                  <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-                    <Globe className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-                    <Select value={selectedTravelStyle} onValueChange={setSelectedTravelStyle}>
-                      <SelectTrigger className="border-0 bg-transparent text-base focus:ring-0 px-3 py-2 md:py-1">
-                        <SelectValue placeholder="All adventures" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All adventures</SelectItem>
-                        <SelectItem value="Adventure">Adventure</SelectItem>
-                        <SelectItem value="Cultural">Cultural</SelectItem>
-                        <SelectItem value="Family">Family</SelectItem>
-                        <SelectItem value="Nature">Nature</SelectItem>
-                        <SelectItem value="Relaxation">Relaxation</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Search Button */}
-                  <Button className="rounded-full px-6 sm:px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300 md:ml-2 w-full md:w-auto">
-                    Search
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Search Bar Component */}
+          <SearchBar onSearch={handleSearch} />
         </div>
       </section>
 
