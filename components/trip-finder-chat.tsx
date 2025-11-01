@@ -245,23 +245,21 @@ export function TripFinderChat() {
               {chatHistory.map((message, index) => (
                 <div key={index} className={`flex gap-3 ${message.type === "user" ? "justify-end" : ""}`}>
                   {message.type === "bot" && (
-                    <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center shrink-0 mt-1">
                       <div className="w-1 h-1 bg-primary rounded-full"></div>
                       <div className="w-1 h-1 bg-primary rounded-full ml-0.5"></div>
                     </div>
                   )}
                   <div
-                    className={`rounded-2xl p-3 shadow-sm max-w-[85%] ${
-                      message.type === "bot" ? "bg-white rounded-tl-md" : "bg-primary text-white rounded-tr-md"
-                    }`}
+                    className={`rounded-2xl p-3 shadow-sm max-w-[85%] ${message.type === "bot" ? "bg-white rounded-tl-md" : "bg-primary text-white rounded-tr-md"
+                      }`}
                   >
                     <p className={`text-sm leading-relaxed ${message.type === "bot" ? "text-gray-800" : "text-white"}`}>
                       {message.content}
                     </p>
                     <p
-                      className={`text-xs mt-1.5 ${
-                        message.type === "bot" ? "text-gray-500" : "text-primary-foreground/70"
-                      }`}
+                      className={`text-xs mt-1.5 ${message.type === "bot" ? "text-gray-500" : "text-primary-foreground/70"
+                        }`}
                     >
                       {message.timestamp}
                     </p>
@@ -342,9 +340,8 @@ export function TripFinderChat() {
                   {chatQuestions.map((_, index) => (
                     <div
                       key={index}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index <= currentStep ? "bg-primary" : "bg-gray-200"
-                      }`}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${index <= currentStep ? "bg-primary" : "bg-gray-200"
+                        }`}
                     />
                   ))}
                 </div>
