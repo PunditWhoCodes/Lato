@@ -2,8 +2,8 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Montserrat, Open_Sans } from "next/font/google"
 import "./globals.css"
-import { Footer } from "@/components/footer"
-import { TripFinderChat } from "@/components/trip-finder-chat"
+import { ConditionalFooter } from "@/components/conditional-footer"
+import { ConditionalChat } from "@/components/conditional-chat"
 import { Providers } from "@/components/providers"
 
 const montserrat = Montserrat({
@@ -36,8 +36,8 @@ export default function RootLayout({
       <body className="font-sans flex flex-col min-h-screen">
         <Providers>
           {children}
-          <Footer />
-          <TripFinderChat />
+          <ConditionalFooter />
+          <ConditionalChat />
         </Providers>
       </body>
     </html>
