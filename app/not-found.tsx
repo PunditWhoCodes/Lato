@@ -78,10 +78,10 @@ export default function NotFound() {
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8 sm:mb-10">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full opacity-20 blur-lg group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-primary to-secondary rounded-full opacity-20 blur-lg group-hover:opacity-30 transition-opacity"></div>
                 <div className="relative bg-white rounded-full shadow-xl border border-white/20 p-2">
                   <div className="flex items-center gap-2">
-                    <Search className="ml-3 sm:ml-4 text-muted-foreground h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                    <Search className="ml-3 sm:ml-4 text-muted-foreground h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
                     <Input
                       type="text"
                       placeholder="Search for tours, destinations..."
@@ -161,7 +161,7 @@ export default function NotFound() {
                   <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border-0 shadow-lg bg-linear-to-br from-white to-primary/5">
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex items-center gap-3 sm:gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 group-hover:scale-110 transition-all">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/20 group-hover:scale-110 transition-all">
                           <link.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
