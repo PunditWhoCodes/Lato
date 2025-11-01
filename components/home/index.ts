@@ -1,0 +1,10 @@
+// Home page components
+export { HeroSection } from "./hero-section"
+export { SearchBar } from "./search-bar"
+export { StatsSection } from "./stats-section"
+export { FeaturedTours } from "./featured-tours"
+export { TourCard } from "./tour-card"
+export { HowItWorks } from "./how-it-works"
+export { ReviewsSection } from "./reviews-section"
+export { ReviewCard } from "./review-card"
+export { CTASection } from "./cta-section"
