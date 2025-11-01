@@ -42,7 +42,7 @@ const REVIEWS = [
 
 export function ReviewsSection() {
   return (
-    <section className="py-8 sm:py-10 md:py-12 px-4 bg-white/50 backdrop-blur-sm">
+    <section className="py-8 sm:py-10 md:py-12 px-4 bg-background/50 dark:bg-background/30 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
@@ -67,19 +67,19 @@ export function ReviewsSection() {
               <img
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=faces"
                 alt="Reviewer"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white object-cover"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-background object-cover"
               />
               <img
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces"
                 alt="Reviewer"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white object-cover"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-background object-cover"
               />
               <img
                 src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=faces"
                 alt="Reviewer"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white object-cover"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-background object-cover"
               />
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white bg-primary flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-background bg-primary flex items-center justify-center text-white text-xs font-bold">
                 +2K
               </div>
             </div>

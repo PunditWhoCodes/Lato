@@ -17,7 +17,7 @@ interface ReviewCardProps {
 
 export function ReviewCard({ review }: ReviewCardProps) {
   return (
-    <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border-0 shadow-lg bg-white/90 backdrop-blur-sm overflow-hidden">
+    <Card className="group hover:shadow-2xl dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-1 border-0 shadow-lg bg-card/90 dark:bg-card/95 backdrop-blur-sm overflow-hidden">
       <CardContent className="p-5">
         {/* Tour Image */}
         <div className="relative h-48 overflow-hidden rounded-lg mb-4">

@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
 import { Logo } from "@/components/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { destinations, travelStyles } from "@/lib/data"
 
 export function Navigation() {
@@ -40,7 +41,7 @@ export function Navigation() {
   // Using imported destinations data from lib/data
 
   return (
-    <nav className="border-b bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/60 sticky top-0 z-50">
+    <nav className="border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -70,7 +71,7 @@ export function Navigation() {
                     <div className="w-[900px] p-0">
                       <div className="flex">
                         {/* Left Panel - Continents */}
-                        <div className="w-52 bg-linear-to-b from-slate-50 to-slate-100/50 rounded-l-lg p-3 space-y-2">
+                        <div className="w-52 bg-gradient-to-b from-muted/50 to-muted/30 dark:from-muted/30 dark:to-muted/20 rounded-l-lg p-3 space-y-2">
                           {destinations.map((continent, index) => (
                             <div
                               key={continent.name}
@@ -79,8 +80,8 @@ export function Navigation() {
                                 "hover:shadow-md hover:scale-[1.02] transform",
                                 hoveredContinent === continent.name ||
                                   (!hoveredContinent && continent.name === "Africa")
-                                  ? "bg-white shadow-lg border border-primary/20 text-primary scale-[1.02]"
-                                  : "bg-white/60 hover:bg-white border border-transparent hover:border-primary/10",
+                                  ? "bg-background shadow-lg border border-primary/20 text-primary scale-[1.02]"
+                                  : "bg-background/60 hover:bg-background border border-transparent hover:border-primary/10",
                               )}
                               onMouseEnter={() => setHoveredContinent(continent.name)}
                             >
@@ -121,7 +122,7 @@ export function Navigation() {
                                     <NavigationMenuLink key={region} asChild>
                                       <Link
                                         href={`/tours?destination=${encodeURIComponent(region)}`}
-                                        className="text-sm text-muted-foreground hover:text-primary transition-colors py-2 px-3 rounded hover:bg-muted/50 block"
+                                        className="text-sm text-muted-foreground hover:text-primary transition-colors py-2 px-3 rounded hover:bg-accent/50 block"
                                       >
                                         {region}
                                       </Link>
@@ -152,7 +153,7 @@ export function Navigation() {
                                 <NavigationMenuLink key={type} asChild>
                                   <Link
                                     href={`/tours?style=${encodeURIComponent(type)}`}
-                                    className="text-sm text-muted-foreground hover:text-primary transition-colors py-2 px-2 rounded hover:bg-muted"
+                                    className="text-sm text-muted-foreground hover:text-primary transition-colors py-2 px-2 rounded hover:bg-accent/50"
                                   >
                                     {type}
                                   </Link>
@@ -199,7 +200,8 @@ export function Navigation() {
           </div>
 
           {/* Auth Section */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-2">
+            <ThemeToggle />
             {user ? (
               <>
                 <Button variant="ghost" size="sm" asChild className="relative">
@@ -279,7 +281,7 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t bg-white max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <div className="md:hidden border-t bg-background max-h-[calc(100vh-4rem)] overflow-y-auto transition-colors">
           <div className="px-4 py-4 space-y-2">
             <Link
               href="/tours"
@@ -377,9 +379,17 @@ export function Navigation() {
               Tour Companies
             </Link>
 
+            {/* Theme Toggle for Mobile */}
+            <div className="border-t pt-3 mt-3">
+              <div className="flex items-center justify-between py-2">
+                <span className="text-base font-medium text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
+            </div>
+
             {user ? (
               <>
-                <div className="border-t pt-3 mt-3 space-y-3">
+                <div className="border-t pt-3 space-y-3">
                   <Link
                     href="/messages"
                     className="flex items-center py-2 text-base font-medium text-muted-foreground hover:text-primary transition-colors"

@@ -24,7 +24,7 @@ export function TourCard({ tour }: TourCardProps) {
   }
 
   return (
-    <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border-0 shadow-lg bg-white/80 backdrop-blur-sm overflow-hidden">
+    <Card className="group hover:shadow-2xl dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 cursor-pointer border-0 shadow-lg bg-card/80 dark:bg-card/95 backdrop-blur-sm overflow-hidden">
       <Link href={`/tours/${tour.id}`}>
         <div className="relative overflow-hidden">
           <img
@@ -35,7 +35,7 @@ export function TourCard({ tour }: TourCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div className="absolute top-4 left-4 flex flex-wrap gap-2">
             {tour.badges.map((badge, badgeIndex) => (
-              <Badge key={badgeIndex} className="bg-white/90 text-foreground backdrop-blur-sm">
+              <Badge key={badgeIndex} className="bg-background/90 dark:bg-background/95 text-foreground backdrop-blur-sm">
                 {badge}
               </Badge>
             ))}

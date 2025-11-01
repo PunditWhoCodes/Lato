@@ -341,7 +341,7 @@ export default function ToursPage() {
         </div>
         {isVisible && (
           <div
-            className="fixed z-50 w-96 bg-white rounded-xl shadow-2xl border border-gray-100 p-6 pointer-events-none"
+            className="fixed z-50 w-96 bg-card dark:bg-card/98 rounded-xl shadow-2xl dark:shadow-primary/20 border border-border p-6 pointer-events-none"
             style={{
               left: position.x - 192, // Center the card (384px / 2 = 192px)
               top: position.y,
@@ -353,21 +353,21 @@ export default function ToursPage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   {/* Company logo placeholder */}
-                  <div className="w-12 h-12 bg-linear-to-br from-primary to-secondary rounded-full flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 bg-linear-to-br from-primary to-secondary dark:from-primary/80 dark:to-secondary/80 rounded-full flex items-center justify-center shrink-0">
                     <Building2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <h3 className="font-heading font-bold text-lg text-foreground">{tour.company}</h3>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+                <div className="flex items-center gap-1 bg-muted px-2 py-1 rounded-md">
                   <span className="text-lg">{tour.companyFlag}</span>
-                  <span className="text-sm font-medium text-gray-600">{tour.companyCountry}</span>
+                  <span className="text-sm font-medium text-muted-foreground">{tour.companyCountry}</span>
                 </div>
               </div>
 
               {/* Location */}
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4" />
                 <span className="text-sm">{tour.location}</span>
               </div>
@@ -383,7 +383,7 @@ export default function ToursPage() {
               </div>
 
               {/* Description */}
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Traditional {tour.companyCountry.toLowerCase()} cooking experts sharing authentic recipes and market
                 secrets.
               </p>
@@ -393,19 +393,19 @@ export default function ToursPage() {
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                   <span className="font-semibold text-sm">{tour.rating}</span>
-                  <span className="text-xs text-gray-500">({tour.reviews})</span>
+                  <span className="text-xs text-muted-foreground">({tour.reviews})</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">6 years</span>
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">6 years</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">10 tours</span>
+                  <Users className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">10 tours</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 flex items-center justify-center">
-                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z"
@@ -413,7 +413,7 @@ export default function ToursPage() {
                       />
                     </svg>
                   </div>
-                  <span className="text-sm text-gray-600">3 languages</span>
+                  <span className="text-sm text-muted-foreground">3 languages</span>
                 </div>
               </div>
 
@@ -425,7 +425,7 @@ export default function ToursPage() {
                 >
                   View Profile
                 </Link>
-                <button className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2.5 px-4 rounded-lg transition-colors pointer-events-auto">
+                <button className="flex items-center justify-center gap-2 bg-muted hover:bg-muted/80 text-muted-foreground text-sm font-medium py-2.5 px-4 rounded-lg transition-colors pointer-events-auto">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -501,7 +501,7 @@ export default function ToursPage() {
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      <section className="relative bg-linear-to-br from-primary/5 via-primary/10 to-secondary/5 py-6 sm:py-8 md:py-12 px-4 overflow-hidden">
+      <section className="relative bg-linear-to-br from-primary/5 via-primary/10 to-secondary/5 dark:from-primary/10 dark:via-primary/5 dark:to-secondary/10 py-6 sm:py-8 md:py-12 px-4 overflow-hidden transition-colors">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
@@ -832,7 +832,7 @@ export default function ToursPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
                 {sortedTours.map((tour) => (
                   <div key={tour.id} onClick={(e) => handleCardClick(tour.id, e)}>
-                    <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border-0 shadow-lg h-full">
+                    <Card className="group hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer border-0 shadow-lg bg-card dark:bg-card/95 h-full">
                       <div className="relative overflow-hidden rounded-t-lg">
                         <img
                           src={tour.image || "/placeholder.svg"}
@@ -842,10 +842,10 @@ export default function ToursPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="absolute top-3 sm:top-4 right-3 sm:right-4 h-8 w-8 p-0 bg-white/80 hover:bg-white"
+                          className="absolute top-3 sm:top-4 right-3 sm:right-4 h-8 w-8 p-0 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <Heart className="h-4 w-4" />
+                          <Heart className="h-4 w-4 text-foreground" />
                         </Button>
                       </div>
                       <CardContent className="p-4 sm:p-5 md:p-6">
@@ -912,7 +912,7 @@ export default function ToursPage() {
               <div className="space-y-4 sm:space-y-6">
                 {sortedTours.map((tour) => (
                   <div key={tour.id} onClick={(e) => handleCardClick(tour.id, e)}>
-                    <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-0 shadow-lg">
+                    <Card className="group hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-300 cursor-pointer border-0 shadow-lg bg-card dark:bg-card/95">
                       <CardContent className="p-0">
                         <div className="flex flex-col sm:flex-row">
                           <div className="sm:w-64 md:w-80 shrink-0">

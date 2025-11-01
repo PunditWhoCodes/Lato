@@ -135,29 +135,29 @@ export default function TourDetailPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute top-4 right-4 bg-white/80 hover:bg-white"
+                  className="absolute top-4 right-4 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
                   onClick={() => setIsLiked(!isLiked)}
                 >
-                  <Heart className={`h-5 w-5 ${isLiked ? "fill-red-500 text-red-500" : ""}`} />
+                  <Heart className={`h-5 w-5 ${isLiked ? "fill-red-500 text-red-500" : "text-foreground"}`} />
                 </Button>
-                <Button variant="ghost" size="sm" className="absolute top-4 right-16 bg-white/80 hover:bg-white">
-                  <Share2 className="h-5 w-5" />
+                <Button variant="ghost" size="sm" className="absolute top-4 right-16 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm">
+                  <Share2 className="h-5 w-5 text-foreground" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
                   onClick={prevImage}
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="h-5 w-5 text-foreground" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
                   onClick={nextImage}
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="h-5 w-5 text-foreground" />
                 </Button>
                 <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
                   <Camera className="w-4 h-4 inline mr-1" />
@@ -241,7 +241,7 @@ export default function TourDetailPage() {
               </div>
             </div>
 
-            <div className="sticky top-20 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border rounded-lg p-2">
+            <div className="sticky top-20 z-30 bg-background/95 dark:bg-background/98 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:supports-[backdrop-filter]:bg-background/70 border border-border rounded-lg p-2 transition-colors">
               <div className="grid grid-cols-4 gap-2">
                 <Button
                   variant={activeSection === "overview" ? "default" : "ghost"}
@@ -317,13 +317,13 @@ export default function TourDetailPage() {
                 </div>
               </div>
 
-              <Card className="mb-8">
+              <Card className="mb-8 bg-card dark:bg-card/95 border-border">
                 <CardContent className="p-6">
                   <h4 className="font-heading font-bold text-lg mb-4 flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-primary" />
                     Interactive Route Map
                   </h4>
-                  <div className="relative bg-linear-to-br from-primary/5 to-secondary/5 rounded-xl p-8 min-h-[400px] flex items-center justify-center">
+                  <div className="relative bg-linear-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 rounded-xl p-8 min-h-[400px] flex items-center justify-center">
                     {/* Enhanced Google Maps style interface */}
                     <div className="relative w-full max-w-3xl">
                       {/* Route visualization */}
@@ -356,13 +356,13 @@ export default function TourDetailPage() {
                               }`}
                           >
                             <div className="relative group">
-                              <div className="w-12 h-12 bg-linear-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg hover:scale-110 transition-all duration-300 cursor-pointer border-4 border-white">
+                              <div className="w-12 h-12 bg-linear-to-br from-primary to-primary dark:to-primary/80 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg hover:scale-110 transition-all duration-300 cursor-pointer border-4 border-background">
                                 {index + 1}
                               </div>
                               <div className="absolute -top-2 -right-2 w-4 h-4 bg-secondary rounded-full animate-pulse"></div>
                             </div>
                             <div className="text-xs text-center mt-3 max-w-24">
-                              <div className="font-bold text-primary bg-white px-2 py-1 rounded-full shadow-sm">
+                              <div className="font-bold text-primary bg-background px-2 py-1 rounded-full shadow-sm">
                                 {item.time}
                               </div>
                               <div className="text-foreground font-semibold mt-1 leading-tight">{item.title}</div>
@@ -372,7 +372,7 @@ export default function TourDetailPage() {
                       </div>
 
                       {/* Enhanced map controls */}
-                      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur rounded-lg p-3 shadow-lg">
+                      <div className="absolute top-4 right-4 bg-background/95 dark:bg-background/98 backdrop-blur rounded-lg p-3 shadow-lg">
                         <div className="text-xs space-y-2">
                           <div className="flex items-center gap-2">
                             <div className="w-3 h-3 bg-linear-to-r from-primary to-primary-dark rounded-full"></div>
@@ -387,7 +387,7 @@ export default function TourDetailPage() {
                       </div>
 
                       {/* Map attribution */}
-                      <div className="absolute bottom-4 left-4 text-xs text-muted-foreground bg-white/80 px-2 py-1 rounded">
+                      <div className="absolute bottom-4 left-4 text-xs text-muted-foreground bg-background/80 dark:bg-background/90 px-2 py-1 rounded">
                         Interactive map powered by Google Maps
                       </div>
                     </div>
@@ -403,7 +403,7 @@ export default function TourDetailPage() {
                 {mockTour.itinerary.map((item, index) => (
                   <Card
                     key={index}
-                    className="overflow-hidden hover:shadow-xl transition-all duration-300 group border-0 bg-linear-to-br from-white to-gray-50/50 cursor-pointer"
+                    className="overflow-hidden hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-300 group border-0 bg-linear-to-br from-card to-muted/20 dark:from-card/95 dark:to-muted/10 cursor-pointer"
                     onClick={() => setSelectedDay(index)}
                   >
                     <CardContent className="p-0">
@@ -422,7 +422,7 @@ export default function TourDetailPage() {
                             }}
                           />
                           <div className="absolute top-4 left-4">
-                            <div className="w-14 h-14 bg-linear-to-br from-primary via-primary to-primary-dark rounded-2xl flex items-center justify-center text-white font-bold shadow-2xl border-2 border-white/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                            <div className="w-14 h-14 bg-linear-to-br from-primary via-primary to-primary dark:to-primary/80 rounded-2xl flex items-center justify-center text-white font-bold shadow-2xl border-2 border-background/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
                               <span className="text-lg">{index + 1}</span>
                             </div>
                           </div>
@@ -462,9 +462,9 @@ export default function TourDetailPage() {
                               {detailedItinerary[index]?.activities.map((activity, actIndex) => (
                                 <div
                                   key={actIndex}
-                                  className="flex items-center gap-3 bg-linear-to-r from-muted/30 to-muted/10 rounded-xl px-4 py-3 border border-muted/20 hover:border-primary/20 transition-colors"
+                                  className="flex items-center gap-3 bg-linear-to-r from-muted/30 to-muted/10 dark:from-muted/20 dark:to-muted/5 rounded-xl px-4 py-3 border border-muted/20 dark:border-muted/30 hover:border-primary/20 transition-colors"
                                 >
-                                  <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center">
+                                  <div className="w-8 h-8 rounded-lg bg-background dark:bg-background/90 shadow-sm flex items-center justify-center">
                                     <span className="text-lg">
                                       {activity.type === "activity"
                                         ? "🎯"
@@ -488,7 +488,7 @@ export default function TourDetailPage() {
 
             <section id="company" className="space-y-6 pt-4">
               <h3 className="font-heading font-bold text-2xl mb-6">About the Company</h3>
-              <Card>
+              <Card className="bg-card dark:bg-card/95 border-border">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Avatar className="w-16 h-16">
@@ -545,7 +545,7 @@ export default function TourDetailPage() {
 
               <div className="space-y-6">
                 {mockTour.reviews.map((review) => (
-                  <Card key={review.id}>
+                  <Card key={review.id} className="bg-card dark:bg-card/95 border-border">
                     <CardContent className="p-6">
                       <div className="flex gap-4">
                         <Avatar>
@@ -563,7 +563,7 @@ export default function TourDetailPage() {
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`w-4 h-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                                    className={`w-4 h-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"
                                       }`}
                                   />
                                 ))}
@@ -605,7 +605,7 @@ export default function TourDetailPage() {
               <h3 className="font-heading font-bold text-2xl mb-6">You Might Also Like</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {mockTour.relatedTours.map((tour) => (
-                  <Card key={tour.id} className="group hover:shadow-lg transition-shadow cursor-pointer">
+                  <Card key={tour.id} className="group hover:shadow-lg dark:hover:shadow-primary/20 transition-shadow cursor-pointer bg-card dark:bg-card/95 border-border">
                     <Link href={`/tours/${tour.id}`}>
                       <div className="flex gap-4 p-4">
                         <img
@@ -637,7 +637,7 @@ export default function TourDetailPage() {
           {/* Booking Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 z-20">
-              <Card className="shadow-xl">
+              <Card className="shadow-xl dark:shadow-primary/20 bg-card dark:bg-card/95 border-border">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -701,14 +701,14 @@ export default function TourDetailPage() {
 
       {selectedDay !== null && (
         <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-50 backdrop-blur-sm"
           onClick={() => setSelectedDay(null)}
         >
           <div
-            className="bg-background rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-background dark:bg-background/98 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl dark:shadow-primary/20 border border-border"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-background border-b p-6 flex items-center justify-between">
+            <div className="sticky top-0 bg-background dark:bg-background/95 border-b border-border backdrop-blur-sm p-6 flex items-center justify-between">
               <div>
                 <h2 className="font-heading font-bold text-2xl">{detailedItinerary[selectedDay]?.title}</h2>
                 <p className="text-muted-foreground">Day {selectedDay + 1}</p>

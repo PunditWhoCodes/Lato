@@ -223,7 +223,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
         <div className="text-center mt-6 sm:mt-8">
           <Button
             size="lg"
-            className="rounded-full px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-linear-to-r from-primary to-primary-dark"
+            className="rounded-full px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-linear-to-r from-primary to-primary"
             asChild
           >
             <Link href="/tours">

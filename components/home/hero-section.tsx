@@ -55,7 +55,7 @@ export function HeroSection({ onSearch, onCategoryClick }: HeroSectionProps) {
                   key={index}
                   variant="outline"
                   size="sm"
-                  className="rounded-full bg-white/60 backdrop-blur-sm border-white/30 hover:bg-white/80 hover:text-primary hover:scale-105 transition-all duration-300 text-xs sm:text-sm px-3 sm:px-4 py-2 h-auto"
+                  className="rounded-full bg-background/60 dark:bg-background/80 backdrop-blur-sm border-border hover:bg-accent hover:text-primary hover:scale-105 transition-all duration-300 text-xs sm:text-sm px-3 sm:px-4 py-2 h-auto"
                   onClick={() => handleCategoryClick(category.value)}
                 >
                   <category.icon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 shrink-0" />

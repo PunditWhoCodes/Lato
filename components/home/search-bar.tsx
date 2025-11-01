@@ -42,7 +42,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
     <div className="max-w-4xl mx-auto mb-6">
       <div className="relative group">
         <div className="absolute inset-0 bg-linear-to-r from-primary to-secondary rounded-3xl md:rounded-full opacity-20 blur-xl group-hover:opacity-30 transition-opacity"></div>
-        <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl md:rounded-full p-2 shadow-2xl border border-white/20">
+        <div className="relative bg-card/90 dark:bg-card/95 backdrop-blur-sm rounded-3xl md:rounded-full p-2 shadow-2xl border border-border">
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
             {/* Destination Field */}
             <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">

@@ -73,7 +73,7 @@ export function HowItWorks() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 relative z-10">
             {STEPS.map((item, index) => (
               <div key={index} className="group">
-                <Card className="relative h-full bg-white/95 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 sm:hover:-translate-y-4 hover:rotate-1 overflow-hidden">
+                <Card className="relative h-full bg-card/95 dark:bg-card/98 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 sm:hover:-translate-y-4 hover:rotate-1 overflow-hidden">
                   <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                   <CardContent className="p-4 sm:p-5 md:p-6 relative z-10">
@@ -82,7 +82,7 @@ export function HowItWorks() {
                         {item.step}
                       </div>
                       <div className="relative">
-                        <div className="w-16 h-16 bg-linear-to-br from-primary to-primary-dark rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6">
+                        <div className="w-16 h-16 bg-linear-to-br from-primary to-primary rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6">
                           <item.icon className="w-8 h-8 text-white drop-shadow-lg" />
                         </div>
                         <div className="absolute -top-2 -right-2 w-4 h-4 bg-secondary rounded-full shadow-lg group-hover:scale-125 transition-transform duration-300"></div>
@@ -122,7 +122,7 @@ export function HowItWorks() {
         <div className="text-center mt-6 sm:mt-8">
           <Button
             size="lg"
-            className="rounded-full px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-linear-to-r from-primary to-primary-dark"
+            className="rounded-full px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-linear-to-r from-primary to-primary"
             asChild
           >
             <Link href="/tours">

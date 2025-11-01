@@ -2,12 +2,20 @@
 
 import { AuthProvider } from "@/lib/auth"
 import { SavedToursProvider } from "@/lib/saved-tours-context"
+import { ThemeProvider } from "next-themes"
 import type { ReactNode } from "react"
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider>
-      <SavedToursProvider>{children}</SavedToursProvider>
-    </AuthProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <AuthProvider>
+        <SavedToursProvider>{children}</SavedToursProvider>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
