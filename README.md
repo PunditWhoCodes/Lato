@@ -92,7 +92,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/PunditWhoCodes/lato.git](https://github.com/PunditWhoCodes/Lato)
+git clone https://github.com/PunditWhoCodes/Lato
 cd lato
 ```
 
