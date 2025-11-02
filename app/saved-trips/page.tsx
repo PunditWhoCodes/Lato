@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -23,23 +23,30 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
-import { mockSavedTrips, mockSavedCompanies } from "./data"
-import type { SavedTrip, SavedCompany } from "./types"
-
+import { useSavedTours } from "@/lib/saved-tours-context"
+import { tours } from "@/lib/data"
+import { ShimmerImage } from "@/components/ui/shimmer-image"
+import { mockSavedCompanies } from "./data"
+import type { SavedCompany } from "./types"
 
 export default function SavedTripsPage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [savedTrips, setSavedTrips] = useState(mockSavedTrips)
   const [savedCompanies, setSavedCompanies] = useState(mockSavedCompanies)
   const [activeTab, setActiveTab] = useState("trips")
 
   const { user } = useAuth()
+  const { savedTours, toggleSaveTour } = useSavedTours()
 
-  const filteredTrips = savedTrips.filter(
+  // Get actual saved tours data
+  const savedTripsData = useMemo(() => {
+    return tours.filter((tour) => savedTours.includes(tour.id))
+  }, [savedTours])
+
+  const filteredTrips = savedTripsData.filter(
     (trip) =>
       trip.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       trip.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      trip.company.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      trip.company.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
   const filteredCompanies = savedCompanies.filter(
@@ -50,7 +57,7 @@ export default function SavedTripsPage() {
   )
 
   const removeSavedTrip = (tripId: number) => {
-    setSavedTrips(savedTrips.filter((trip) => trip.id !== tripId))
+    toggleSaveTour(tripId)
   }
 
   const removeSavedCompany = (companyId: number) => {
@@ -71,7 +78,7 @@ export default function SavedTripsPage() {
             </div>
             <div className="flex gap-2">
               <Badge className="bg-primary text-primary-foreground">
-                {savedTrips.length} trip{savedTrips.length !== 1 ? "s" : ""}
+                {savedTripsData.length} trip{savedTripsData.length !== 1 ? "s" : ""}
               </Badge>
               <Badge className="bg-secondary text-secondary-foreground">
                 {savedCompanies.length} compan{savedCompanies.length !== 1 ? "ies" : "y"}
@@ -94,7 +101,7 @@ export default function SavedTripsPage() {
             <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
               <TabsTrigger value="trips" className="flex items-center gap-2">
                 <Heart className="w-4 h-4" />
-                Saved Trips ({savedTrips.length})
+                Saved Trips ({savedTripsData.length})
               </TabsTrigger>
               <TabsTrigger value="companies" className="flex items-center gap-2">
                 <Building2 className="w-4 h-4" />
@@ -108,8 +115,8 @@ export default function SavedTripsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredTrips.map((trip) => (
                     <Card key={trip.id} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
-                      <div className="relative">
-                        <img
+                      <div className="relative h-48">
+                        <ShimmerImage
                           src={trip.image || "/placeholder.svg"}
                           alt={trip.title}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
@@ -124,7 +131,7 @@ export default function SavedTripsPage() {
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
-                        {trip.originalPrice > trip.price && (
+                        {trip.originalPrice && trip.originalPrice > trip.price && (
                           <Badge className="absolute top-3 left-3 bg-green-500 text-white">
                             Save €{trip.originalPrice - trip.price}
                           </Badge>
@@ -138,23 +145,14 @@ export default function SavedTripsPage() {
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                             <span className="text-sm font-medium">{trip.rating}</span>
-                            <span className="text-xs text-muted-foreground">({trip.reviewCount})</span>
+                            <span className="text-xs text-muted-foreground">({trip.reviews})</span>
                           </div>
                         </div>
 
                         <h3 className="font-heading font-bold text-lg mb-2 line-clamp-2">{trip.title}</h3>
 
                         <div className="flex items-center gap-2 mb-3">
-                          <Avatar className="w-6 h-6">
-                            <AvatarImage src={trip.company.avatar || "/placeholder.svg"} />
-                            <AvatarFallback>{trip.company.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <span className="text-sm text-muted-foreground">{trip.company.name}</span>
-                          {trip.company.verified && (
-                            <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
-                              Verified
-                            </Badge>
-                          )}
+                          <span className="text-sm text-muted-foreground">{trip.company}</span>
                         </div>
 
                         <div className="space-y-2 mb-4">
@@ -177,7 +175,7 @@ export default function SavedTripsPage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="font-heading font-bold text-xl text-primary">€{trip.price}</span>
-                            {trip.originalPrice > trip.price && (
+                            {trip.originalPrice && trip.originalPrice > trip.price && (
                               <span className="text-sm text-muted-foreground line-through">€{trip.originalPrice}</span>
                             )}
                           </div>

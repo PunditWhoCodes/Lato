@@ -182,9 +182,9 @@ export function FiltersSidebar({
                     checked={selectedTourTypes.includes(type)}
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        setSelectedTourTypes((prev) => [...prev, type])
+                        setSelectedTourTypes([...selectedTourTypes, type])
                       } else {
-                        setSelectedTourTypes((prev) => prev.filter((t) => t !== type))
+                        setSelectedTourTypes(selectedTourTypes.filter((t) => t !== type))
                       }
                     }}
                   />
@@ -251,8 +251,10 @@ export function FiltersSidebar({
                         <CommandItem
                           key={country}
                           onSelect={() => {
-                            setSelectedOperatorCountries((prev) =>
-                              prev.includes(country) ? prev.filter((c) => c !== country) : [...prev, country],
+                            setSelectedOperatorCountries(
+                              selectedOperatorCountries.includes(country)
+                                ? selectedOperatorCountries.filter((c) => c !== country)
+                                : [...selectedOperatorCountries, country]
                             )
                           }}
                         >
@@ -279,8 +281,10 @@ export function FiltersSidebar({
                     type="button"
                     className="w-full flex items-center justify-between p-3 text-left hover:bg-muted/50 transition-colors"
                     onClick={() => {
-                      setExpandedTravelStyles((prev) =>
-                        prev.includes(style.name) ? prev.filter((s) => s !== style.name) : [...prev, style.name],
+                      setExpandedTravelStyles(
+                        expandedTravelStyles.includes(style.name)
+                          ? expandedTravelStyles.filter((s) => s !== style.name)
+                          : [...expandedTravelStyles, style.name]
                       )
                     }}
                   >
@@ -296,9 +300,9 @@ export function FiltersSidebar({
                             checked={selectedTravelStyleTypes.includes(type)}
                             onCheckedChange={(checked) => {
                               if (checked) {
-                                setSelectedTravelStyleTypes((prev) => [...prev, type])
+                                setSelectedTravelStyleTypes([...selectedTravelStyleTypes, type])
                               } else {
-                                setSelectedTravelStyleTypes((prev) => prev.filter((t) => t !== type))
+                                setSelectedTravelStyleTypes(selectedTravelStyleTypes.filter((t) => t !== type))
                               }
                             }}
                           />

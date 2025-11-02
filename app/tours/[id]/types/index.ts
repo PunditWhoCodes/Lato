@@ -5,10 +5,9 @@ export type { TourDetail, DetailedItineraryItem }
 export interface ImageGalleryProps {
   images: string[]
   title: string
+  tourId: number
   currentImageIndex: number
   setCurrentImageIndex: (index: number) => void
-  isLiked: boolean
-  setIsLiked: (liked: boolean) => void
 }
 
 export interface RelatedToursProps {

@@ -19,7 +19,6 @@ import { TourItineraryModal } from "./components/tour-itinerary-modal"
 
 export default function TourDetailPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isLiked, setIsLiked] = useState(false)
   const [activeSection, setActiveSection] = useState("overview")
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
 
@@ -97,10 +96,9 @@ export default function TourDetailPage() {
             <ImageGallery
               images={tour.images}
               title={tour.title}
+              tourId={tour.id}
               currentImageIndex={currentImageIndex}
               setCurrentImageIndex={setCurrentImageIndex}
-              isLiked={isLiked}
-              setIsLiked={setIsLiked}
             />
 
             <TourInfo tour={tour} onCompanyClick={() => scrollToSection("company")} />

@@ -7,6 +7,8 @@ import { Star, MapPin, Clock, Users, Heart } from "lucide-react"
 import { ChatButton } from "@/components/chat-button"
 import { ShimmerImage } from "@/components/ui/shimmer-image"
 import { CompanyHoverCard } from "./company-hover-card"
+import { useSavedTours } from "@/lib/saved-tours-context"
+import { cn } from "@/lib/utils"
 import type { Tour } from "@/types"
 
 interface TourListCardProps {
@@ -15,6 +17,14 @@ interface TourListCardProps {
 }
 
 export function TourListCard({ tour, onClick }: TourListCardProps) {
+  const { toggleSaveTour, isTourSaved } = useSavedTours()
+  const isSaved = isTourSaved(tour.id)
+
+  const handleSaveClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    toggleSaveTour(tour.id)
+  }
+
   return (
     <div onClick={(e) => onClick(tour.id, e)}>
       <Card className="group hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-300 cursor-pointer border-0 shadow-lg bg-card dark:bg-card/95">
@@ -30,10 +40,16 @@ export function TourListCard({ tour, onClick }: TourListCardProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute top-3 sm:top-4 right-3 sm:right-4 h-8 w-8 p-0 bg-white/80 hover:bg-white"
-                  onClick={(e) => e.stopPropagation()}
+                  className={cn(
+                    "absolute top-3 sm:top-4 right-3 sm:right-4 h-8 w-8 p-0 backdrop-blur-sm transition-all hover:scale-110",
+                    isSaved
+                      ? "bg-primary hover:bg-primary/90"
+                      : "bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95"
+                  )}
+                  onClick={handleSaveClick}
+                  aria-label={isSaved ? "Remove from saved tours" : "Save tour"}
                 >
-                  <Heart className="h-4 w-4" />
+                  <Heart className={cn("h-4 w-4 transition-all", isSaved ? "fill-white text-white" : "text-foreground")} />
                 </Button>
               </div>
             </div>

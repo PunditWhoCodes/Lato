@@ -3,23 +3,24 @@
 import { Button } from "@/components/ui/button"
 import { Heart, Share2, ChevronLeft, ChevronRight, Camera } from "lucide-react"
 import { ShimmerImage } from "@/components/ui/shimmer-image"
+import { useSavedTours } from "@/lib/saved-tours-context"
+import { cn } from "@/lib/utils"
 import { ImageGalleryProps } from "../types"
 
+export function ImageGallery({ images, title, tourId, currentImageIndex, setCurrentImageIndex }: ImageGalleryProps) {
+  const { toggleSaveTour, isTourSaved } = useSavedTours()
+  const isSaved = isTourSaved(tourId)
 
-export function ImageGallery({
-  images,
-  title,
-  currentImageIndex,
-  setCurrentImageIndex,
-  isLiked,
-  setIsLiked,
-}: ImageGalleryProps) {
   const nextImage = () => {
     setCurrentImageIndex((currentImageIndex + 1) % images.length)
   }
 
   const prevImage = () => {
     setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length)
+  }
+
+  const handleSaveClick = () => {
+    toggleSaveTour(tourId)
   }
 
   return (
@@ -36,10 +37,16 @@ export function ImageGallery({
         <Button
           variant="ghost"
           size="sm"
-          className="absolute top-4 right-4 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
-          onClick={() => setIsLiked(!isLiked)}
+          className={cn(
+            "absolute top-4 right-4 backdrop-blur-sm transition-all hover:scale-110",
+            isSaved
+              ? "bg-primary hover:bg-primary/90"
+              : "bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95"
+          )}
+          onClick={handleSaveClick}
+          aria-label={isSaved ? "Remove from saved tours" : "Save tour"}
         >
-          <Heart className={`h-5 w-5 ${isLiked ? "fill-red-500 text-red-500" : "text-foreground"}`} />
+          <Heart className={cn("h-5 w-5 transition-all", isSaved ? "fill-white text-white" : "text-foreground")} />
         </Button>
         <Button
           variant="ghost"
