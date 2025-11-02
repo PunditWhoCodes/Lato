@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "./skeleton"
 
@@ -25,12 +25,19 @@ export function ShimmerImage({
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const [imageSrc, setImageSrc] = useState(src)
+  const imgRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
     // Reset loading state when src changes
     setIsLoading(true)
     setHasError(false)
     setImageSrc(src)
+
+    const img = imgRef.current
+    if (img && img.complete && img.naturalHeight !== 0) {
+      setIsLoading(false)
+      setHasError(false)
+    }
   }, [src])
 
   const handleLoad = () => {
@@ -59,6 +66,7 @@ export function ShimmerImage({
 
       {/* Actual image */}
       <img
+        ref={imgRef}
         src={imageSrc}
         alt={alt}
         className={cn(
