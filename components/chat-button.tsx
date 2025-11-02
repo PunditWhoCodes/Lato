@@ -13,7 +13,6 @@ interface ChatButtonProps {
 }
 
 export function ChatButton({ companyId, tourId, className, size = "sm", variant = "default" }: ChatButtonProps) {
-  // In a real app, this would create a new conversation or navigate to existing one
   const chatUrl = `/messages/conv-${companyId}${tourId ? `-${tourId}` : ""}`
 
   return (

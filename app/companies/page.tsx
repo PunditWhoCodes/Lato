@@ -13,6 +13,7 @@ import Link from "next/link"
 import { ChatButton } from "@/components/chat-button"
 import { companies } from "@/lib/data"
 import type { Company } from "@/types"
+import { locations, specialties } from "./data/inex"
 
 const mockCompanies: Company[] = companies
 
@@ -22,18 +23,7 @@ export default function CompaniesPage() {
   const [selectedSpecialty, setSelectedSpecialty] = useState("all")
   const [sortBy, setSortBy] = useState("rating")
 
-  // Mock user - in real app this would come from auth context
   const user = undefined
-
-  const locations = [
-    "Bali, Indonesia",
-    "Tokyo, Japan",
-    "Santorini, Greece",
-    "Amazon, Brazil",
-    "Marrakech, Morocco",
-    "Reykjavik, Iceland",
-  ]
-  const specialties = ["Cultural Tours", "Food Tours", "Photography", "Wildlife", "Cooking Classes", "Northern Lights"]
 
   const filteredCompanies = mockCompanies.filter((company) => {
     const matchesSearch =
@@ -66,11 +56,11 @@ export default function CompaniesPage() {
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      <section className="relative bg-linear-to-br from-primary/5 via-primary/10 to-secondary/5 py-12 px-4 overflow-hidden">
+      <section className="relative bg-linear-to-br from-primary/5 via-primary/10 to-secondary/5 dark:from-primary/10 dark:via-primary/5 dark:to-secondary/10 py-12 px-4 overflow-hidden transition-colors">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 dark:bg-primary/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 dark:bg-secondary/20 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -91,7 +81,7 @@ export default function CompaniesPage() {
           <div className="max-w-3xl mx-auto">
             <div className="relative group">
               <div className="absolute inset-0 bg-linear-to-r from-primary/20 to-secondary/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-2xl border border-white/20">
+              <div className="relative bg-card/80 dark:bg-card/95 backdrop-blur-sm rounded-2xl p-2 shadow-2xl border border-border">
                 <div className="relative">
                   <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-muted-foreground h-6 w-6" />
                   <Input

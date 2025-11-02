@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, MapPin, Shield } from "lucide-react"
+import { ShimmerImage } from "@/components/ui/shimmer-image"
 
 interface ReviewCardProps {
   review: {
@@ -21,7 +22,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
       <CardContent className="p-5">
         {/* Tour Image */}
         <div className="relative h-48 overflow-hidden rounded-lg mb-4">
-          <img
+          <ShimmerImage
             src={review.tourImage || "/placeholder.svg"}
             alt={review.tourTitle}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -44,11 +45,12 @@ export function ReviewCard({ review }: ReviewCardProps) {
 
         {/* Reviewer Info */}
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <img
+          <div className="relative w-12 h-12">
+            <ShimmerImage
               src={review.avatar || "/placeholder.svg"}
               alt={review.name}
               className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+              shimmerClassName="rounded-full"
             />
             {review.verified && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">

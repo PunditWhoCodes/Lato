@@ -8,6 +8,7 @@ import { Star, Heart } from "lucide-react"
 import type { Tour } from "@/types"
 import { useSavedTours } from "@/lib/saved-tours-context"
 import { cn } from "@/lib/utils"
+import { ShimmerImage } from "@/components/ui/shimmer-image"
 
 interface TourCardProps {
   tour: Tour
@@ -26,8 +27,8 @@ export function TourCard({ tour }: TourCardProps) {
   return (
     <Card className="group hover:shadow-2xl dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 cursor-pointer border-0 shadow-lg bg-card/80 dark:bg-card/95 backdrop-blur-sm overflow-hidden">
       <Link href={`/tours/${tour.id}`}>
-        <div className="relative overflow-hidden">
-          <img
+        <div className="relative overflow-hidden h-56">
+          <ShimmerImage
             src={tour.image || "/placeholder.svg"}
             alt={tour.title}
             className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"

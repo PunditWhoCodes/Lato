@@ -1,5 +1,3 @@
-// Page-specific types for Message Detail (Chat) page
-
 export interface ChatMessage {
   id: number
   sender: "user" | "company"
