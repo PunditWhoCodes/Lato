@@ -33,7 +33,7 @@ export function TourCard({ tour }: TourCardProps) {
             alt={tour.title}
             className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div className="absolute top-4 left-4 flex flex-wrap gap-2">
             {tour.badges.map((badge, badgeIndex) => (
               <Badge key={badgeIndex} className="bg-background/90 dark:bg-background/95 text-foreground backdrop-blur-sm">

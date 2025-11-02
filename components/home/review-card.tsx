@@ -27,7 +27,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
             alt={review.tourTitle}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent"></div>
           <div className="absolute bottom-4 left-4 right-4">
             <h4 className="text-white font-semibold text-sm leading-tight">{review.tourTitle}</h4>
           </div>
