@@ -21,10 +21,15 @@ export function TripFinderChat() {
   const [chatResponses, setChatResponses] = useState<Record<string, string>>({})
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
   const [customInput, setCustomInput] = useState("")
+  const [isMounted, setIsMounted] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (chatHistory.length === 0) {
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (isMounted && chatHistory.length === 0) {
       setChatHistory([
         {
           type: "bot",
@@ -39,7 +44,7 @@ export function TripFinderChat() {
         },
       ])
     }
-  }, [chatHistory.length])
+  }, [isMounted, chatHistory.length])
 
   useEffect(() => {
     if (currentStep < chatQuestions.length && chatHistory.length > 0) {
@@ -113,6 +118,8 @@ export function TripFinderChat() {
   }
 
   const resetChat = () => {
+    if (!isMounted) return
+
     setCurrentStep(0)
     setChatResponses({})
     setChatHistory([
