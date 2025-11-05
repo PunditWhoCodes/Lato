@@ -8,12 +8,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Star, MapPin, Award, Shield, Users, Globe } from "lucide-react"
+import { Search, Star, MapPin, Award, Shield, Users, Globe, Heart } from "lucide-react"
 import Link from "next/link"
 import { ChatButton } from "@/components/chat-button"
 import { companies } from "@/lib/data"
 import type { Company } from "@/types"
 import { locations, specialties } from "./data/inex"
+import { useSavedCompanies } from "@/lib/saved-companies-context"
+import { cn } from "@/lib/utils"
 
 const mockCompanies: Company[] = companies
 
@@ -23,7 +25,7 @@ export default function CompaniesPage() {
   const [selectedSpecialty, setSelectedSpecialty] = useState("all")
   const [sortBy, setSortBy] = useState("rating")
 
-  const user = undefined
+  const { toggleSaveCompany, isCompanySaved } = useSavedCompanies()
 
   const filteredCompanies = mockCompanies.filter((company) => {
     const matchesSearch =
@@ -171,6 +173,27 @@ export default function CompaniesPage() {
                         Verified
                       </Badge>
                     )}
+                  </div>
+                  <div className="absolute top-4 right-4">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="bg-white/90 hover:bg-white shadow-md"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        toggleSaveCompany(company.id)
+                      }}
+                    >
+                      <Heart
+                        className={cn(
+                          "w-4 h-4 transition-all",
+                          isCompanySaved(company.id)
+                            ? "fill-red-500 text-red-500"
+                            : "text-muted-foreground hover:text-red-500"
+                        )}
+                      />
+                    </Button>
                   </div>
                 </div>
               </Link>

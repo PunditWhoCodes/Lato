@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
+import { useMessages } from "@/contexts/MessagesContext"
 import { Logo } from "@/components/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { destinations, travelStyles } from "@/lib/data"
@@ -30,9 +31,12 @@ import { destinations, travelStyles } from "@/lib/data"
 export function Navigation() {
   const { user, logout } = useAuth()
   const { savedToursCount } = useSavedTours()
+  const { getTotalUnread } = useMessages()
   const [hoveredContinent, setHoveredContinent] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
+
+  const totalUnreadMessages = getTotalUnread()
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section)
@@ -207,9 +211,11 @@ export function Navigation() {
                 <Button variant="ghost" size="sm" asChild className="relative">
                   <Link href="/messages" className="flex items-center">
                     <MessageCircle className="h-5 w-5" />
-                    <Badge className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs min-w-[18px] h-[18px] flex items-center justify-center p-0 rounded-full">
-                      3
-                    </Badge>
+                    {totalUnreadMessages > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs min-w-[18px] h-[18px] flex items-center justify-center p-0 rounded-full">
+                        {totalUnreadMessages}
+                      </Badge>
+                    )}
                   </Link>
                 </Button>
                 <Button variant="ghost" size="sm" asChild className="relative">
@@ -397,7 +403,11 @@ export function Navigation() {
                   >
                     <MessageCircle className="h-5 w-5 mr-2" />
                     Messages
-                    <Badge className="ml-2 bg-primary text-primary-foreground text-xs">3</Badge>
+                    {totalUnreadMessages > 0 && (
+                      <Badge className="ml-2 bg-primary text-primary-foreground text-xs">
+                        {totalUnreadMessages}
+                      </Badge>
+                    )}
                   </Link>
                   <Link
                     href="/saved-trips"

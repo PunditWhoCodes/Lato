@@ -25,7 +25,7 @@ import {
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
-import { mockConversationsDetail, getConversationById } from "./data"
+import { useMessages } from "@/contexts/MessagesContext"
 import type { ConversationDetail } from "./types"
 
 
@@ -36,17 +36,26 @@ export default function ChatPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const currentConversation = mockConversationsDetail.find((conv) => conv.id === params.id) || mockConversationsDetail[0]
+  const { conversationsDetail, markAsRead, getConversation } = useMessages()
+
+  const currentConversation = getConversation(params.id as string) || conversationsDetail[0]
   const [messages, setMessages] = useState(currentConversation.messages)
 
+  // Mark conversation as read when opened
   useEffect(() => {
-    const conversation = mockConversationsDetail.find((conv) => conv.id === params.id)
+    if (params.id) {
+      markAsRead(params.id as string)
+    }
+  }, [params.id, markAsRead])
+
+  useEffect(() => {
+    const conversation = getConversation(params.id as string)
     if (conversation) {
       setMessages(conversation.messages)
     }
-  }, [params.id])
+  }, [params.id, getConversation])
 
-  const filteredConversations = mockConversationsDetail.filter(
+  const filteredConversations = conversationsDetail.filter(
     (conv) =>
       conv.company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       conv.tour.title.toLowerCase().includes(searchQuery.toLowerCase()),

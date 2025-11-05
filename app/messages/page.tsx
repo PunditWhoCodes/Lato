@@ -10,16 +10,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Search, MessageCircle } from "lucide-react"
 import Link from "next/link"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
-import { mockConversations } from "./data"
-import type { Conversation } from "./types"
+import { useMessages } from "@/contexts/MessagesContext"
 
 export default function MessagesPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedFilter, setSelectedFilter] = useState("all")
 
   const { user } = useAuth()
+  const { conversations, getTotalUnread } = useMessages()
 
-  const filteredConversations = mockConversations.filter((conv) => {
+  const filteredConversations = conversations.filter((conv) => {
     const matchesSearch =
       conv.company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       conv.tour.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -33,7 +33,7 @@ export default function MessagesPage() {
     return matchesSearch && matchesFilter
   })
 
-  const totalUnread = mockConversations.reduce((sum, conv) => sum + conv.unreadCount, 0)
+  const totalUnread = getTotalUnread()
 
   return (
     <ProtectedRoute>

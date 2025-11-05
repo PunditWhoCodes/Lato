@@ -13,6 +13,8 @@ import { Star, MapPin, Award, Shield, Globe, Clock, Mail, Phone, Calendar, Check
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { mockCompanyDetail } from "./data"
+import { useSavedCompanies } from "@/lib/saved-companies-context"
+import { cn } from "@/lib/utils"
 
 const mockCompany = mockCompanyDetail
 
@@ -20,6 +22,10 @@ const mockCompany = mockCompanyDetail
 export default function CompanyProfilePage() {
   const params = useParams()
   const [activeTab, setActiveTab] = useState("about")
+  const { toggleSaveCompany, isCompanySaved } = useSavedCompanies()
+
+  const companyId = mockCompany.id
+  const isSaved = isCompanySaved(companyId)
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,9 +94,17 @@ export default function CompanyProfilePage() {
                     </div>
                   </div>
                 </div>
-                <Button variant="outline">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Save
+                <Button
+                  variant={isSaved ? "default" : "outline"}
+                  onClick={() => toggleSaveCompany(companyId)}
+                >
+                  <Heart
+                    className={cn(
+                      "w-4 h-4 mr-2 transition-all",
+                      isSaved ? "fill-white text-white" : "text-muted-foreground"
+                    )}
+                  />
+                  {isSaved ? "Saved" : "Save"}
                 </Button>
               </div>
 

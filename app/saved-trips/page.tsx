@@ -24,23 +24,27 @@ import {
 import Link from "next/link"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
-import { tours } from "@/lib/data"
+import { useSavedCompanies } from "@/lib/saved-companies-context"
+import { tours, companies } from "@/lib/data"
 import { ShimmerImage } from "@/components/ui/shimmer-image"
-import { mockSavedCompanies } from "./data"
-import type { SavedCompany } from "./types"
 
 export default function SavedTripsPage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [savedCompanies, setSavedCompanies] = useState(mockSavedCompanies)
   const [activeTab, setActiveTab] = useState("trips")
 
   const { user } = useAuth()
   const { savedTours, toggleSaveTour } = useSavedTours()
+  const { savedCompanies, toggleSaveCompany } = useSavedCompanies()
 
   // Get actual saved tours data
   const savedTripsData = useMemo(() => {
     return tours.filter((tour) => savedTours.includes(tour.id))
   }, [savedTours])
+
+  // Get actual saved companies data
+  const savedCompaniesData = useMemo(() => {
+    return companies.filter((company) => savedCompanies.includes(company.id))
+  }, [savedCompanies])
 
   const filteredTrips = savedTripsData.filter(
     (trip) =>
@@ -49,7 +53,7 @@ export default function SavedTripsPage() {
       trip.company.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const filteredCompanies = savedCompanies.filter(
+  const filteredCompanies = savedCompaniesData.filter(
     (company) =>
       company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       company.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -60,8 +64,8 @@ export default function SavedTripsPage() {
     toggleSaveTour(tripId)
   }
 
-  const removeSavedCompany = (companyId: number) => {
-    setSavedCompanies(savedCompanies.filter((company) => company.id !== companyId))
+  const removeSavedCompany = (companyId: string) => {
+    toggleSaveCompany(companyId)
   }
 
   return (
@@ -81,7 +85,7 @@ export default function SavedTripsPage() {
                 {savedTripsData.length} trip{savedTripsData.length !== 1 ? "s" : ""}
               </Badge>
               <Badge className="bg-secondary text-secondary-foreground">
-                {savedCompanies.length} compan{savedCompanies.length !== 1 ? "ies" : "y"}
+                {savedCompaniesData.length} compan{savedCompaniesData.length !== 1 ? "ies" : "y"}
               </Badge>
             </div>
           </div>
@@ -105,7 +109,7 @@ export default function SavedTripsPage() {
               </TabsTrigger>
               <TabsTrigger value="companies" className="flex items-center gap-2">
                 <Building2 className="w-4 h-4" />
-                Saved Companies ({savedCompanies.length})
+                Saved Companies ({savedCompaniesData.length})
               </TabsTrigger>
             </TabsList>
 
@@ -233,7 +237,7 @@ export default function SavedTripsPage() {
                           </Button>
                         </div>
                         <Badge className="absolute top-3 left-3 bg-muted text-muted-foreground">
-                          🇲🇦 {company.country}
+                          {company.countryFlag} {company.country}
                         </Badge>
                       </div>
                       <CardContent className="p-4">
@@ -252,7 +256,7 @@ export default function SavedTripsPage() {
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                             <span className="text-sm font-medium">{company.rating}</span>
-                            <span className="text-xs text-muted-foreground">({company.reviewCount})</span>
+                            <span className="text-xs text-muted-foreground">({company.reviews})</span>
                           </div>
                         </div>
 
@@ -284,7 +288,7 @@ export default function SavedTripsPage() {
                           </div>
                           <div className="flex items-center gap-1 text-muted-foreground">
                             <Globe className="w-4 h-4" />
-                            <span>{company.languages} languages</span>
+                            <span>{company.languages.length} languages</span>
                           </div>
                         </div>
 

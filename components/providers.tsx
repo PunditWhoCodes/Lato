@@ -2,6 +2,8 @@
 
 import { AuthProvider } from "@/lib/auth"
 import { SavedToursProvider } from "@/lib/saved-tours-context"
+import { SavedCompaniesProvider } from "@/lib/saved-companies-context"
+import { MessagesProvider } from "@/contexts/MessagesContext"
 import { ThemeProvider } from "next-themes"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -21,7 +23,11 @@ export function Providers({ children }: { children: ReactNode }) {
         disableTransitionOnChange
       >
         <AuthProvider>
-          <SavedToursProvider>{children}</SavedToursProvider>
+          <SavedToursProvider>
+            <SavedCompaniesProvider>
+              <MessagesProvider>{children}</MessagesProvider>
+            </SavedCompaniesProvider>
+          </SavedToursProvider>
         </AuthProvider>
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
