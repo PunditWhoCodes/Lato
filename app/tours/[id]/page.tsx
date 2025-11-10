@@ -1,76 +1,55 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
+import { mockTours } from "../data"
 import { mockTourDetail, detailedItinerary } from "./data"
-import {
-  ImageGallery,
-  TourInfo,
-  SectionNavigation,
-  TourOverview,
-  TourItinerary,
-  CompanySection,
-  ReviewsSection,
-  BookingSidebar,
-  RelatedTours,
-} from "./components"
-import { TourItineraryModal } from "./components/tour-itinerary-modal"
+import { TourDetailClient } from "./components/tour-detail-client"
+import { notFound } from "next/navigation"
 
-export default function TourDetailPage() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [activeSection, setActiveSection] = useState("overview")
-  const [selectedDay, setSelectedDay] = useState<number | null>(null)
+/**
+ * Tour Detail Page (Server Component with SSG + ISR)
+ *
+ * This page is pre-generated at build time and revalidated every hour.
+ * Interactive features (image gallery, modals, section navigation) are handled by TourDetailClient.
+ */
 
-  const tour = mockTourDetail
+// Generate static params for all tours at build time
+export async function generateStaticParams() {
+  return mockTours.map((tour) => ({
+    id: tour.id.toString(),
+  }))
+}
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["overview", "itinerary", "company", "reviews"]
-      const navHeight = 80
-      const sectionNavHeight = 60
-      const offset = navHeight + sectionNavHeight + 40
+// Revalidate every hour (3600 seconds)
+export const revalidate = 3600
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sections[i])
-        if (section) {
-          const rect = section.getBoundingClientRect()
-          if (rect.top <= offset) {
-            setActiveSection(sections[i])
-            break
-          }
-        }
-      }
-    }
+// Generate metadata for SEO
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const tour = mockTours.find((t) => t.id.toString() === id)
 
-    window.addEventListener("scroll", handleScroll)
-    handleScroll()
-
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  useEffect(() => {
-    if (selectedDay !== null) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-
-    return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [selectedDay])
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      const navHeight = 80
-      const sectionNavHeight = 60
-      const totalOffset = navHeight + sectionNavHeight + 20
-      const elementPosition = element.offsetTop - totalOffset
-      window.scrollTo({ top: elementPosition, behavior: "smooth" })
+  if (!tour) {
+    return {
+      title: "Tour Not Found | Lato Marketplace",
     }
   }
+
+  return {
+    title: `${tour.title} | Tour Details | Lato Marketplace`,
+    description: `${tour.duration} tour in ${tour.location}. From $${tour.price}. Rating: ${tour.rating}/5 (${tour.reviews} reviews).`,
+  }
+}
+
+export default async function TourDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  // In production, this would fetch from API
+  const { id } = await params
+  const tour = mockTours.find((t) => t.id.toString() === id)
+
+  if (!tour) {
+    notFound()
+  }
+
+  // Extended tour details (in production, fetch from API)
+  const tourDetail = mockTourDetail
 
   return (
     <div className="min-h-screen bg-background">
@@ -90,45 +69,8 @@ export default function TourDetailPage() {
           <span className="text-foreground">{tour.title}</span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            <ImageGallery
-              images={tour.images}
-              title={tour.title}
-              tourId={tour.id}
-              currentImageIndex={currentImageIndex}
-              setCurrentImageIndex={setCurrentImageIndex}
-            />
-
-            <TourInfo tour={tour} onCompanyClick={() => scrollToSection("company")} />
-
-            <SectionNavigation activeSection={activeSection} onSectionClick={scrollToSection} />
-
-            <TourOverview tour={tour} />
-
-            <TourItinerary itinerary={tour.itinerary} onDayClick={setSelectedDay} />
-
-            <CompanySection company={tour.company} />
-
-            <ReviewsSection reviews={tour.reviews} rating={tour.rating} />
-
-            <RelatedTours tours={tour.relatedTours} />
-          </div>
-
-          {/* Booking Sidebar */}
-          <BookingSidebar tour={tour} />
-        </div>
+        <TourDetailClient tourDetail={tourDetail} detailedItinerary={detailedItinerary} />
       </div>
-
-      {/* Itinerary Modal */}
-      {selectedDay !== null && (
-        <TourItineraryModal
-          itinerary={detailedItinerary}
-          selectedDay={selectedDay}
-          onClose={() => setSelectedDay(null)}
-        />
-      )}
     </div>
   )
 }
