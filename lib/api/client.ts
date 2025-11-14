@@ -12,18 +12,39 @@ export class APIError extends Error {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api"
 
+export interface APIClientOptions extends RequestInit {
+  useAuth?: boolean
+  baseURL?: string
+}
+
 export async function apiClient<T>(
   endpoint: string,
-  options?: RequestInit
+  options?: APIClientOptions
 ): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`
+  const { useAuth = false, baseURL, ...fetchOptions } = options || {}
+  const url = `${baseURL || API_BASE_URL}${endpoint}`
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  }
+
+  if (fetchOptions?.headers) {
+    const existingHeaders = fetchOptions.headers as Record<string, string>
+    Object.assign(headers, existingHeaders)
+  }
+
+  if (useAuth) {
+    const bearerToken = process.env.NEXT_PUBLIC_BEARER_TOKEN || "I5XVq3DTeiv7AAxVWOchKw8aV7GVyytP"
+    if (bearerToken) {
+      headers["Authorization"] = `Bearer ${bearerToken}`
+    } else {
+      console.error("Bearer token is missing. Please set NEXT_PUBLIC_BEARER_TOKEN in .env.local")
+    }
+  }
 
   const config: RequestInit = {
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-    ...options,
+    ...fetchOptions,
+    headers,
   }
 
   try {
@@ -67,31 +88,31 @@ export async function apiClient<T>(
 }
 
 export const api = {
-  get: <T>(endpoint: string, options?: RequestInit) =>
+  get: <T>(endpoint: string, options?: APIClientOptions) =>
     apiClient<T>(endpoint, { method: "GET", ...options }),
 
-  post: <T>(endpoint: string, data?: any, options?: RequestInit) =>
+  post: <T>(endpoint: string, data?: any, options?: APIClientOptions) =>
     apiClient<T>(endpoint, {
       method: "POST",
       body: JSON.stringify(data),
       ...options,
     }),
 
-  put: <T>(endpoint: string, data?: any, options?: RequestInit) =>
+  put: <T>(endpoint: string, data?: any, options?: APIClientOptions) =>
     apiClient<T>(endpoint, {
       method: "PUT",
       body: JSON.stringify(data),
       ...options,
     }),
 
-  patch: <T>(endpoint: string, data?: any, options?: RequestInit) =>
+  patch: <T>(endpoint: string, data?: any, options?: APIClientOptions) =>
     apiClient<T>(endpoint, {
       method: "PATCH",
       body: JSON.stringify(data),
       ...options,
     }),
 
-  delete: <T>(endpoint: string, options?: RequestInit) =>
+  delete: <T>(endpoint: string, options?: APIClientOptions) =>
     apiClient<T>(endpoint, { method: "DELETE", ...options }),
 }
 

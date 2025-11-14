@@ -3,17 +3,27 @@
 import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Loader2, AlertCircle } from "lucide-react"
 import type { Tour } from "@/types"
 import { ToursHeader, FiltersSidebar, ToursToolbar, TourGridCard, TourListCard, NoToursFound } from "../components"
 import type { SearchFilters, ViewMode, SortByType } from "../types"
+import { useToursData } from "../hooks/useToursData"
 
-interface ToursClientProps {
-  tours: Tour[]
-}
-
-export function ToursClient({ tours }: ToursClientProps) {
+/**
+ * ToursClient Component
+ * Handles data fetching, filtering, sorting, and rendering of tours
+ * Now integrated with live API data from Lato Travel API
+ */
+export function ToursClient() {
   const searchParams = useSearchParams()
   const router = useRouter()
+
+  // Fetch tours from API
+  const { tours: apiTours, isLoading, isError, error, totalCount, refetch } = useToursData({
+    page: 1,
+    itemsPerPage: 100, // Fetch more items for better filtering
+    countries: "US", // Can be made dynamic based on user preferences
+  })
 
   // Search and Filter State
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
@@ -63,6 +73,13 @@ export function ToursClient({ tours }: ToursClientProps) {
   }
 
   const handleClearFilters = () => {
+    setSearchFilters({
+      destination: "",
+      month: "",
+      year: new Date().getFullYear(),
+      duration: "",
+      travelStyle: "",
+    })
     setSelectedDestinations([])
     setPriceRange([0, 50000])
     setSelectedOperator("all")
@@ -74,13 +91,44 @@ export function ToursClient({ tours }: ToursClientProps) {
     setExpandedTravelStyles([])
   }
 
-  // Filter Tours
-  const filteredTours = tours.filter((tour) => {
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-lg text-muted-foreground">Loading amazing tours...</p>
+        <p className="text-sm text-muted-foreground mt-2">Fetching data from Lato Travel API</p>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
+        <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+        <h2 className="text-2xl font-semibold mb-2">Oops! Something went wrong</h2>
+        <p className="text-muted-foreground mb-6 text-center max-w-md">
+          {error?.message || "We couldn't load the tours. Please try again."}
+        </p>
+        <Button onClick={() => refetch()} size="lg">
+          Try Again
+        </Button>
+      </div>
+    )
+  }
+
+  // Filter Tours (all client-side filtering on API data)
+  const filteredTours = apiTours.filter((tour) => {
     const matchesSearch =
       !searchFilters.destination ||
       tour.title.toLowerCase().includes(searchFilters.destination.toLowerCase()) ||
       tour.location.toLowerCase().includes(searchFilters.destination.toLowerCase()) ||
       tour.company.toLowerCase().includes(searchFilters.destination.toLowerCase())
+
+    // Match searchbar travel style filter (adventures dropdown)
+    const matchesSearchBarTravelStyle =
+      !searchFilters.travelStyle ||
+      searchFilters.travelStyle === "all" ||
+      tour.travelStyle.toLowerCase() === searchFilters.travelStyle.toLowerCase()
 
     const matchesDestination = selectedDestinations.length === 0 || selectedDestinations.includes(tour.destination)
     const matchesTravelStyle =
@@ -131,6 +179,7 @@ export function ToursClient({ tours }: ToursClientProps) {
 
     return (
       matchesSearch &&
+      matchesSearchBarTravelStyle &&
       matchesDestination &&
       matchesTravelStyle &&
       matchesOperator &&
@@ -184,14 +233,14 @@ export function ToursClient({ tours }: ToursClientProps) {
             setExpandedTravelStyles={setExpandedTravelStyles}
             selectedTravelStyleTypes={selectedTravelStyleTypes}
             setSelectedTravelStyleTypes={setSelectedTravelStyleTypes}
-            tours={tours}
+            tours={apiTours}
           />
 
           {/* Tours Grid/List */}
           <div className="flex-1 min-w-0">
             <ToursToolbar
               totalResults={sortedTours.length}
-              totalTours={tours.length}
+              totalTours={apiTours.length}
               viewMode={viewMode}
               setViewMode={setViewMode}
               sortBy={sortBy}
@@ -214,8 +263,8 @@ export function ToursClient({ tours }: ToursClientProps) {
 
             {sortedTours.length === 0 && <NoToursFound onClearFilters={handleClearFilters} />}
 
-            {/* Load More */}
-            {sortedTours.length > 0 && (
+            {/* Load More - Can be implemented with pagination later */}
+            {sortedTours.length > 0 && sortedTours.length >= 50 && (
               <div className="text-center mt-8 sm:mt-12">
                 <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   Load More Tours

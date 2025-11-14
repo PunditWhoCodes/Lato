@@ -1,21 +1,17 @@
 import { Navigation } from "@/components/navigation"
-import { mockTours } from "./data"
 import { ToursClient } from "./components/tours-client"
 
 /**
- * Tours Listing Page (Server Component with SSR)
+ * Tours Listing Page
  *
- * This page is server-rendered for SEO benefits.
- * Interactive features (search, filters, sorting) are handled by ToursClient.
+ * This page now uses live API data from the Lato Travel API.
+ * Data fetching and caching is handled by TanStack Query in ToursClient.
  */
-export default async function ToursPage() {
-  // Fetch data on the server (currently mock data, ready for API integration)
-  const tours = mockTours
-
+export default function ToursPage() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <ToursClient tours={tours} />
+      <ToursClient />
     </div>
   )
 }
