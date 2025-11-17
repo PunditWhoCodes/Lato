@@ -1,11 +1,11 @@
 "use client"
 
 import { useMemo } from "react"
-import { useMarketplaceTrips, mapMarketplaceResponseToTours } from "../../api"
+import { useTripById, mapUserTripToTour } from "../../api"
 import type { Tour } from "@/types"
 
 interface UseTourDetailOptions {
-  tourId: string | number
+  tourId: string
   enabled?: boolean
 }
 
@@ -17,35 +17,29 @@ interface UseTourDetailReturn {
   refetch: () => void
 }
 
+/**
+ * Hook to fetch a single tour by UUID
+ * Uses the dedicated single trip endpoint for better performance
+ */
 export function useTourDetail(options: UseTourDetailOptions): UseTourDetailReturn {
   const { tourId, enabled = true } = options
 
-  const numericId = typeof tourId === "string" ? parseInt(tourId, 10) : tourId
-
-  // Fetch all tours (cached by TanStack Query)
+  // Fetch single trip by UUID using the dedicated endpoint
   const {
     data,
     isLoading,
     isError,
     error,
     refetch,
-  } = useMarketplaceTrips(
-    {
-      page: 1,
-      step: 100,
-      sample: true,
-    },
-    {
-      enabled,
-    }
-  )
+  } = useTripById(tourId, {
+    enabled: enabled && !!tourId,
+  })
 
-  // Find the tour by numeric ID
+  // Map API response to Tour format
   const tour = useMemo(() => {
     if (!data) return undefined
-    const tours = mapMarketplaceResponseToTours(data)
-    return tours.find((t) => t.id === numericId)
-  }, [data, numericId])
+    return mapUserTripToTour(data)
+  }, [data])
 
   return {
     tour,

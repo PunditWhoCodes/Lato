@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Loader2, AlertCircle } from "lucide-react"
-import type { Tour } from "@/types"
 import { ToursHeader, FiltersSidebar, ToursToolbar, TourGridCard, TourListCard, NoToursFound } from "../components"
 import type { SearchFilters, ViewMode, SortByType } from "../types"
 import { useToursData } from "../hooks/useToursData"
@@ -19,7 +18,7 @@ export function ToursClient() {
   const router = useRouter()
 
   // Fetch tours from API
-  const { tours: apiTours, isLoading, isError, error, totalCount, refetch } = useToursData({
+  const { tours: apiTours, isLoading, isError, error, refetch } = useToursData({
     page: 1,
     itemsPerPage: 100, // Fetch more items for better filtering
     countries: "US", // Can be made dynamic based on user preferences
@@ -69,7 +68,12 @@ export function ToursClient() {
     if (target.closest("button") || target.closest("a") || target.closest("[data-prevent-navigation]")) {
       return
     }
-    router.push(`/tours/${tourId}`)
+
+    // Find the tour to get its UUID
+    const tour = sortedTours.find(t => t.id === tourId)
+    const tourUuid = tour?.uuid || tourId.toString()
+
+    router.push(`/tours/${tourUuid}`)
   }
 
   const handleClearFilters = () => {

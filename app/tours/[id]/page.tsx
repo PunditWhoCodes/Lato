@@ -9,6 +9,9 @@ import { TourDetailClient } from "./components/tour-detail-client"
  * Data fetching is handled client-side for dynamic updates.
  */
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata = {
   title: "Tour Details | Lato Marketplace",
   description: "Explore detailed information about this amazing tour experience.",

@@ -46,6 +46,7 @@ export interface CompanyStats {
 // Tour Types
 export interface Tour {
   id: number
+  uuid?: string // Original UUID from API
   title: string
   company: string
   companyId: string

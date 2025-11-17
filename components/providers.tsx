@@ -3,7 +3,7 @@
 import { AuthProvider } from "@/lib/auth"
 import { SavedToursProvider } from "@/lib/saved-tours-context"
 import { SavedCompaniesProvider } from "@/lib/saved-companies-context"
-import { MessagesProvider } from "@/contexts/MessagesContext"
+import { EnhancedMessagesProvider } from "@/contexts/EnhancedMessagesContext"
 import { ThemeProvider } from "next-themes"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -25,7 +25,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <AuthProvider>
           <SavedToursProvider>
             <SavedCompaniesProvider>
-              <MessagesProvider>{children}</MessagesProvider>
+              <EnhancedMessagesProvider>{children}</EnhancedMessagesProvider>
             </SavedCompaniesProvider>
           </SavedToursProvider>
         </AuthProvider>

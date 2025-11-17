@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { CountrySelect } from "@/components/ui/country-select"
 import { MapPin, Calendar, Users, Globe, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import type { SearchFilters } from "@/types"
 
@@ -45,15 +46,13 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         <div className="relative bg-card/90 dark:bg-card/95 backdrop-blur-sm rounded-3xl md:rounded-full p-2 shadow-2xl border border-border">
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
             {/* Destination Field */}
-            <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-              <MapPin className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-              <Input
-                placeholder="Where to?"
-                value={filters.destination}
-                onChange={(e) => updateFilter("destination", e.target.value)}
-                className="border-0 bg-transparent text-base placeholder:text-muted-foreground/70 focus-visible:ring-0 px-3 py-2 md:py-1"
-              />
-            </div>
+            <CountrySelect
+              value={filters.destination}
+              onChange={(value) => updateFilter("destination", value)}
+              placeholder="Where to?"
+              variant="search-bar"
+              showIcon={true}
+            />
 
             {/* Separator */}
             <div className="hidden md:block w-px h-8 bg-border"></div>

@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
-import { useMessages } from "@/contexts/MessagesContext"
+import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
 import { Logo } from "@/components/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { destinations, travelStyles } from "@/lib/data"
@@ -31,7 +31,7 @@ import { destinations, travelStyles } from "@/lib/data"
 export function Navigation() {
   const { user, logout } = useAuth()
   const { savedToursCount } = useSavedTours()
-  const { getTotalUnread } = useMessages()
+  const { getTotalUnread } = useEnhancedMessages()
   const [hoveredContinent, setHoveredContinent] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [expandedSection, setExpandedSection] = useState<string | null>(null)

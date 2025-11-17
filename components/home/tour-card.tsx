@@ -24,9 +24,12 @@ export function TourCard({ tour }: TourCardProps) {
     toggleSaveTour(tour.id)
   }
 
+  // Use UUID if available, otherwise fall back to numeric ID
+  const tourLink = tour.uuid || tour.id.toString()
+
   return (
     <Card className="group hover:shadow-2xl dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 cursor-pointer border-0 shadow-lg bg-card/80 dark:bg-card/95 backdrop-blur-sm overflow-hidden">
-      <Link href={`/tours/${tour.id}`}>
+      <Link href={`/tours/${tourLink}`}>
         <div className="relative overflow-hidden h-56">
           <ShimmerImage
             src={tour.image || "/placeholder.svg"}
