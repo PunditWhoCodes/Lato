@@ -77,7 +77,8 @@ export function CountrySelect({
       (c) => c.name.toLowerCase() === currentValue.toLowerCase()
     )
     if (country) {
-      onChange(availableCountries.length > 0 ? country.code : country.name)
+      // Always return ISO code for API compatibility
+      onChange(country.code)
       setOpen(false)
     }
   }

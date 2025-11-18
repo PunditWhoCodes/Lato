@@ -7,7 +7,6 @@ import { Loader2, AlertCircle } from "lucide-react"
 import { ToursHeader, FiltersSidebar, ToursToolbar, TourGridCard, TourListCard, NoToursFound } from "../components"
 import type { SearchFilters, ViewMode, SortByType } from "../types"
 import { useToursData } from "../hooks/useToursData"
-import { useCountries } from "../hooks/useCountries"
 
 /**
  * ToursClient Component
@@ -20,9 +19,6 @@ export function ToursClient() {
 
   // Country Selection State
   const [selectedCountry, setSelectedCountry] = useState<string>("")
-
-  // Fetch available countries from API
-  const { countries: availableCountries, isLoading: isLoadingCountries } = useCountries()
 
   // Fetch tours from API - now with dynamic country filtering
   const { tours: apiTours, isLoading, isError, error, refetch } = useToursData({
@@ -225,8 +221,6 @@ export function ToursClient() {
       <ToursHeader
         onSearch={handleSearch}
         onCountryChange={handleCountryChange}
-        availableCountries={availableCountries}
-        selectedCountry={selectedCountry}
       />
 
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">

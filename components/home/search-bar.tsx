@@ -8,13 +8,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CountrySelect } from "@/components/ui/country-select"
 import { MapPin, Calendar, Users, Globe, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import type { SearchFilters } from "@/types"
-import type { CountryOption } from "@/app/tours/hooks/useCountries"
 
 interface SearchBarProps {
   onSearch: (filters: SearchFilters) => void
   onCountryChange?: (countryIso: string) => void
-  availableCountries?: CountryOption[]
-  selectedCountry?: string
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -22,8 +19,6 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 export function SearchBar({
   onSearch,
   onCountryChange,
-  availableCountries = [],
-  selectedCountry = ""
 }: SearchBarProps) {
   const [filters, setFilters] = useState<SearchFilters>({
     destination: "",
@@ -63,12 +58,11 @@ export function SearchBar({
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
             {/* Destination Field */}
             <CountrySelect
-              value={selectedCountry || filters.destination}
+              value={filters.destination}
               onChange={handleCountrySelect}
               placeholder="Where to?"
               variant="search-bar"
               showIcon={true}
-              availableCountries={availableCountries}
             />
 
             {/* Separator */}
