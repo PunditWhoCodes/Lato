@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${montserrat.variable} ${openSans.variable} antialiased`} suppressHydrationWarning>
-      <body className="font-sans flex flex-col min-h-screen">
+      <body className="font-sans flex flex-col min-h-screen" suppressHydrationWarning>
         <Providers>
           {children}
           <ConditionalFooter />
