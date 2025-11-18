@@ -127,37 +127,89 @@ function extractHighlights(userTrip: APIUserTrip): string[] {
  * Map APIUserTrip to Tour interface
  */
 export function mapUserTripToTour(userTrip: APIUserTrip): Tour {
+  // Validate input
+  if (!userTrip) {
+    console.error("mapUserTripToTour: userTrip is undefined or null")
+    throw new Error("Invalid user trip data: userTrip is undefined")
+  }
+
+  if (!userTrip.id) {
+    console.error("mapUserTripToTour: userTrip.id is missing", userTrip)
+    throw new Error("Invalid user trip data: ID is missing")
+  }
+
+  // Check if this is actually a Trip object instead of UserTrip
+  // The API sometimes returns Trip directly instead of UserTrip
+  const isTrip = 'client_name' in userTrip || 'tripdays' in userTrip
+
+  if (isTrip) {
+    console.warn("Received Trip object instead of UserTrip, creating minimal tour data")
+    const tripData = userTrip as any
+    const title = tripData.titles?.[0]?.content || "Untitled Tour"
+    const country = tripData.country
+
+    return {
+      id: parseInt(tripData.id.split("-")[0], 16),
+      uuid: tripData.id,
+      title,
+      company: "Unknown Company",
+      companyId: undefined,
+      companyCountry: country?.name || "Unknown",
+      companyFlag: country?.flagEmoticon || "🌍",
+      price: 0,
+      originalPrice: undefined,
+      rating: generateDeterministicRating(tripData.id),
+      reviews: 0,
+      duration: tripData.nrOfDays ? `${tripData.nrOfDays} days` : "Multiple days",
+      groupSize: "Small Group",
+      location: country?.name || "International",
+      destination: country?.iso || "INT",
+      travelStyle: "Exploration",
+      image: getTourImage(country?.iso || "US"),
+      badges: tripData.sample ? ["Sample"] : [],
+      category: "Exploration",
+      difficulty: "Moderate",
+      highlights: [],
+      tourType: "Group Tour",
+    }
+  }
+
   const trip = userTrip.trip
   const title = trip?.titles?.[0]?.content || "Untitled Tour"
   const country = trip?.country
 
-  return {
-    id: parseInt(userTrip.id.split("-")[0], 16), // Convert UUID to number for compatibility
-    uuid: userTrip.id, // Preserve original UUID for API calls
-    title,
-    company: userTrip?.user?.company?.name || userTrip?.user?.name,
-    companyId: userTrip?.user?.companyId,
-    companyCountry: country?.name || "Unknown",
-    companyFlag: country?.flagEmoticon || "🌍",
-    price: userTrip?.price || 0,
-    originalPrice: userTrip?.price && userTrip?.fee ? userTrip.price + userTrip.fee : undefined,
-    rating: generateDeterministicRating(userTrip.id), // Deterministic rating based on UUID
-    reviews: userTrip?.travelapp_visits, // Using visits as a proxy for reviews
-    duration: trip?.nrOfDays ? `${trip.nrOfDays} days` : "Multiple days",
-    groupSize: userTrip.max_travellers
-      ? `Up to ${userTrip.max_travellers} people`
-      : userTrip.group_booking
-        ? "Group"
-        : "Small Group",
-    location: country?.name || "International",
-    destination: country?.iso || "INT",
-    travelStyle: determineTravelStyle(userTrip),
-    image: getTourImage(country?.iso || "US"),
-    badges: generateTourBadges(userTrip),
-    category: determineTravelStyle(userTrip),
-    difficulty: "Moderate", // Default difficulty
-    highlights: extractHighlights(userTrip),
-    tourType: determineTourType(userTrip),
+  try {
+    return {
+      id: parseInt(userTrip.id.split("-")[0], 16), // Convert UUID to number for compatibility
+      uuid: userTrip.id, // Preserve original UUID for API calls
+      title,
+      company: userTrip?.user?.company?.name || userTrip?.user?.name || "Unknown Company",
+      companyId: userTrip?.user?.companyId,
+      companyCountry: country?.name || "Unknown",
+      companyFlag: country?.flagEmoticon || "🌍",
+      price: userTrip?.price || 0,
+      originalPrice: userTrip?.price && userTrip?.fee ? userTrip.price + userTrip.fee : undefined,
+      rating: generateDeterministicRating(userTrip.id), // Deterministic rating based on UUID
+      reviews: userTrip?.travelapp_visits || 0, // Using visits as a proxy for reviews
+      duration: trip?.nrOfDays ? `${trip.nrOfDays} days` : "Multiple days",
+      groupSize: userTrip.max_travellers
+        ? `Up to ${userTrip.max_travellers} people`
+        : userTrip.group_booking
+          ? "Group"
+          : "Small Group",
+      location: country?.name || "International",
+      destination: country?.iso || "INT",
+      travelStyle: determineTravelStyle(userTrip),
+      image: getTourImage(country?.iso || "US"),
+      badges: generateTourBadges(userTrip),
+      category: determineTravelStyle(userTrip),
+      difficulty: "Moderate", // Default difficulty
+      highlights: extractHighlights(userTrip),
+      tourType: determineTourType(userTrip),
+    }
+  } catch (error) {
+    console.error("Error in mapUserTripToTour:", error, { userTrip })
+    throw new Error(`Failed to map user trip: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 

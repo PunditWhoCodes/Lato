@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -8,7 +9,7 @@ import { Slider } from "@/components/ui/slider"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Filter, ChevronDown, Check, SlidersHorizontal } from "lucide-react"
-import { destinations, travelStyles, durations, groupSizes, tourTypes } from "../data"
+import { travelStyles, durations, groupSizes, tourTypes } from "../data"
 import type { TravelStyleType, Tour } from "../types"
 
 interface FiltersSidebarProps {
@@ -54,6 +55,36 @@ export function FiltersSidebar({
   setSelectedTravelStyleTypes,
   tours,
 }: FiltersSidebarProps) {
+  // Extract unique destinations from actual API tours data
+  const destinations = useMemo(() => {
+    const uniqueDestinations = new Map<string, { code: string; name: string; count: number }>()
+
+    tours.forEach((tour) => {
+      const key = tour.destination
+      if (key) {
+        const existing = uniqueDestinations.get(key)
+        if (existing) {
+          existing.count++
+        } else {
+          uniqueDestinations.set(key, {
+            code: tour.destination,
+            name: tour.location, // Use location as the display name
+            count: 1,
+          })
+        }
+      }
+    })
+
+    // Convert to array and sort by count (most popular first), then alphabetically
+    return Array.from(uniqueDestinations.values())
+      .sort((a, b) => {
+        if (b.count !== a.count) {
+          return b.count - a.count
+        }
+        return a.name.localeCompare(b.name)
+      })
+  }, [tours])
+
   const getOperatorCountries = () => {
     const allCountries = Array.from(new Set(tours.map((tour) => tour.companyCountry))).sort()
 
@@ -112,19 +143,20 @@ export function FiltersSidebar({
                       </CommandItem>
                       {destinations.map((destination) => (
                         <CommandItem
-                          key={destination}
+                          key={destination.code}
                           onSelect={() => {
                             setSelectedDestinations(
-                              selectedDestinations.includes(destination)
-                                ? selectedDestinations.filter((d) => d !== destination)
-                                : [...selectedDestinations, destination],
+                              selectedDestinations.includes(destination.code)
+                                ? selectedDestinations.filter((d) => d !== destination.code)
+                                : [...selectedDestinations, destination.code],
                             )
                           }}
                         >
                           <Check
-                            className={`mr-2 h-4 w-4 ${selectedDestinations.includes(destination) ? "opacity-100" : "opacity-0"}`}
+                            className={`mr-2 h-4 w-4 ${selectedDestinations.includes(destination.code) ? "opacity-100" : "opacity-0"}`}
                           />
-                          {destination}
+                          <span className="flex-1">{destination.name}</span>
+                          <span className="text-xs text-muted-foreground ml-2">({destination.count})</span>
                         </CommandItem>
                       ))}
                     </CommandGroup>

@@ -2,12 +2,21 @@
 
 import { SearchBar } from "@/components/home/search-bar"
 import type { SearchFilters } from "@/types"
+import type { CountryOption } from "../hooks/useCountries"
 
 interface ToursHeaderProps {
   onSearch: (filters: SearchFilters) => void
+  onCountryChange: (countryIso: string) => void
+  availableCountries: CountryOption[]
+  selectedCountry: string
 }
 
-export function ToursHeader({ onSearch }: ToursHeaderProps) {
+export function ToursHeader({
+  onSearch,
+  onCountryChange,
+  availableCountries,
+  selectedCountry
+}: ToursHeaderProps) {
   return (
     <section className="relative bg-linear-to-br from-primary/5 via-primary/10 to-secondary/5 dark:from-primary/10 dark:via-primary/5 dark:to-secondary/10 py-6 sm:py-8 md:py-12 px-4 overflow-hidden transition-colors">
       {/* Background decorative elements */}
@@ -31,7 +40,12 @@ export function ToursHeader({ onSearch }: ToursHeaderProps) {
         </div>
 
         {/* Search Bar Component */}
-        <SearchBar onSearch={onSearch} />
+        <SearchBar
+          onSearch={onSearch}
+          onCountryChange={onCountryChange}
+          availableCountries={availableCountries}
+          selectedCountry={selectedCountry}
+        />
       </div>
     </section>
   )

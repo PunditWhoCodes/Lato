@@ -20,6 +20,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { countries, type Country } from "@/lib/data/countries"
+import type { CountryOption } from "@/app/tours/hooks/useCountries"
 
 export interface CountrySelectProps {
   value?: string
@@ -28,6 +29,7 @@ export interface CountrySelectProps {
   className?: string
   showIcon?: boolean
   variant?: "default" | "search-bar"
+  availableCountries?: CountryOption[]
 }
 
 // Helper function to get flag component
@@ -43,22 +45,39 @@ export function CountrySelect({
   className,
   showIcon = true,
   variant = "default",
+  availableCountries = [],
 }: CountrySelectProps) {
   const [open, setOpen] = React.useState(false)
   const [searchValue, setSearchValue] = React.useState("")
 
-  const selectedCountry = countries.find(
-    (country) => country.name.toLowerCase() === value?.toLowerCase()
-  )
+  const countryList = React.useMemo(() => {
+    if (availableCountries.length > 0) {
+      return availableCountries.map((apiCountry) => ({
+        code: apiCountry.iso,
+        name: apiCountry.name,
+        tripCount: apiCountry.tripCount,
+      }))
+    }
+    return countries
+  }, [availableCountries])
+
+  const selectedCountry = React.useMemo(() => {
+    if (!value) return null
+    return countryList.find(
+      (country) =>
+        country.code.toLowerCase() === value.toLowerCase() ||
+        country.name.toLowerCase() === value.toLowerCase()
+    )
+  }, [value, countryList])
 
   const SelectedFlag = selectedCountry ? getFlagComponent(selectedCountry.code) : null
 
   const handleSelect = (currentValue: string) => {
-    const country = countries.find(
+    const country = countryList.find(
       (c) => c.name.toLowerCase() === currentValue.toLowerCase()
     )
     if (country) {
-      onChange(country.name)
+      onChange(availableCountries.length > 0 ? country.code : country.name)
       setOpen(false)
     }
   }
@@ -70,15 +89,15 @@ export function CountrySelect({
 
   // Filter countries based on search
   const filteredCountries = React.useMemo(() => {
-    if (!searchValue) return countries
+    if (!searchValue) return countryList
 
     const search = searchValue.toLowerCase()
-    return countries.filter(
+    return countryList.filter(
       (country) =>
         country.name.toLowerCase().includes(search) ||
         country.code.toLowerCase().includes(search)
     )
-  }, [searchValue])
+  }, [searchValue, countryList])
 
   if (variant === "search-bar") {
     return (

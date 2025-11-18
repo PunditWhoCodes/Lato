@@ -37,6 +37,20 @@ export function useToursData(options: UseToursDataOptions = {}): UseToursDataRet
     enabled = true,
   } = options
 
+  const queryParams = useMemo(() => {
+    const params: any = {
+      page,
+      step: itemsPerPage,
+      sample: true,
+    }
+
+    if (countries !== undefined && countries !== null && countries.trim() !== '') {
+      params.countries = countries
+    }
+
+    return params
+  }, [page, itemsPerPage, countries])
+
   const {
     data,
     isLoading,
@@ -44,12 +58,7 @@ export function useToursData(options: UseToursDataOptions = {}): UseToursDataRet
     error,
     refetch,
   } = useMarketplaceTrips(
-    {
-      page,
-      step: itemsPerPage,
-      sample: true,
-      countries,
-    },
+    queryParams,
     {
       enabled,
     }

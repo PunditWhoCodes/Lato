@@ -9,11 +9,9 @@ export class APIError extends Error {
     this.name = "APIError"
   }
 }
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api"
 
 export interface APIClientOptions extends RequestInit {
-  useAuth?: boolean
   baseURL?: string
 }
 
@@ -21,7 +19,7 @@ export async function apiClient<T>(
   endpoint: string,
   options?: APIClientOptions
 ): Promise<T> {
-  const { useAuth = false, baseURL, ...fetchOptions } = options || {}
+  const { baseURL, ...fetchOptions } = options || {}
   const url = `${baseURL || API_BASE_URL}${endpoint}`
 
   const headers: Record<string, string> = {
@@ -31,15 +29,6 @@ export async function apiClient<T>(
   if (fetchOptions?.headers) {
     const existingHeaders = fetchOptions.headers as Record<string, string>
     Object.assign(headers, existingHeaders)
-  }
-
-  if (useAuth) {
-    const bearerToken = process.env.NEXT_PUBLIC_BEARER_TOKEN || "I5XVq3DTeiv7AAxVWOchKw8aV7GVyytP"
-    if (bearerToken) {
-      headers["Authorization"] = `Bearer ${bearerToken}`
-    } else {
-      console.error("Bearer token is missing. Please set NEXT_PUBLIC_BEARER_TOKEN in .env.local")
-    }
   }
 
   const config: RequestInit = {

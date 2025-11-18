@@ -8,14 +8,23 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CountrySelect } from "@/components/ui/country-select"
 import { MapPin, Calendar, Users, Globe, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import type { SearchFilters } from "@/types"
+import type { CountryOption } from "@/app/tours/hooks/useCountries"
 
 interface SearchBarProps {
   onSearch: (filters: SearchFilters) => void
+  onCountryChange?: (countryIso: string) => void
+  availableCountries?: CountryOption[]
+  selectedCountry?: string
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-export function SearchBar({ onSearch }: SearchBarProps) {
+export function SearchBar({
+  onSearch,
+  onCountryChange,
+  availableCountries = [],
+  selectedCountry = ""
+}: SearchBarProps) {
   const [filters, setFilters] = useState<SearchFilters>({
     destination: "",
     month: "",
@@ -30,6 +39,13 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 
   const updateFilter = (key: keyof SearchFilters, value: string | number) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const handleCountrySelect = (countryIso: string) => {
+    updateFilter("destination", countryIso)
+    if (onCountryChange) {
+      onCountryChange(countryIso)
+    }
   }
 
   const handleYearChange = (direction: "prev" | "next") => {
@@ -47,11 +63,12 @@ export function SearchBar({ onSearch }: SearchBarProps) {
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
             {/* Destination Field */}
             <CountrySelect
-              value={filters.destination}
-              onChange={(value) => updateFilter("destination", value)}
+              value={selectedCountry || filters.destination}
+              onChange={handleCountrySelect}
               placeholder="Where to?"
               variant="search-bar"
               showIcon={true}
+              availableCountries={availableCountries}
             />
 
             {/* Separator */}

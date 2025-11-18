@@ -1,10 +1,7 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.latotravelapp.com"
+export const API_BASE_URL = ""
 export const API_VERSION = "v1"
 
-export const BEARER_TOKEN =
-  typeof window !== 'undefined' && process.env.NEXT_PUBLIC_BEARER_TOKEN
-    ? process.env.NEXT_PUBLIC_BEARER_TOKEN
-    : "I5XVq3DTeiv7AAxVWOchKw8aV7GVyytP"
+export const BEARER_TOKEN = undefined
 
 export const TRIPS_API = {
 
@@ -20,20 +17,20 @@ export const TRIPS_API = {
       sample: String(params?.sample ?? true),
       ...(params?.countries && { countries: params.countries }),
     })
-    return `/api/${API_VERSION}/trips/marketplace?${queryParams.toString()}`
+    return `/${API_VERSION}/trips/marketplace?${queryParams.toString()}`
   },
 
-  BY_ID: (id: string) => `/api/${API_VERSION}/usertrips/${id}`,
+  BY_ID: (id: string) => `/${API_VERSION}/usertrips/${id}`,
 } as const
 
 export const USER_API = {
-  PROFILE: "/api/v1/user/profile",
-  SAVED_TRIPS: "/api/v1/user/saved-trips",
+  PROFILE: "/v1/user/profile",
+  SAVED_TRIPS: "/v1/user/saved-trips",
 } as const
 
 export const COMPANIES_API = {
-  ALL: "/api/v1/companies",
-  BY_ID: (id: string) => `/api/v1/companies/${id}`,
+  ALL: "/v1/companies",
+  BY_ID: (id: string) => `/v1/companies/${id}`,
 } as const
 
 export const buildApiUrl = (endpoint: string): string => {
