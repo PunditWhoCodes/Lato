@@ -26,7 +26,7 @@ export function TourGridCard({ tour, onClick }: TourGridCardProps) {
   }
 
   return (
-    <div onClick={(e) => onClick(tour.uuid, e)}>
+    <div onClick={(e) => onClick(tour.uuid || tour.id.toString(), e)}>
       <Card className="group hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer border-0 shadow-lg bg-card dark:bg-card/95 h-full">
         <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-52 md:h-56">
           <ShimmerImage

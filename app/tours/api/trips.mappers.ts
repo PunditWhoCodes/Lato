@@ -153,7 +153,7 @@ export function mapUserTripToTour(userTrip: APIUserTrip): Tour {
       uuid: tripData.id,
       title,
       company: "Unknown Company",
-      companyId: undefined,
+      companyId: "",
       companyCountry: country?.name || "Unknown",
       companyFlag: country?.flagEmoticon || "🌍",
       price: 0,

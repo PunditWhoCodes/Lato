@@ -196,7 +196,20 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           </div>
 
           <div id="reviews">
-            <ReviewsSection reviews={tourDetail.reviews} rating={tourDetail.rating} />
+            <ReviewsSection
+              reviews={tourDetail.reviews}
+              rating={tourDetail.rating}
+              tourLocation={
+                tour.location
+                  ? {
+                      lat: 0, // TODO: Add coordinates to API or geocode tour.location
+                      lng: 0,
+                      name: tour.location,
+                    }
+                  : undefined
+              }
+              enableGoogleReviews={false} // Disabled until coordinates are available
+            />
           </div>
         </div>
 

@@ -134,19 +134,21 @@ export interface Activity {
 
 // Review Types
 export interface Review {
-  id: number
+  id: number | string
   user: {
     name: string
-    avatar: string
-    location: string
+    avatar?: string
+    location?: string
   }
   rating: number
   date: string
   tourTitle?: string
   comment: string
-  helpful: number
+  helpful?: number
   images?: string[]
   verified?: boolean
+  source?: 'google' | 'internal'
+  googleReviewUrl?: string
 }
 
 export interface RelatedTour {
