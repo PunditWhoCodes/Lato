@@ -264,7 +264,12 @@ export function Navigation() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={logout} className="text-destructive">
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        await logout()
+                      }}
+                      className="text-destructive"
+                    >
                       <LogOut className="mr-2 h-4 w-4" />
                       Log out
                     </DropdownMenuItem>
@@ -439,8 +444,8 @@ export function Navigation() {
                     Settings
                   </Link>
                   <button
-                    onClick={() => {
-                      logout()
+                    onClick={async () => {
+                      await logout()
                       setMobileMenuOpen(false)
                     }}
                     className="flex items-center py-2 text-base font-medium text-destructive w-full"
