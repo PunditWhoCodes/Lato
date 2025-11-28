@@ -1,3 +1,5 @@
+import { getAccessToken, setAccessToken, clearAllTokens, getRefreshToken } from '@/lib/utils/token'
+
 export class APIError extends Error {
   constructor(
     message: string,
@@ -9,21 +11,76 @@ export class APIError extends Error {
     this.name = "APIError"
   }
 }
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api"
+
+const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.latotravelapp.com"
+
+const INTERNAL_API_URL = "/api"
 
 export interface APIClientOptions extends RequestInit {
   baseURL?: string
+  requiresAuth?: boolean
+  isRetry?: boolean
+}
+
+let isRefreshing = false
+let refreshSubscribers: Array<(token: string) => void> = []
+
+function subscribeTokenRefresh(cb: (token: string) => void) {
+  refreshSubscribers.push(cb)
+}
+
+function onTokenRefreshed(token: string) {
+  refreshSubscribers.forEach((cb) => cb(token))
+  refreshSubscribers = []
+}
+
+async function refreshAccessToken(): Promise<string | null> {
+  const refreshToken = getRefreshToken()
+  if (!refreshToken) {
+    return null
+  }
+
+  try {
+    const response = await fetch(`${EXTERNAL_API_URL}/api/v1/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refreshToken }),
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    const data = await response.json()
+    const { accessToken, expiresIn } = data.tokens || data
+
+    setAccessToken(accessToken, expiresIn)
+    return accessToken
+  } catch (error) {
+    console.error('Token refresh failed:', error)
+    return null
+  }
 }
 
 export async function apiClient<T>(
   endpoint: string,
   options?: APIClientOptions
 ): Promise<T> {
-  const { baseURL, ...fetchOptions } = options || {}
-  const url = `${baseURL || API_BASE_URL}${endpoint}`
+  const { baseURL, requiresAuth = false, isRetry = false, ...fetchOptions } = options || {}
+  const url = `${baseURL || INTERNAL_API_URL}${endpoint}`
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+  }
+
+  if (requiresAuth) {
+    const token = getAccessToken()
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
   }
 
   if (fetchOptions?.headers) {
@@ -34,10 +91,44 @@ export async function apiClient<T>(
   const config: RequestInit = {
     ...fetchOptions,
     headers,
+    credentials: 'include',
   }
 
   try {
     const response = await fetch(url, config)
+
+    if (response.status === 401 && requiresAuth && !isRetry) {
+      if (!isRefreshing) {
+        isRefreshing = true
+        const newToken = await refreshAccessToken()
+
+        if (newToken) {
+          isRefreshing = false
+          onTokenRefreshed(newToken)
+
+          return apiClient<T>(endpoint, { ...options, isRetry: true })
+        } else {
+          isRefreshing = false
+          clearAllTokens()
+          if (typeof window !== 'undefined') {
+            window.location.href = '/login?session=expired'
+          }
+          throw new APIError(
+            'Session expired. Please login again.',
+            401,
+            'Unauthorized'
+          )
+        }
+      } else {
+        return new Promise((resolve, reject) => {
+          subscribeTokenRefresh((token: string) => {
+            apiClient<T>(endpoint, { ...options, isRetry: true })
+              .then(resolve)
+              .catch(reject)
+          })
+        })
+      }
+    }
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null)
