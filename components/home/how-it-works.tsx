@@ -45,89 +45,76 @@ const STEPS: Step[] = [
 
 export function HowItWorks() {
   return (
-    <section className="py-8 sm:py-10 md:py-12 px-4 bg-linear-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
-      <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-secondary/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-
-      <div className="max-w-7xl mx-auto relative">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
-            <Sparkles className="w-3 h-3" />
+    <section className="py-12 md:py-20 px-4 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-mulish font-semibold mb-4">
+            <Sparkles className="w-4 h-4" />
             Simple Process
           </div>
-          <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-foreground mb-3">How It Works</h2>
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
+          <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-text-primary mb-4">
+            How It Works
+          </h2>
+          <p className="text-base md:text-lg font-poppins text-text-muted max-w-3xl mx-auto leading-relaxed">
             From discovery to adventure in three simple steps. Connect with local experts and create unforgettable
             memories.
           </p>
         </div>
 
-        <div className="relative">
-          <div className="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl">
-            <div className="flex justify-between items-center px-24">
-              <div className="w-40 h-1 bg-linear-to-r from-primary/40 to-primary/20 rounded-full shadow-sm"></div>
-              <div className="w-40 h-1 bg-linear-to-r from-primary/20 to-primary/40 rounded-full shadow-sm"></div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+          {STEPS.map((item, index) => (
+            <div key={index} className="group">
+              <Card className="relative h-full bg-white border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 rounded-4xl overflow-hidden">
+                <CardContent className="p-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="text-6xl font-poppins font-bold text-primary/10 select-none group-hover:text-primary/20 transition-colors duration-500">
+                      {item.step}
+                    </div>
+                    <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-500">
+                      <item.icon className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 relative z-10">
-            {STEPS.map((item, index) => (
-              <div key={index} className="group">
-                <Card className="relative h-full bg-card/95 dark:bg-card/98 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 sm:hover:-translate-y-4 hover:rotate-1 overflow-hidden">
-                  <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="font-poppins font-semibold text-xl text-text-primary mb-2 group-hover:text-primary transition-colors duration-300 leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-primary font-mulish font-semibold text-xs uppercase tracking-wider">
+                        {item.subtitle}
+                      </p>
+                    </div>
 
-                  <CardContent className="p-4 sm:p-5 md:p-6 relative z-10">
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="text-6xl font-heading font-black text-primary/15 select-none group-hover:text-primary/25 transition-colors duration-500">
-                        {item.step}
-                      </div>
-                      <div className="relative">
-                        <div className="w-16 h-16 bg-linear-to-br from-primary to-primary rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6">
-                          <item.icon className="w-8 h-8 text-white drop-shadow-lg" />
+                    <p className="text-text-muted font-poppins leading-relaxed text-sm">
+                      {item.description}
+                    </p>
+
+                    <div className="space-y-2 pt-3">
+                      {item.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                          <span className="text-xs text-text-muted font-mulish font-medium">
+                            {feature}
+                          </span>
                         </div>
-                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-secondary rounded-full shadow-lg group-hover:scale-125 transition-transform duration-300"></div>
-                      </div>
+                      ))}
                     </div>
-
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="font-heading font-bold text-xl text-foreground mb-2 group-hover:text-primary transition-colors duration-300 leading-tight">
-                          {item.title}
-                        </h3>
-                        <p className="text-primary/70 font-semibold text-xs uppercase tracking-wider">
-                          {item.subtitle}
-                        </p>
-                      </div>
-
-                      <p className="text-muted-foreground leading-relaxed text-sm">{item.description}</p>
-
-                      <div className="space-y-2 pt-3">
-                        {item.features.map((feature, featureIndex) => (
-                          <div key={featureIndex} className="flex items-center gap-3 group/feature">
-                            <div className="w-2 h-2 bg-primary rounded-full group-hover/feature:scale-125 transition-transform duration-200"></div>
-                            <span className="text-xs text-muted-foreground font-medium group-hover/feature:text-foreground transition-colors duration-200">
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
         </div>
 
-        <div className="text-center mt-6 sm:mt-8">
+        <div className="text-center mt-12">
           <Button
             size="lg"
-            className="rounded-full px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-linear-to-r from-primary to-primary"
+            className="rounded-4xl bg-primary hover:bg-primary/90 text-white px-10 py-6 text-lg font-montserrat font-semibold shadow-xl hover:shadow-2xl transition-all duration-300"
             asChild
           >
             <Link href="/tours">
               Start Exploring
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
           </Button>
         </div>
