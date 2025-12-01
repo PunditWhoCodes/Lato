@@ -1,25 +1,31 @@
+import { StatCard } from "./stat-card"
+import { Users, Map, Star, Globe } from "lucide-react"
+
 interface Stat {
-  number: string
+  value: string
   label: string
+  icon: React.ReactNode
 }
 
 const STATS: Stat[] = [
-  { number: "10K+", label: "Happy Travelers" },
-  { number: "500+", label: "Local Experts" },
-  { number: "50+", label: "Destinations" },
-  { number: "4.9", label: "Average Rating" },
+  { value: "10K+", label: "Happy Travelers", icon: <Users className="w-10 h-10" /> },
+  { value: "500+", label: "Local Experts", icon: <Map className="w-10 h-10" /> },
+  { value: "50+", label: "Destinations", icon: <Globe className="w-10 h-10" /> },
+  { value: "4.9", label: "Average Rating", icon: <Star className="w-10 h-10" /> },
 ]
 
 export function StatsSection() {
   return (
-    <section className="py-6 sm:py-8 md:py-10 px-4 bg-background/50 dark:bg-background/30 backdrop-blur-sm transition-colors">
+    <section className="py-12 md:py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {STATS.map((stat, index) => (
-            <div key={index} className="text-center py-2">
-              <div className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-primary mb-1 sm:mb-2">{stat.number}</div>
-              <div className="text-muted-foreground font-medium text-xs sm:text-sm">{stat.label}</div>
-            </div>
+            <StatCard
+              key={index}
+              value={stat.value}
+              label={stat.label}
+              icon={stat.icon}
+            />
           ))}
         </div>
       </div>
