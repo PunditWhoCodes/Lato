@@ -71,20 +71,20 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
   // Loading State
   if (isLoading) {
     return (
-      <section className="py-8 sm:py-10 md:py-12 px-4">
+      <section className="py-12 md:py-20 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
-              <Award className="w-3 h-3" />
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-mulish font-semibold mb-4">
+              <Award className="w-4 h-4" />
               Featured Experiences
             </div>
-            <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-foreground mb-3">
+            <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-text-primary mb-4">
               Handpicked Adventures
             </h2>
           </div>
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-            <p className="text-lg text-muted-foreground">Loading featured tours...</p>
+            <p className="text-lg font-poppins text-text-muted">Loading featured tours...</p>
           </div>
         </div>
       </section>
@@ -94,21 +94,21 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
   // Error State
   if (isError) {
     return (
-      <section className="py-8 sm:py-10 md:py-12 px-4">
+      <section className="py-12 md:py-20 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
-              <Award className="w-3 h-3" />
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-mulish font-semibold mb-4">
+              <Award className="w-4 h-4" />
               Featured Experiences
             </div>
-            <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-foreground mb-3">
+            <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-text-primary mb-4">
               Handpicked Adventures
             </h2>
           </div>
           <div className="flex flex-col items-center justify-center py-12">
-            <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-            <p className="text-lg text-muted-foreground">Unable to load featured tours</p>
-            <p className="text-sm text-muted-foreground mt-2">Please try again later</p>
+            <AlertCircle className="h-12 w-12 text-accent mb-4" />
+            <p className="text-lg font-poppins text-text-muted">Unable to load featured tours</p>
+            <p className="text-sm font-mulish text-text-muted mt-2">Please try again later</p>
           </div>
         </div>
       </section>
@@ -116,52 +116,52 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
   }
 
   return (
-    <section className="py-8 sm:py-10 md:py-12 px-4">
+    <section className="py-12 md:py-20 px-4 bg-background">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
-            <Award className="w-3 h-3" />
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-mulish font-semibold mb-4">
+            <Award className="w-4 h-4" />
             Featured Experiences
           </div>
-          <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-foreground mb-3">
+          <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-text-primary mb-4">
             Handpicked Adventures
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4 sm:px-0">
+          <p className="text-base md:text-lg font-poppins text-text-muted max-w-2xl mx-auto">
             Discover extraordinary experiences curated by our trusted local partners
           </p>
           {filters.destination || filters.duration || filters.travelStyle ? (
-            <p className="text-sm text-primary font-semibold mt-2">
+            <p className="text-sm font-mulish text-primary font-semibold mt-3">
               Showing top {topTours.length} featured tours based on your filters
             </p>
           ) : null}
         </div>
 
         {topTours.length === 0 ? (
-          <div className="text-center py-8 sm:py-12">
-            <p className="text-muted-foreground text-base sm:text-lg mb-4">
+          <div className="text-center py-12">
+            <p className="text-text-muted font-poppins text-lg mb-4">
               No tours found matching your criteria
             </p>
-            <p className="text-xs sm:text-sm text-muted-foreground">
+            <p className="text-sm font-mulish text-text-muted">
               Try adjusting your filters to see more results
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {topTours.map((tour) => (
               <TourCard key={tour.id} tour={tour} />
             ))}
           </div>
         )}
 
-        <div className="text-center mt-6 sm:mt-8">
+        <div className="text-center mt-12">
           <Button
             size="lg"
-            className="rounded-full px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-linear-to-r from-primary to-primary"
+            className="rounded-4xl bg-primary hover:bg-primary/90 text-white px-10 py-6 text-lg font-montserrat font-semibold shadow-xl hover:shadow-2xl transition-all duration-300"
             asChild
           >
             <Link href="/tours">
               Explore All Tours
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
           </Button>
         </div>
