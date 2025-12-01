@@ -25,7 +25,6 @@ import { useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
 import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
 import { Logo } from "@/components/logo"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { destinations, travelStyles } from "@/lib/data"
 
 export function Navigation() {
@@ -45,9 +44,9 @@ export function Navigation() {
   // Using imported destinations data from lib/data
 
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 sticky top-0 z-50 transition-colors">
+    <nav className="bg-white border-b border-border/50 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-[117px]">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
             <Logo width={120} height={40} />
@@ -59,16 +58,16 @@ export function Navigation() {
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link
-                      href="/tours"
-                      className="text-muted-foreground hover:text-primary transition-colors font-medium"
+                      href="/"
+                      className="text-text-secondary hover:text-primary transition-colors font-montserrat text-[19.69px] font-normal"
                     >
-                      Explore Tours
+                      Home
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-muted-foreground hover:text-white font-medium">
+                  <NavigationMenuTrigger className="bg-transparent text-text-secondary hover:text-primary font-montserrat text-[19.69px] font-normal">
                     Destinations
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -143,8 +142,19 @@ export function Navigation() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-muted-foreground hover:text-white font-medium">
-                    Travel Styles
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href="/tours"
+                      className="text-text-secondary hover:text-primary transition-colors font-montserrat text-[19.69px] font-normal"
+                    >
+                      Tours
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent text-text-secondary hover:text-primary font-montserrat text-[19.69px] font-normal">
+                    Activities
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="w-[800px] p-8">
@@ -174,10 +184,10 @@ export function Navigation() {
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link
-                      href="/companies"
-                      className="text-muted-foreground hover:text-primary transition-colors font-medium"
+                      href="/about"
+                      className="text-text-secondary hover:text-primary transition-colors font-montserrat text-[19.69px] font-normal"
                     >
-                      Tour Companies
+                      About Us
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -205,7 +215,6 @@ export function Navigation() {
 
           {/* Auth Section */}
           <div className="hidden md:flex items-center space-x-2">
-            <ThemeToggle />
             {user ? (
               <>
                 <Button variant="ghost" size="sm" asChild className="relative">
@@ -277,12 +286,12 @@ export function Navigation() {
                 </DropdownMenu>
               </>
             ) : (
-              <div className="flex items-center space-x-2">
-                <Button variant="ghost" asChild>
-                  <Link href="/login">Log in</Link>
+              <div className="flex items-center space-x-3">
+                <Button variant="outline" asChild className="rounded-4xl border-black hover:bg-black hover:text-white font-montserrat font-light">
+                  <Link href="/login">Login</Link>
                 </Button>
-                <Button variant="default" asChild>
-                  <Link href="/register">Sign up</Link>
+                <Button asChild className="rounded-4xl bg-black text-white hover:bg-black/90 font-montserrat font-light">
+                  <Link href="/register">Sign Up</Link>
                 </Button>
               </div>
             )}
@@ -389,14 +398,6 @@ export function Navigation() {
             >
               Tour Companies
             </Link>
-
-            {/* Theme Toggle for Mobile */}
-            <div className="border-t pt-3 mt-3">
-              <div className="flex items-center justify-between py-2">
-                <span className="text-base font-medium text-muted-foreground">Theme</span>
-                <ThemeToggle />
-              </div>
-            </div>
 
             {user ? (
               <>
