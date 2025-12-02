@@ -14,6 +14,7 @@ import { FeaturedActivitiesSection } from "@/components/home/featured-activities
 import { EmailSubscriptionSection } from "@/components/home/email-subscription-section"
 import { CTASection } from "@/components/home/cta-section"
 import type { SearchFilters } from "@/types"
+import { FeaturedActivities } from "@/components/home/featured-activities"
 
 export default function HomePage() {
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
@@ -42,11 +43,11 @@ export default function HomePage() {
 
       <TestimonialsSection />
 
-      <AttractionsCarousel />
+      {/* <AttractionsCarousel /> */}
 
       <TrendingAdventuresSection />
 
-      <FeaturedActivitiesSection />
+      <FeaturedActivities />
 
       <EmailSubscriptionSection />
 
