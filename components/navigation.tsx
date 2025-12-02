@@ -24,7 +24,6 @@ import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
 import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
-import { Logo } from "@/components/logo"
 import { destinations, travelStyles } from "@/lib/data"
 
 export function Navigation() {
@@ -44,30 +43,48 @@ export function Navigation() {
   // Using imported destinations data from lib/data
 
   return (
-    <nav className="bg-white border-b border-border/50 sticky top-0 z-50">
+    <nav className="bg-[#F7F7F7] sticky top-0 z-50 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-[117px]">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <Logo width={120} height={40} />
+        <div className="flex justify-between items-center h-16 sm:h-20 md:h-24">
+          {/* Logo Image */}
+          <Link href="/" className="flex items-center">
+            <img
+              src="/lato-logo.png"
+              alt="Lato"
+              className="h-8 md:h-10 w-auto object-contain"
+            />
           </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
+          {/* Center Navigation Menu */}
+          <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
             <NavigationMenu>
-              <NavigationMenuList>
+              <NavigationMenuList className="gap-8">
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link
-                      href="/"
-                      className="text-text-secondary hover:text-primary transition-colors font-montserrat text-[19.69px] font-normal"
+                      href="/about"
+                      className="text-gray-900 hover:text-black transition-colors font-normal text-base"
                     >
-                      Home
+                      About Us
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-text-secondary hover:text-primary font-montserrat text-[19.69px] font-normal">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href="/tours"
+                      className="text-gray-900 hover:text-black transition-colors font-normal text-base"
+                    >
+                      Explore Places
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger
+                    className="bg-transparent text-gray-900 hover:text-black font-normal text-base"
+                  >
                     Destinations
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -142,19 +159,10 @@ export function Navigation() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/tours"
-                      className="text-text-secondary hover:text-primary transition-colors font-montserrat text-[19.69px] font-normal"
-                    >
-                      Tours
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-text-secondary hover:text-primary font-montserrat text-[19.69px] font-normal">
-                    Activities
+                  <NavigationMenuTrigger
+                    className="bg-transparent text-gray-900 hover:text-black font-normal text-base"
+                  >
+                    Travel Styles
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="w-[800px] p-8">
@@ -184,10 +192,10 @@ export function Navigation() {
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link
-                      href="/about"
-                      className="text-text-secondary hover:text-primary transition-colors font-montserrat text-[19.69px] font-normal"
+                      href="/contact"
+                      className="text-gray-900 hover:text-black transition-colors font-normal text-base"
                     >
-                      About Us
+                      Contact Us
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -196,7 +204,7 @@ export function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden">
+          <div className="flex lg:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -206,15 +214,15 @@ export function Navigation() {
                   setExpandedSection(null)
                 }
               }}
-              className="p-2"
+              className="p-1.5 sm:p-2"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? <X className="h-5 w-5 sm:h-6 sm:w-6" /> : <Menu className="h-5 w-5 sm:h-6 sm:w-6" />}
             </Button>
           </div>
 
-          {/* Auth Section */}
-          <div className="hidden md:flex items-center space-x-2">
+          {/* Auth Section - Right Side */}
+          <div className="hidden lg:flex items-center space-x-4 lg:space-x-6">
             {user ? (
               <>
                 <Button variant="ghost" size="sm" asChild className="relative">
@@ -286,13 +294,21 @@ export function Navigation() {
                 </DropdownMenu>
               </>
             ) : (
-              <div className="flex items-center space-x-3">
-                <Button variant="outline" asChild className="rounded-4xl border-black hover:bg-black hover:text-white font-montserrat font-light">
-                  <Link href="/login">Login</Link>
-                </Button>
-                <Button asChild className="rounded-4xl bg-black text-white hover:bg-black/90 font-montserrat font-light">
-                  <Link href="/register">Sign Up</Link>
-                </Button>
+              <div className="flex items-center space-x-6">
+                {/* Login Text Link */}
+                <Link
+                  href="/login"
+                  className="text-gray-900 hover:text-black transition-colors font-normal text-base"
+                >
+                  Login
+                </Link>
+                {/* Sign Up Button */}
+                <Link
+                  href="/register"
+                  className="rounded-full bg-black text-white hover:bg-gray-900 px-8 py-2.5 font-normal text-base transition-colors inline-block"
+                >
+                  Sign Up
+                </Link>
               </div>
             )}
           </div>
@@ -301,14 +317,22 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t bg-background max-h-[calc(100vh-4rem)] overflow-y-auto transition-colors">
+        <div className="lg:hidden border-t bg-background max-h-[calc(100vh-4rem)] overflow-y-auto transition-colors">
           <div className="px-4 py-4 space-y-2">
+            <Link
+              href="/about"
+              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              About Us
+            </Link>
+
             <Link
               href="/tours"
               className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Explore Tours
+              Explore Places
             </Link>
 
             {/* Destinations Expandable Section */}
@@ -392,11 +416,11 @@ export function Navigation() {
             </div>
 
             <Link
-              href="/companies"
+              href="/contact"
               className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Tour Companies
+              Contact Us
             </Link>
 
             {user ? (
