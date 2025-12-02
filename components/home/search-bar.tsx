@@ -1,72 +1,81 @@
 "use client"
 
-import { Calendar, MapPin, Users } from "lucide-react"
+import { ArrowLeftRight, ArrowRightLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 export function SearchBar() {
-  const [destination, setDestination] = useState("")
-  const [dates, setDates] = useState("")
-  const [travelers, setTravelers] = useState("")
+  const [fromTo, setFromTo] = useState("")
+  const [departReturn, setDepartReturn] = useState("")
+  const [passengerClass, setPassengerClass] = useState("")
 
   const handleSearch = () => {
     // TODO: Implement search functionality
-    console.log({ destination, dates, travelers })
+    console.log({ fromTo, departReturn, passengerClass })
+  }
+
+  const handleSwap = () => {
+    console.log("Swap clicked")
   }
 
   return (
-    <div className="glass-effect rounded-4xl p-2 w-full max-w-5xl mx-auto">
-      <div className="bg-white rounded-4xl shadow-lg p-6 flex flex-col md:flex-row gap-4 items-stretch md:items-center">
-        {/* Destination Input */}
-        <div className="flex-1 flex items-center gap-3 px-4 py-3 border border-border rounded-2xl hover:border-primary/50 focus-within:border-primary transition-colors">
-          <MapPin className="w-5 h-5 text-text-muted flex-shrink-0" />
-          <div className="flex-1">
-            <label htmlFor="destination" className="block text-xs font-mulish font-semibold text-text-muted mb-1">
-              Destination
-            </label>
+    <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-[32px] bg-white/[0.08] backdrop-blur-[55.55px] rounded-[19.69px]">
+      {/* Desktop Layout */}
+      <div className="hidden md:flex flex-row justify-between items-center bg-white mx-auto w-full max-w-[1380px] h-[69px] rounded-[30px]">
+        {/* Three Input Fields Container */}
+        <div className="relative bg-white flex items-center flex-1 h-[69px] rounded-[30px]">
+          {/* First Field - From/To */}
+          <div className="flex items-center flex-1 h-full bg-white border-r border-black/[0.09] rounded-l-[30px] px-4 lg:px-5">
             <input
-              id="destination"
               type="text"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              placeholder="Where to?"
-              className="w-full text-sm font-montserrat text-text-primary placeholder:text-text-light outline-none bg-transparent"
+              value={fromTo}
+              onChange={(e) => setFromTo(e.target.value)}
+              placeholder="From - To"
+              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              style={{
+                fontWeight: 400,
+                color: '#112211',
+              }}
             />
           </div>
-        </div>
 
-        {/* Dates Input */}
-        <div className="flex-1 flex items-center gap-3 px-4 py-3 border border-border rounded-2xl hover:border-primary/50 focus-within:border-primary transition-colors">
-          <Calendar className="w-5 h-5 text-text-muted flex-shrink-0" />
-          <div className="flex-1">
-            <label htmlFor="dates" className="block text-xs font-mulish font-semibold text-text-muted mb-1">
-              Dates
-            </label>
+          {/* Swap Icon */}
+          <button
+            onClick={handleSwap}
+            className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px]"
+          >
+            <div className="flex items-center justify-center">
+              <ArrowRightLeft className="siz-4 text-[#00A792]" />
+            </div>
+          </button>
+
+          {/* Second Field - Depart/Return */}
+          <div className="flex items-center flex-1 h-full bg-white px-4 lg:px-5">
             <input
-              id="dates"
               type="text"
-              value={dates}
-              onChange={(e) => setDates(e.target.value)}
-              placeholder="Add dates"
-              className="w-full text-sm font-montserrat text-text-primary placeholder:text-text-light outline-none bg-transparent"
+              value={departReturn}
+              onChange={(e) => setDepartReturn(e.target.value)}
+              placeholder="Depart - Return"
+              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              style={{
+                fontWeight: 400,
+                color: '#1C1B1F',
+              }}
             />
           </div>
-        </div>
 
-        {/* Travelers Input */}
-        <div className="flex-1 flex items-center gap-3 px-4 py-3 border border-border rounded-2xl hover:border-primary/50 focus-within:border-primary transition-colors">
-          <Users className="w-5 h-5 text-text-muted flex-shrink-0" />
-          <div className="flex-1">
-            <label htmlFor="travelers" className="block text-xs font-mulish font-semibold text-text-muted mb-1">
-              Travelers
-            </label>
+          {/* Third Field - Passenger/Class */}
+          <div className="flex items-center flex-1 h-full bg-white border-l border-black/[0.2] rounded-r-[30px] px-4 lg:px-5">
             <input
-              id="travelers"
               type="text"
-              value={travelers}
-              onChange={(e) => setTravelers(e.target.value)}
-              placeholder="Add guests"
-              className="w-full text-sm font-montserrat text-text-primary placeholder:text-text-light outline-none bg-transparent"
+              value={passengerClass}
+              onChange={(e) => setPassengerClass(e.target.value)}
+              placeholder="Passenger - Class"
+              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              style={{
+                fontWeight: 400,
+                color: '#1C1B1F',
+              }}
             />
           </div>
         </div>
@@ -74,7 +83,71 @@ export function SearchBar() {
         {/* Search Button */}
         <Button
           onClick={handleSearch}
-          className="bg-primary hover:bg-primary/90 text-white rounded-4xl px-8 py-6 font-montserrat font-semibold text-base shadow-md hover:shadow-lg transition-all"
+          className="flex-none ml-4 lg:ml-0 bg-[#00A792] hover:bg-[#00A792]/90 text-white rounded-[30px] font-montserrat font-medium"
+          style={{
+            width: '150px',
+            height: '65px',
+            fontSize: '16px',
+          }}
+        >
+          Search
+        </Button>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="md:hidden bg-white rounded-[20px] p-4 space-y-3">
+        {/* First Field - From/To */}
+        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
+          <input
+            type="text"
+            value={fromTo}
+            onChange={(e) => setFromTo(e.target.value)}
+            placeholder="From - To"
+            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
+            style={{
+              fontWeight: 400,
+              color: '#112211',
+            }}
+          />
+        </div>
+
+        {/* Second Field - Depart/Return */}
+        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
+          <input
+            type="text"
+            value={departReturn}
+            onChange={(e) => setDepartReturn(e.target.value)}
+            placeholder="Depart - Return"
+            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
+            style={{
+              fontWeight: 400,
+              color: '#1C1B1F',
+            }}
+          />
+        </div>
+
+        {/* Third Field - Passenger/Class */}
+        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
+          <input
+            type="text"
+            value={passengerClass}
+            onChange={(e) => setPassengerClass(e.target.value)}
+            placeholder="Passenger - Class"
+            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
+            style={{
+              fontWeight: 400,
+              color: '#1C1B1F',
+            }}
+          />
+        </div>
+
+        {/* Search Button */}
+        <Button
+          onClick={handleSearch}
+          className="w-full bg-[#00A792] hover:bg-[#00A792]/90 text-white rounded-full font-montserrat font-medium h-12"
+          style={{
+            fontSize: '16px',
+          }}
         >
           Search
         </Button>
