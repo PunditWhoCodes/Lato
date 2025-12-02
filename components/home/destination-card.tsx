@@ -11,31 +11,36 @@ interface DestinationCardProps {
   tourCount?: number
 }
 
-export function DestinationCard({ name, image, href, tourCount }: DestinationCardProps) {
+export function DestinationCard({
+  name,
+  image,
+  href,
+  tourCount,
+}: DestinationCardProps) {
   return (
     <Link href={href}>
-      <Card className="group relative overflow-hidden rounded-4xl border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-80">
-        <div className="relative w-full h-full">
+      <Card className="group cursor-pointer border-0 bg-transparent shadow-none">
+        
+        {/* Image */}
+        <div className="overflow-hidden rounded-2xl w-full h-52 md:h-64 mb-4">
           <ShimmerImage
             src={image}
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          {/* Dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-
-          {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-white font-poppins font-bold text-2xl mb-2">
-              {name}
-            </h3>
-            {tourCount && (
-              <p className="text-white/90 font-mulish text-sm">
-                {tourCount} {tourCount === 1 ? 'tour' : 'tours'} available
-              </p>
-            )}
-          </div>
         </div>
+
+        {/* Destination Name */}
+        <h3 className="text-center font-poppins text-lg md:text-xl font-medium text-black mb-1">
+          {name}
+        </h3>
+
+        {/* Tour Count */}
+        {tourCount && (
+          <p className="text-center text-sm text-gray-500 font-mulish">
+            {tourCount}+ Tours
+          </p>
+        )}
       </Card>
     </Link>
   )
