@@ -1,39 +1,55 @@
 "use client"
 
 import { SearchBar } from "./search-bar"
+import { Button } from "@/components/ui/button"
+import { ArrowUpRight } from "lucide-react"
+import Link from "next/link"
 
 export function HeroSection() {
   return (
-    <section className="relative px-4 py-12 md:py-16">
+    <section className="relative bg-[#F7F7F7] px-4 pt-8 md:pt-12 pb-16 md:pb-20">
       <div className="max-w-7xl mx-auto">
-        {/* Hero Image Container */}
-        <div className="relative rounded-5xl overflow-hidden h-[600px] md:h-[700px]">
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: "url('/hero-image.jpg')",
-            }}
-          >
-            {/* Overlay for better text readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40"></div>
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8">
-            {/* Heading */}
-            <h1 className="font-poppins font-bold text-4xl md:text-5xl lg:text-6xl text-white text-center mb-8 max-w-4xl leading-tight">
+        {/* Top Section - Heading and Subtitle */}
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-6 lg:gap-8 mb-6 md:mb-8 px-2 md:px-4 lg:px-20">
+          {/* Left Side - Heading */}
+          <div className="w-full lg:max-w-[984px]">
+            <h1 className="font-poppins font-medium text-black leading-none text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
               Your Next Adventure Awaits
             </h1>
+          </div>
 
-            <p className="font-poppins text-lg md:text-xl text-white/90 text-center mb-12 max-w-2xl">
-              Discover unique travel experiences tailored just for you
+          {/* Right Side - Subtitle and Book Now Button */}
+          <div className="flex flex-col items-start w-full lg:max-w-[386px] space-y-4 lg:space-y-6">
+            <p className="font-poppins text-sm md:text-base font-light text-black/80 leading-relaxed">
+              Explore stunning destinations, unique experience, and unforgettable journey with Lato.
             </p>
+            <Button
+              asChild
+              className="bg-black text-white hover:bg-gray-900 rounded-full h-auto px-6 py-2.5 md:py-3 font-poppins font-light flex items-center gap-4 md:gap-[34px] text-base md:text-lg"
+            >
+              <Link href="/tours">
+                Book Now
+                <ArrowUpRight className="size-5 md:size-8" />
+              </Link>
+            </Button>
+          </div>
+        </div>
 
-            {/* Search Bar with Glassmorphism */}
-            <div className="w-full max-w-5xl">
-              <SearchBar />
-            </div>
+        {/* Hero Image Container */}
+        <div className="relative px-2 md:px-4 lg:px-20">
+          <div className="relative rounded-2xl md:rounded-[30px] overflow-hidden h-[300px] sm:h-[400px] md:h-[500px] lg:h-[557px]">
+            {/* Background Image - No Overlay */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: "url('/hero-image.jpg')",
+              }}
+            />
+          </div>
+
+          {/* Search Bar - Overlapping Hero Image */}
+          <div className="absolute w-[calc(100%-10rem)] -bottom-20 z-20 px-2 md:px-4 lg:px-20">
+            <SearchBar />
           </div>
         </div>
       </div>
