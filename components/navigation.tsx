@@ -9,198 +9,70 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
-import { MessageCircle, User, LogOut, Settings, Heart, DollarSign, Menu, X, ChevronDown } from "lucide-react"
+import { MessageCircle, User, LogOut, Settings, Heart, DollarSign, Menu, X } from "lucide-react"
 import { useState } from "react"
-import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
 import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
-import { destinations, travelStyles } from "@/lib/data"
 
 export function Navigation() {
   const { user, logout } = useAuth()
   const { savedToursCount } = useSavedTours()
   const { getTotalUnread } = useEnhancedMessages()
-  const [hoveredContinent, setHoveredContinent] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [expandedSection, setExpandedSection] = useState<string | null>(null)
 
   const totalUnreadMessages = getTotalUnread()
 
-  const toggleSection = (section: string) => {
-    setExpandedSection(expandedSection === section ? null : section)
-  }
-
-  // Using imported destinations data from lib/data
-
   return (
-    <nav className="bg-[#F7F7F7] sticky top-0 z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20 md:h-24">
-          {/* Logo Image */}
+    <nav className="bg-[#FFFFFF] sticky top-0 z-50 border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
           <Link href="/" className="flex items-center">
             <img
               src="/lato-logo.png"
               alt="Lato"
-              className="h-8 md:h-10 w-auto object-contain"
+              className="h-10 w-auto object-contain"
             />
           </Link>
 
-          {/* Center Navigation Menu */}
-          <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <NavigationMenu>
-              <NavigationMenuList className="gap-8">
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/about"
-                      className="text-gray-900 hover:text-black transition-colors font-normal text-base"
-                    >
-                      About Us
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+          {/* Center Navigation - Simple Links */}
+          <div className="hidden lg:flex items-center gap-10">
+            <Link
+              href="/about"
+              className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
+            >
+              About Us
+            </Link>
 
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/tours"
-                      className="text-gray-900 hover:text-black transition-colors font-normal text-base"
-                    >
-                      Explore Places
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+            <Link
+              href="/tours"
+              className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
+            >
+              Explore Places
+            </Link>
 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger
-                    className="bg-transparent text-gray-900 hover:text-black font-normal text-base"
-                  >
-                    Destinations
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[900px] p-0">
-                      <div className="flex">
-                        {/* Left Panel - Continents */}
-                        <div className="w-52 bg-gradient-to-b from-muted/50 to-muted/30 dark:from-muted/30 dark:to-muted/20 rounded-l-lg p-3 space-y-2">
-                          {destinations.map((continent, index) => (
-                            <div
-                              key={continent.name}
-                              className={cn(
-                                "px-4 py-3 cursor-pointer transition-all duration-300 relative group rounded-xl",
-                                "hover:shadow-md hover:scale-[1.02] transform",
-                                hoveredContinent === continent.name ||
-                                  (!hoveredContinent && continent.name === "Africa")
-                                  ? "bg-background shadow-lg border border-primary/20 text-primary scale-[1.02]"
-                                  : "bg-background/60 hover:bg-background border border-transparent hover:border-primary/10",
-                              )}
-                              onMouseEnter={() => setHoveredContinent(continent.name)}
-                            >
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h3 className="font-semibold text-sm leading-tight">{continent.name}</h3>
-                                  <p className="text-xs text-muted-foreground/80 mt-0.5">
-                                    {continent.regions.length} places
-                                  </p>
-                                </div>
-                                <div
-                                  className={cn(
-                                    "w-2 h-2 rounded-full transition-all duration-300",
-                                    hoveredContinent === continent.name ||
-                                      (!hoveredContinent && continent.name === "Africa")
-                                      ? "bg-primary shadow-sm"
-                                      : "bg-muted group-hover:bg-primary/60",
-                                  )}
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+            <Link
+              href="/destinations"
+              className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
+            >
+              Destinations
+            </Link>
 
-                        {/* Right Panel - Destinations */}
-                        <div className="flex-1 p-6 rounded-r-lg">
-                          {(() => {
-                            const activeContinent = destinations.find(
-                              (continent) => continent.name === (hoveredContinent || "Africa"),
-                            )
-                            return (
-                              <div>
-                                <h3 className="font-semibold text-foreground mb-4 text-lg">
-                                  {activeContinent?.name} Destinations
-                                </h3>
-                                <div className="grid grid-cols-4 gap-2 max-h-80 overflow-y-auto">
-                                  {activeContinent?.regions.map((region) => (
-                                    <NavigationMenuLink key={region} asChild>
-                                      <Link
-                                        href={`/tours?destination=${encodeURIComponent(region)}`}
-                                        className="text-sm text-muted-foreground hover:text-primary transition-colors py-2 px-3 rounded hover:bg-accent/50 block"
-                                      >
-                                        {region}
-                                      </Link>
-                                    </NavigationMenuLink>
-                                  ))}
-                                </div>
-                              </div>
-                            )
-                          })()}
-                        </div>
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+            <Link
+              href="/travel-styles"
+              className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
+            >
+              Travel Styles
+            </Link>
 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger
-                    className="bg-transparent text-gray-900 hover:text-black font-normal text-base"
-                  >
-                    Travel Styles
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[800px] p-8">
-                      <div className="grid grid-cols-3 gap-8">
-                        {travelStyles.map((style) => (
-                          <div key={style.name}>
-                            <h3 className="font-semibold text-foreground mb-3 text-lg">{style.name}</h3>
-                            <div className="grid grid-cols-1 gap-2">
-                              {style.types.map((type) => (
-                                <NavigationMenuLink key={type} asChild>
-                                  <Link
-                                    href={`/tours?style=${encodeURIComponent(type)}`}
-                                    className="text-sm text-muted-foreground hover:text-primary transition-colors py-2 px-2 rounded hover:bg-accent/50"
-                                  >
-                                    {type}
-                                  </Link>
-                                </NavigationMenuLink>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/contact"
-                      className="text-gray-900 hover:text-black transition-colors font-normal text-base"
-                    >
-                      Contact Us
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            <Link
+              href="/contact"
+              className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
+            >
+              Contact Us
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -208,12 +80,7 @@ export function Navigation() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => {
-                setMobileMenuOpen(!mobileMenuOpen)
-                if (mobileMenuOpen) {
-                  setExpandedSection(null)
-                }
-              }}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-1.5 sm:p-2"
               aria-label="Toggle menu"
             >
@@ -222,7 +89,7 @@ export function Navigation() {
           </div>
 
           {/* Auth Section - Right Side */}
-          <div className="hidden lg:flex items-center space-x-4 lg:space-x-6">
+          <div className="hidden lg:flex items-center gap-8">
             {user ? (
               <>
                 <Button variant="ghost" size="sm" asChild className="relative">
@@ -294,22 +161,20 @@ export function Navigation() {
                 </DropdownMenu>
               </>
             ) : (
-              <div className="flex items-center space-x-6">
-                {/* Login Text Link */}
+              <>
                 <Link
                   href="/login"
-                  className="text-gray-900 hover:text-black transition-colors font-normal text-base"
+                  className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
                 >
                   Login
                 </Link>
-                {/* Sign Up Button */}
                 <Link
                   href="/register"
-                  className="rounded-full bg-black text-white hover:bg-gray-900 px-8 py-2.5 font-normal text-base transition-colors inline-block"
+                  className="rounded-full bg-black text-white hover:bg-gray-800 px-6 py-2.5 font-normal text-[15px] transition-colors inline-block"
                 >
                   Sign Up
                 </Link>
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -335,85 +200,21 @@ export function Navigation() {
               Explore Places
             </Link>
 
-            {/* Destinations Expandable Section */}
-            <div className="border-b pb-2">
-              <button
-                onClick={() => toggleSection("destinations")}
-                className="w-full flex items-center justify-between py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                <span>Destinations</span>
-                <ChevronDown
-                  className={cn(
-                    "h-5 w-5 transition-transform duration-200",
-                    expandedSection === "destinations" && "rotate-180"
-                  )}
-                />
-              </button>
-              {expandedSection === "destinations" && (
-                <div className="pl-4 pb-2 space-y-3 animate-in slide-in-from-top-2 duration-200">
-                  {destinations.map((continent) => (
-                    <div key={continent.name} className="space-y-2">
-                      <h4 className="font-semibold text-sm text-foreground">{continent.name}</h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {continent.regions.map((region) => (
-                          <Link
-                            key={region}
-                            href={`/tours?destination=${encodeURIComponent(region)}`}
-                            className="text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                            onClick={() => {
-                              setMobileMenuOpen(false)
-                              setExpandedSection(null)
-                            }}
-                          >
-                            {region}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <Link
+              href="/destinations"
+              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Destinations
+            </Link>
 
-            {/* Travel Styles Expandable Section */}
-            <div className="border-b pb-2">
-              <button
-                onClick={() => toggleSection("travelStyles")}
-                className="w-full flex items-center justify-between py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                <span>Travel Styles</span>
-                <ChevronDown
-                  className={cn(
-                    "h-5 w-5 transition-transform duration-200",
-                    expandedSection === "travelStyles" && "rotate-180"
-                  )}
-                />
-              </button>
-              {expandedSection === "travelStyles" && (
-                <div className="pl-4 pb-2 space-y-3 animate-in slide-in-from-top-2 duration-200">
-                  {travelStyles.map((style) => (
-                    <div key={style.name} className="space-y-2">
-                      <h4 className="font-semibold text-sm text-foreground">{style.name}</h4>
-                      <div className="space-y-1">
-                        {style.types.map((type) => (
-                          <Link
-                            key={type}
-                            href={`/tours?style=${encodeURIComponent(type)}`}
-                            className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                            onClick={() => {
-                              setMobileMenuOpen(false)
-                              setExpandedSection(null)
-                            }}
-                          >
-                            {type}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <Link
+              href="/travel-styles"
+              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Travel Styles
+            </Link>
 
             <Link
               href="/contact"
