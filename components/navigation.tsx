@@ -168,12 +168,16 @@ export function Navigation() {
                 >
                   Login
                 </Link>
-                <Link
-                  href="/register"
-                  className="rounded-full bg-black text-white hover:bg-gray-800 px-6 py-2.5 font-normal text-[15px] transition-colors inline-block"
-                >
-                  Sign Up
-                </Link>
+                <div className="group">
+                  <Link
+                    href="/register"
+                    className="relative overflow-hidden rounded-full bg-black text-white px-6 py-2.5 font-normal text-[15px] inline-flex items-center justify-center"
+                  >
+                    <span className="relative z-10">Sign Up</span>
+
+                    <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                  </Link>
+                </div>
               </>
             )}
           </div>
