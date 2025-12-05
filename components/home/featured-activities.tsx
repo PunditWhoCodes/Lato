@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface Activity {
   id: number
@@ -27,7 +27,7 @@ const activities: Activity[] = [
     id: 3,
     title: "Art & Culture",
     tourCount: "450+ Tours",
-    image: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1640350168509-756f1ef84b37?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGFydCUyMGFuZCUyMGN1bHR1cmV8ZW58MHx8MHx8fDA%3D",
   },
   {
     id: 4,
@@ -77,10 +77,10 @@ export function FeaturedActivities() {
         {/* Header */}
         <div className="flex justify-between items-start mb-8 md:mb-12">
           <div>
-            <p className="font-poppins font-normal text-sm md:text-base text-[#666666] mb-2">
+            <p className="font-poppins font-light text-sm md:text-base mb-2">
               Discover the world your way
             </p>
-            <h2 className="font-poppins font-semibold text-3xl md:text-4xl lg:text-[42px] lg:leading-[56px] text-black">
+            <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-[42px] lg:leading-[56px] text-black">
               Featured Tour Activities
             </h2>
           </div>
@@ -90,22 +90,22 @@ export function FeaturedActivities() {
             <button
               onClick={() => scroll("left")}
               disabled={!showLeftArrow}
-              className={`w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
+              className={`size-10 rounded-full border flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
                 !showLeftArrow ? "opacity-40 cursor-not-allowed" : ""
               }`}
               aria-label="Previous activities"
             >
-              <ChevronLeft className="w-6 h-6 text-gray-700" />
+              <ArrowLeft className="size-5" />
             </button>
             <button
               onClick={() => scroll("right")}
               disabled={!showRightArrow}
-              className={`w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
+              className={`size-10 rounded-full border flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
                 !showRightArrow ? "opacity-40 cursor-not-allowed" : ""
               }`}
               aria-label="Next activities"
             >
-              <ChevronRight className="w-6 h-6 text-gray-700" />
+              <ArrowRight className="size-5" />
             </button>
           </div>
         </div>
@@ -138,10 +138,10 @@ export function FeaturedActivities() {
 
               {/* Content */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                <h3 className="font-poppins font-semibold text-2xl md:text-3xl text-white mb-2">
+                <h3 className="font-poppins font-medium text-2xl md:text-3xl text-white mb-2">
                   {activity.title}
                 </h3>
-                <p className="font-mulish font-normal text-sm md:text-base text-white/90">
+                <p className="font-mulish font-light text-sm md:text-base text-white/90">
                   {activity.tourCount}
                 </p>
               </div>
