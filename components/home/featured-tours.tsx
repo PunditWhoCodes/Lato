@@ -141,8 +141,11 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
             <span className="font-mulish font-semibold text-[#495560]" style={{ fontSize: '18.85px', lineHeight: '24px' }}>
               View More
             </span>
-            <div className="flex items-center justify-center bg-black rounded-full group-hover:bg-gray-900 transition-colors" style={{ width: '42.4px', height: '42.4px', padding: '9.42px' }}>
-              <ArrowUpRight className="text-white" style={{ width: '22.62px', height: '22.62px' }} />
+            <div className="relative flex items-center justify-center bg-black rounded-full overflow-hidden" style={{ width: '42.4px', height: '42.4px', padding: '9.42px' }}>
+              <ArrowUpRight className="relative z-10 text-white transition-transform duration-300 group-hover:rotate-45" style={{ width: '22.62px', height: '22.62px' }} />
+
+              {/* Radial expanding hover overlay */}
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
             </div>
           </Link>
         </div>
@@ -174,8 +177,11 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
             <span className="font-mulish font-semibold text-base text-[#495560]">
               View More
             </span>
-            <div className="flex items-center justify-center w-10 h-10 bg-black rounded-full group-hover:bg-gray-900 transition-colors p-2">
-              <ArrowUpRight className="w-5 h-5 text-white" />
+            <div className="relative flex items-center justify-center w-10 h-10 bg-black rounded-full overflow-hidden p-2">
+              <ArrowUpRight className="relative z-10 w-5 h-5 text-white transition-transform duration-300 group-hover:rotate-45" />
+
+              {/* Radial expanding hover overlay */}
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
             </div>
           </Link>
         </div>

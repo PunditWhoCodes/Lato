@@ -81,17 +81,22 @@ export function SearchBar() {
         </div>
 
         {/* Search Button */}
-        <Button
-          onClick={handleSearch}
-          className="flex-none ml-4 lg:ml-0 mr-2 lg:mr-4 bg-[#00A792] hover:bg-[#00A792]/90 text-white rounded-[30px] font-montserrat font-medium"
-          style={{
-            width: '150px',
-            height: '50px',
-            fontSize: '16px',
-          }}
-        >
-          Search
-        </Button>
+        <div className="group flex-none ml-4 lg:ml-0 mr-2 lg:mr-4">
+          <Button
+            onClick={handleSearch}
+            className="relative overflow-hidden bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium"
+            style={{
+              width: '150px',
+              height: '50px',
+              fontSize: '16px',
+            }}
+          >
+            <span className="relative z-10">Search</span>
+
+            {/* Radial expanding hover overlay */}
+            <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Layout */}
@@ -142,15 +147,20 @@ export function SearchBar() {
         </div>
 
         {/* Search Button */}
-        <Button
-          onClick={handleSearch}
-          className="w-full bg-[#00A792] hover:bg-[#00A792]/90 text-white rounded-full font-montserrat font-medium h-12"
-          style={{
-            fontSize: '16px',
-          }}
-        >
-          Search
-        </Button>
+        <div className="group w-full">
+          <Button
+            onClick={handleSearch}
+            className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-full font-montserrat font-medium h-12"
+            style={{
+              fontSize: '16px',
+            }}
+          >
+            <span className="relative z-10">Search</span>
+
+            {/* Radial expanding hover overlay */}
+            <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+          </Button>
+        </div>
       </div>
     </div>
   )

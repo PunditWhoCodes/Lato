@@ -24,19 +24,23 @@ export function CTASection() {
         </h2>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Link
-            href="/tours"
-            className="bg-black text-white hover:bg-gray-900 rounded-full px-8 py-3.5 text-base font-poppins font-medium transition-all shadow-lg"
-          >
-            Start Planning
-          </Link>
+          <div className="group">
+            <Link
+              href="/tours"
+              className="relative overflow-hidden inline-flex items-center justify-center bg-black text-white rounded-full px-8 py-3.5 text-base font-poppins font-medium shadow-lg"
+            >
+              <span className="relative z-10">Talk to a Travel Expert</span>
 
-          <Link
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+            </Link>
+          </div>
+
+          {/* <Link
             href="/contact"
             className="bg-white border-2 border-black text-black hover:bg-gray-50 rounded-full px-8 py-3.5 text-base font-poppins font-medium transition-all"
           >
-            Talk to a Travel Expert
-          </Link>
+            Start Planning 
+          </Link> */}
         </div>
       </div>
     </section>

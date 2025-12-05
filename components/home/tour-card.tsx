@@ -94,20 +94,25 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
               </div>
 
               {/* Right: Book Now Button */}
-              <Button
-                className="bg-black text-white hover:bg-gray-900 flex items-center gap-4 h-auto flex-shrink-0"
-                style={{
-                  width: '175.07px',
-                  height: '44.66px',
-                  borderRadius: '26.8px',
-                  padding: '8.04px 13.4px',
-                }}
-              >
-                <span className="font-poppins font-light" style={{ fontSize: '16.08px', lineHeight: '149.77%' }}>
-                  Book Now
-                </span>
-                <ArrowUpRight className="w-[21.44px] h-[21.44px]" />
-              </Button>
+              <div className="group">
+                <Button
+                  className="relative overflow-hidden bg-black text-white flex items-center gap-4 h-auto flex-shrink-0"
+                  style={{
+                    width: '175.07px',
+                    height: '44.66px',
+                    borderRadius: '26.8px',
+                    padding: '8.04px 13.4px',
+                  }}
+                >
+                  <span className="relative z-10 font-poppins font-light" style={{ fontSize: '16.08px', lineHeight: '149.77%' }}>
+                    Book Now
+                  </span>
+                  <ArrowUpRight className="relative z-10 w-[21.44px] h-[21.44px] transition-transform duration-300 group-hover:rotate-45" />
+
+                  {/* Radial expanding hover overlay */}
+                  <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                </Button>
+              </div>
             </div>
           </div>
         </Card>

@@ -46,8 +46,11 @@ export function TrendingAdventuresSection() {
             <span className="font-mullish text-[#495560] font-semibold text-sm leading-px">
               See All Tours
             </span>
-            <div className="w-[42px] h-[42px] rounded-full bg-black flex items-center justify-center group-hover:bg-gray-900 transition-colors">
-              <ArrowUpRight className="text-white w-[22px] h-[22px]" />
+            <div className="relative w-[42px] h-[42px] rounded-full bg-black flex items-center justify-center overflow-hidden">
+              <ArrowUpRight className="relative z-10 text-white w-[22px] h-[22px] transition-transform duration-300 group-hover:rotate-45" />
+
+              {/* Radial expanding hover overlay */}
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
             </div>
           </Link>
         </div>

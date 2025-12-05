@@ -23,15 +23,20 @@ export function HeroSection() {
             <p className="font-poppins text-sm md:text-base font-light text-black/80 leading-relaxed">
               Explore stunning destinations, unique experience, and unforgettable journey with Lato.
             </p>
-            <Button
-              asChild
-              className="bg-black text-white hover:bg-gray-900 rounded-full h-auto px-6 py-2.5 md:py-3 font-poppins font-light flex items-center gap-4 md:gap-[34px] text-base md:text-lg"
-            >
-              <Link href="/tours">
-                Book Now
-                <ArrowUpRight className="size-5 md:size-8" />
-              </Link>
-            </Button>
+            <div className="group">
+              <Button
+                asChild
+                className="relative overflow-hidden bg-black text-white rounded-full h-auto px-6 py-2.5 md:py-3 font-poppins font-light flex items-center gap-4 md:gap-[34px] text-base md:text-lg"
+              >
+                <Link href="/tours">
+                  <span className="relative z-10">Book Now</span>
+                  <ArrowUpRight className="relative z-10 size-5 md:size-8 transition-transform duration-300 group-hover:rotate-45" />
+
+                  {/* Radial expanding hover overlay */}
+                  <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
 
