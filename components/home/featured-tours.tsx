@@ -138,7 +138,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
             href="/tours"
             className="hidden lg:flex items-center gap-[7.54px] group"
           >
-            <span className="font-mulish font-semibold text-[#495560]" style={{ fontSize: '18.85px', lineHeight: '24px' }}>
+            <span className="text-[#495560] text-base group-hover:text-black transition-colors">
               View More
             </span>
             <div className="relative flex items-center justify-center bg-black rounded-full overflow-hidden" style={{ width: '42.4px', height: '42.4px', padding: '9.42px' }}>

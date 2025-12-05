@@ -43,7 +43,7 @@ export function TrendingAdventuresSection() {
             href="/tours"
             className="hidden lg:flex items-center gap-3 group"
           >
-            <span className="font-mullish text-[#495560] font-semibold text-sm leading-px">
+            <span className="text-[#495560] text-base group-hover:text-black transition-colors">
               See All Tours
             </span>
             <div className="relative w-[42px] h-[42px] rounded-full bg-black flex items-center justify-center overflow-hidden">

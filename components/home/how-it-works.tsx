@@ -69,10 +69,10 @@ export function HowItWorks() {
         {/* HEADER */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
           <div>
-            <p className="text-sm md:text-base font-light text-black font-poppins">
+            <p className="text-sm md:text-base font-light text-black font-poppins mb-2">
               Our Process
             </p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-black font-poppins leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-black font-poppins leading-tight">
               How It Works
             </h2>
           </div>
@@ -95,7 +95,7 @@ export function HowItWorks() {
         </div>
 
         {/* CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-14">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-14">
           {STEPS.map((item, index) => (
             <Card
               key={index}

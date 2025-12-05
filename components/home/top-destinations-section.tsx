@@ -28,10 +28,10 @@ export function TopDestinationsSection() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
           <div>
-            <p className="text-sm md:text-base font-light font-poppins text-black">
+            <p className="text-sm md:text-base font-light font-poppins text-black mb-2">
               Find your next adventure in destinations that inspire you
             </p>
-            <h2 className="font-poppins font-normal text-3xl md:text-4xl lg:text-5xl text-black leading-tight">
+            <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-5xl text-black leading-tight">
               Top Destinations
             </h2>
           </div>
@@ -41,7 +41,7 @@ export function TopDestinationsSection() {
             href="/tours"
             className="hidden lg:flex items-center gap-3 group"
           >
-            <span className="text-[#495560] font-semibold text-[18px] group-hover:text-black transition-colors">
+            <span className="text-[#495560] text-base group-hover:text-black transition-colors">
               View More
             </span>
             <div className="relative w-[42px] h-[42px] rounded-full bg-black flex items-center justify-center overflow-hidden">
