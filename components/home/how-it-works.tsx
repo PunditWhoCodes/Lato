@@ -82,7 +82,7 @@ export function HowItWorks() {
             href="/tours"
             className="hidden lg:flex items-center gap-3 group"
           >
-            <span className="text-[#495560] font-semibold text-[18px] group-hover:text-black transition-colors">
+            <span className="text-[#495560] text-base group-hover:text-black transition-colors">
               View More
             </span>
             <div className="w-[42px] h-[42px] rounded-full bg-black flex items-center justify-center group-hover:bg-gray-900 transition-colors">
@@ -96,26 +96,26 @@ export function HowItWorks() {
           {STEPS.map((item, index) => (
             <Card
               key={index}
-              className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-shadow"
+              className="group bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl hover:bg-[#00A792] transition-all duration-300"
             >
               <CardContent className="p-0">
                 {/* ICON */}
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-[#00A792] rounded-full flex items-center justify-center mb-6">
-                  <item.icon className="text-white w-8 h-8 md:w-10 md:h-10" />
+                <div className="size-12 md:size-16 bg-[#00A792] group-hover:bg-white rounded-full flex items-center justify-center mb-6 transition-all duration-300">
+                  <item.icon className="text-white group-hover:text-[#00A792] size-4 md:size-6 transition-colors duration-300" />
                 </div>
 
                 {/* TITLE */}
-                <h3 className="text-xl md:text-2xl font-semibold text-black font-poppins mb-1">
+                <h3 className="text-lg md:text-xl font-semibold text-black group-hover:text-white font-poppins mb-1 transition-colors duration-300">
                   {item.title}
                 </h3>
 
                 {/* SUBTITLE */}
-                <p className="text-[#00A792] font-normal font-poppins text-sm md:text-base mb-4">
+                <p className="text-[#00A792] group-hover:text-white font-normal font-poppins text-sm mb-4 transition-colors duration-300">
                   {item.subtitle}
                 </p>
 
                 {/* DESCRIPTION */}
-                <p className="text-gray-600 text-sm leading-relaxed font-poppins mb-6">
+                <p className="text-[#595959] group-hover:text-white text-sm leading-relaxed font-poppins mb-6 transition-colors duration-300">
                   {item.description}
                 </p>
 
@@ -124,9 +124,9 @@ export function HowItWorks() {
                   {item.features.map((feature, i) => (
                     <li
                       key={i}
-                      className="text-sm text-gray-600 flex gap-2 items-start"
+                      className="text-sm text-[#595959] group-hover:text-white flex gap-2 items-start transition-colors duration-300"
                     >
-                      <span className="text-gray-400">•</span> {feature}
+                      <span className="text-gray-400 group-hover:text-white transition-colors duration-300">•</span> {feature}
                     </li>
                   ))}
                 </ul>
@@ -134,10 +134,10 @@ export function HowItWorks() {
                 {/* LEARN MORE */}
                 <Link
                   href="/tours"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-[#00A792] transition-colors group"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-gray-700 group-hover:text-white transition-colors duration-300"
                 >
                   Learn More
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </CardContent>
             </Card>
@@ -145,37 +145,39 @@ export function HowItWorks() {
         </div>
 
         {/* EXPLORE MORE BUTTON */}
-        <div className="group">
-  <Button
-    size="lg"
-    className="
-      relative overflow-hidden
-      rounded-full px-12 py-6 text-base md:text-lg font-medium shadow-lg
-      bg-[#00A792]
-    "
-    asChild
-  >
-    <Link
-      href="/tours"
-      className="relative z-20 text-white group-hover:text-white transition-colors duration-300"
-    >
-      Explore More
+        <div className="flex justify-center">
+          <div className="group">
+            <Button
+              size="lg"
+              className="
+                relative overflow-hidden
+                rounded-full px-12 py-6 text-base md:text-lg font-medium shadow-lg
+                bg-[#00A792]
+              "
+              asChild
+            >
+              <Link
+                href="/tours"
+                className="relative text-white"
+              >
+                <span className="relative z-20">Explore More</span>
 
-      {/* Radial expanding hover overlay */}
-      <span
-        className="
-          absolute inset-0
-          bg-black
-          rounded-full
-          scale-0 opacity-0
-          transition-all duration-700 ease-out
-          group-hover:scale-150 group-hover:opacity-100
-          z-10      /* <-- overlay BELOW text */
-        "
-      ></span>
-    </Link>
-  </Button>
-</div>
+                {/* Radial expanding hover overlay */}
+                <span
+                  className="
+                    absolute inset-0
+                    bg-black
+                    rounded-full
+                    scale-0 opacity-0
+                    transition-all duration-700 ease-out
+                    group-hover:scale-150 group-hover:opacity-100
+                    z-0
+                  "
+                ></span>
+              </Link>
+            </Button>
+          </div>
+        </div>
 
 
 
