@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeftRight, ArrowRightLeft } from "lucide-react"
+import { MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
@@ -30,7 +30,7 @@ export function SearchBar() {
               type="text"
               value={fromTo}
               onChange={(e) => setFromTo(e.target.value)}
-              placeholder="From - To"
+              placeholder="Destination"
               className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
               style={{
                 fontWeight: 400,
@@ -45,7 +45,7 @@ export function SearchBar() {
             className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px]"
           >
             <div className="flex items-center justify-center">
-              <ArrowRightLeft className="siz-4 text-[#00A792]" />
+              <MapPin className="siz-4 text-[#00A792]" />
             </div>
           </button>
 
@@ -55,11 +55,11 @@ export function SearchBar() {
               type="text"
               value={departReturn}
               onChange={(e) => setDepartReturn(e.target.value)}
-              placeholder="Depart - Return"
+              placeholder="Departure"
               className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
               style={{
                 fontWeight: 400,
-                color: '#1C1B1F',
+                color: '#',
               }}
             />
           </div>
@@ -83,10 +83,10 @@ export function SearchBar() {
         {/* Search Button */}
         <Button
           onClick={handleSearch}
-          className="flex-none ml-4 lg:ml-0 bg-[#00A792] hover:bg-[#00A792]/90 text-white rounded-[30px] font-montserrat font-medium"
+          className="flex-none ml-4 lg:ml-0 mr-2 lg:mr-4 bg-[#00A792] hover:bg-[#00A792]/90 text-white rounded-[30px] font-montserrat font-medium"
           style={{
             width: '150px',
-            height: '65px',
+            height: '50px',
             fontSize: '16px',
           }}
         >
