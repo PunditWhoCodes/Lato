@@ -218,10 +218,7 @@ export function ToursClient() {
 
   return (
     <>
-      <ToursHeader
-        onSearch={handleSearch}
-        onCountryChange={handleCountryChange}
-      />
+      <ToursHeader />
 
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
