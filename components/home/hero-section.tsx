@@ -26,7 +26,7 @@ export function HeroSection() {
             <div className="group">
               <Button
                 asChild
-                className="relative overflow-hidden bg-black text-white rounded-full h-auto px-6 py-2.5 md:py-3 font-poppins font-light flex items-center gap-4 md:gap-[34px] text-base md:text-lg"
+                className="relative overflow-hidden bg-black text-white rounded-full h-auto px-5 py-1.5 md:py-2 font-poppins font-light flex items-center gap-4 md:gap-[34px] text-base md:text-lg"
               >
                 <Link href="/tours">
                   <span className="relative z-10">Book Now</span>
