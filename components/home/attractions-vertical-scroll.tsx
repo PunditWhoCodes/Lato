@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { ChevronRight } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 
 interface Attraction {
@@ -84,7 +84,7 @@ export function AttractionsVerticalScroll() {
       }}
     >
       {/* Sticky Header Container */}
-      <div className="sticky  top-20 md:top-36 h-screen flex items-center justify-center overflow-hidden">
+      <div className="sticky top-20 md:top-36 bottom-20 h-screen flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10 w-full max-w-7xl">
           {/* Stacked Cards Container */}
           <div className="relative h-[600px] md:h-[700px]">
@@ -92,11 +92,11 @@ export function AttractionsVerticalScroll() {
               // For the first card, it stays fixed at position 0 (doesn't move)
               // For subsequent cards, they slide up from the bottom
               const startPosition = index === 0 ? 0 : 700
-              const endPosition = index * 60 // Stack offset
+              const endPosition = index * 80 // Stack offset
 
               // Smoother animation timing - longer animation window with gradual transitions
               // First card stays at position 0 and doesn't animate
-              const startProgress = index === 0 ? 0 : Math.max(0, (index - 0.5) / attractions.length)
+              const startProgress = index === 0 ? 0 : Math.max(0, (index - 0.8) / attractions.length)
               const endProgress = index === 0 ? 0 : Math.min(1, (index + 0.3) / attractions.length)
 
               // Transform for sliding up - card slides up to its stacked position
@@ -132,7 +132,7 @@ export function AttractionsVerticalScroll() {
                     zIndex: index,
                   }}
                 >
-                  <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl">
+                  <div className="relative w-full h-full rounded-3xl overflow-hidden">
                     <Image
                       src={attraction.image}
                       alt={attraction.name}
@@ -143,7 +143,7 @@ export function AttractionsVerticalScroll() {
                     />
 
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                    {/* <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" /> */}
 
                     {/* Header on First Card */}
                     {index === 0 && (
@@ -158,13 +158,15 @@ export function AttractionsVerticalScroll() {
                             <p className="text-white/90 font-normal text-xs md:text-sm mb-2 md:mb-3 drop-shadow-md">
                               Find your most adventurous destinations and attractions you
                             </p>
-                            <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold drop-shadow-lg leading-tight">
+                            <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light drop-shadow-lg leading-tight">
                               Attractions You Can&apos;t Miss
                             </h2>
                           </div>
-                          <button className="hidden md:flex items-center gap-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 px-4 py-2 rounded-full font-medium transition-colors group flex-shrink-0">
+                          <button className="hidden md:flex items-center gap-2">
                             <span className="text-sm">View More</span>
-                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            <div className="relative size-9 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                              <ArrowUpRight className="relative z-10 text-black size-5 transition-transform duration-300 group-hover:rotate-45" />
+                            </div>
                           </button>
                         </div>
                       </motion.div>
