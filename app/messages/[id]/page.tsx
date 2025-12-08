@@ -10,6 +10,13 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
   Send,
   Star,
   Clock,
@@ -21,25 +28,48 @@ import {
   Paperclip,
   ImageIcon,
   Search,
+  Trash2,
+  MailOpen,
+  MailX,
 } from "lucide-react"
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
-import { useMessages } from "@/contexts/MessagesContext"
-import type { ConversationDetail } from "./types"
+import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
+import { CompanyStatus } from "@/components/messages/company-status"
+import { DeleteConfirmationDialog } from "@/components/messages/delete-confirmation-dialog"
+import type { FilterType } from "../types/enhanced"
 
 
 export default function ChatPage() {
   const params = useParams()
+  const router = useRouter()
   const { user } = useAuth()
   const [newMessage, setNewMessage] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>("all")
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const previousMessageCountRef = useRef<number>(0)
+  const isInitialLoadRef = useRef(true)
 
-  const { conversationsDetail, markAsRead, getConversation } = useMessages()
+  const {
+    getFilteredConversations,
+    getConversation,
+    markAsRead,
+    markAsUnread,
+    deleteConversation,
+    addMessage,
+  } = useEnhancedMessages()
 
-  const currentConversation = getConversation(params.id as string) || conversationsDetail[0]
-  const [messages, setMessages] = useState(currentConversation.messages)
+  const currentConversation = getConversation(params.id as string)
+
+  // Redirect if conversation not found or deleted
+  useEffect(() => {
+    if (!currentConversation) {
+      router.push("/messages")
+    }
+  }, [currentConversation, router])
 
   // Mark conversation as read when opened
   useEffect(() => {
@@ -48,53 +78,61 @@ export default function ChatPage() {
     }
   }, [params.id, markAsRead])
 
-  useEffect(() => {
-    const conversation = getConversation(params.id as string)
-    if (conversation) {
-      setMessages(conversation.messages)
-    }
-  }, [params.id, getConversation])
+  const filteredConversations = getFilteredConversations(selectedFilter, searchQuery)
 
-  const filteredConversations = conversationsDetail.filter(
-    (conv) =>
-      conv.company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.tour.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  const scrollToBottom = (smooth = true) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto" })
   }
 
+  // Only auto-scroll when new messages are added, not on initial load
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    if (!currentConversation) return
+
+    const currentMessageCount = currentConversation.messages.length
+
+    // Skip auto-scroll on initial load
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false
+      previousMessageCountRef.current = currentMessageCount
+      return
+    }
+
+    // Only scroll if new messages were added
+    if (currentMessageCount > previousMessageCountRef.current) {
+      scrollToBottom(true)
+      previousMessageCountRef.current = currentMessageCount
+    }
+  }, [currentConversation?.messages])
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newMessage.trim()) return
+    if (!newMessage.trim() || !currentConversation) return
 
-    const message = {
-      id: messages.length + 1,
-      sender: "user" as const,
-      text: newMessage,
-      timestamp: new Date().toISOString(),
-      type: "text" as const,
-    }
-
-    setMessages([...messages, message])
+    // Add user message
+    addMessage(params.id as string, newMessage, "user")
     setNewMessage("")
 
     // Simulate company response after a delay
     setTimeout(() => {
-      const response = {
-        id: messages.length + 2,
-        sender: "company" as const,
-        text: "Thanks for your message! I'll get back to you shortly with more details.",
-        timestamp: new Date().toISOString(),
-        type: "text" as const,
-      }
-      setMessages((prev) => [...prev, response])
+      addMessage(
+        params.id as string,
+        "Thanks for your message! I'll get back to you shortly with more details.",
+        "company"
+      )
     }, 2000)
+  }
+
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteConfirm = () => {
+    deleteConversation(params.id as string)
+    router.push("/messages")
+  }
+
+  const handleMarkAsUnread = () => {
+    markAsUnread(params.id as string)
   }
 
   const formatTime = (timestamp: string) => {
@@ -103,6 +141,10 @@ export default function ChatPage() {
 
   const formatDate = (timestamp: string) => {
     return new Date(timestamp).toLocaleDateString([], { month: "short", day: "numeric" })
+  }
+
+  if (!currentConversation) {
+    return null // Will redirect in useEffect
   }
 
   return (
@@ -127,6 +169,26 @@ export default function ChatPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
+              </div>
+
+              {/* Filter Buttons */}
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { key: "all" as FilterType, label: "All" },
+                  { key: "unread" as FilterType, label: "Unread" },
+                  { key: "active" as FilterType, label: "Active" },
+                  { key: "completed" as FilterType, label: "Done" },
+                ].map((filter) => (
+                  <Button
+                    key={filter.key}
+                    variant={selectedFilter === filter.key ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedFilter(filter.key)}
+                    className="text-xs px-2"
+                  >
+                    {filter.label}
+                  </Button>
+                ))}
               </div>
 
               {/* Conversations */}
@@ -191,10 +253,12 @@ export default function ChatPage() {
                             </Badge>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>Online • {currentConversation.company.responseTime}</span>
-                        </div>
+                        <CompanyStatus
+                          isOnline={currentConversation.company.isOnline}
+                          lastSeen={currentConversation.company.lastSeen}
+                          responseTime={currentConversation.company.responseTime}
+                          timezone={currentConversation.company.timezone}
+                        />
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -204,18 +268,37 @@ export default function ChatPage() {
                       <Button variant="outline" size="sm">
                         <Video className="w-4 h-4" />
                       </Button>
-                      <Button variant="outline" size="sm">
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={handleMarkAsUnread}>
+                            <MailX className="w-4 h-4 mr-2" />
+                            Mark as Unread
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={handleDeleteClick}
+                            className="text-destructive focus:text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete Conversation
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 </CardHeader>
 
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {messages.map((message, index) => {
+                  {currentConversation.messages.map((message, index) => {
                     const showDate =
-                      index === 0 || formatDate(message.timestamp) !== formatDate(messages[index - 1].timestamp)
+                      index === 0 ||
+                      formatDate(message.timestamp) !== formatDate(currentConversation.messages[index - 1].timestamp)
 
                     return (
                       <div key={message.id}>
@@ -356,6 +439,17 @@ export default function ChatPage() {
             </div>
           </div>
         </div>
+
+        {/* Delete Confirmation Dialog */}
+        <DeleteConfirmationDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          onConfirm={handleDeleteConfirm}
+          title="Delete Conversation"
+          description={`Are you sure you want to delete this conversation with ${currentConversation.company.name}? This action cannot be undone and all messages will be permanently removed.`}
+          confirmText="Delete Conversation"
+          cancelText="Cancel"
+        />
       </div>
     </ProtectedRoute>
   )

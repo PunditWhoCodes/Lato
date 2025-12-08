@@ -10,29 +10,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Search, MessageCircle } from "lucide-react"
 import Link from "next/link"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
-import { useMessages } from "@/contexts/MessagesContext"
+import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
+import type { FilterType } from "./types/enhanced"
 
 export default function MessagesPage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedFilter, setSelectedFilter] = useState("all")
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>("all")
 
   const { user } = useAuth()
-  const { conversations, getTotalUnread } = useMessages()
+  const { getFilteredConversations, getTotalUnread } = useEnhancedMessages()
 
-  const filteredConversations = conversations.filter((conv) => {
-    const matchesSearch =
-      conv.company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.tour.title.toLowerCase().includes(searchQuery.toLowerCase())
-
-    const matchesFilter =
-      selectedFilter === "all" ||
-      (selectedFilter === "unread" && conv.unreadCount > 0) ||
-      (selectedFilter === "active" && conv.status === "active") ||
-      (selectedFilter === "completed" && conv.status === "completed")
-
-    return matchesSearch && matchesFilter
-  })
-
+  const filteredConversations = getFilteredConversations(selectedFilter, searchQuery)
   const totalUnread = getTotalUnread()
 
   return (
@@ -71,10 +59,10 @@ export default function MessagesPage() {
               {/* Filters */}
               <div className="flex flex-wrap gap-2">
                 {[
-                  { key: "all", label: "All" },
-                  { key: "unread", label: "Unread" },
-                  { key: "active", label: "Active" },
-                  { key: "completed", label: "Completed" },
+                  { key: "all" as FilterType, label: "All" },
+                  { key: "unread" as FilterType, label: "Unread" },
+                  { key: "active" as FilterType, label: "Active" },
+                  { key: "completed" as FilterType, label: "Completed" },
                 ].map((filter) => (
                   <Button
                     key={filter.key}

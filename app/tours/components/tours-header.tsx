@@ -1,13 +1,8 @@
 "use client"
 
 import { SearchBar } from "@/components/home/search-bar"
-import type { SearchFilters } from "@/types"
 
-interface ToursHeaderProps {
-  onSearch: (filters: SearchFilters) => void
-}
-
-export function ToursHeader({ onSearch }: ToursHeaderProps) {
+export function ToursHeader() {
   return (
     <section className="relative bg-linear-to-br from-primary/5 via-primary/10 to-secondary/5 dark:from-primary/10 dark:via-primary/5 dark:to-secondary/10 py-6 sm:py-8 md:py-12 px-4 overflow-hidden transition-colors">
       {/* Background decorative elements */}
@@ -31,7 +26,7 @@ export function ToursHeader({ onSearch }: ToursHeaderProps) {
         </div>
 
         {/* Search Bar Component */}
-        <SearchBar onSearch={onSearch} />
+        <SearchBar />
       </div>
     </section>
   )

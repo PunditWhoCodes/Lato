@@ -6,9 +6,16 @@ import { HeroSection } from "@/components/home/hero-section"
 import { StatsSection } from "@/components/home/stats-section"
 import { FeaturedTours } from "@/components/home/featured-tours"
 import { HowItWorks } from "@/components/home/how-it-works"
-import { ReviewsSection } from "@/components/home/reviews-section"
+import { TopDestinationsSection } from "@/components/home/top-destinations-section"
+import { TestimonialsSection } from "@/components/home/testimonials-section"
+import { AttractionsCarousel } from "@/components/home/attractions-carousel"
+import { AttractionsVerticalScroll } from "@/components/home/attractions-vertical-scroll"
+import { TrendingAdventuresSection } from "@/components/home/trending-adventures-section"
+import { FeaturedActivitiesSection } from "@/components/home/featured-activities-section"
+import { EmailSubscriptionSection } from "@/components/home/email-subscription-section"
 import { CTASection } from "@/components/home/cta-section"
 import type { SearchFilters } from "@/types"
+import { FeaturedActivities } from "@/components/home/featured-activities"
 
 export default function HomePage() {
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
@@ -19,30 +26,11 @@ export default function HomePage() {
     travelStyle: "",
   })
 
-  const handleSearch = (filters: SearchFilters) => {
-    setSearchFilters(filters)
-    const toursSection = document.getElementById("featured-tours")
-    if (toursSection) {
-      toursSection.scrollIntoView({ behavior: "smooth", block: "start" })
-    }
-  }
-
-  const handleCategoryClick = (category: string) => {
-    setSearchFilters((prev) => ({
-      ...prev,
-      travelStyle: category,
-    }))
-    const toursSection = document.getElementById("featured-tours")
-    if (toursSection) {
-      toursSection.scrollIntoView({ behavior: "smooth", block: "start" })
-    }
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      <HeroSection onSearch={handleSearch} onCategoryClick={handleCategoryClick} />
+      <HeroSection />
 
       <StatsSection />
 
@@ -52,7 +40,17 @@ export default function HomePage() {
 
       <HowItWorks />
 
-      <ReviewsSection />
+      <TopDestinationsSection />
+
+      <TestimonialsSection />
+
+      <AttractionsVerticalScroll />
+
+      <TrendingAdventuresSection />
+
+      <FeaturedActivities />
+
+      <EmailSubscriptionSection />
 
       <CTASection />
     </div>

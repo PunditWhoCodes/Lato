@@ -3,7 +3,7 @@
 import { useMemo } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Award, ArrowRight, Loader2, AlertCircle } from "lucide-react"
+import { Award, ArrowRight, ArrowUpRight, Loader2, AlertCircle } from "lucide-react"
 import { TourCard } from "./tour-card"
 import type { SearchFilters } from "@/types"
 import { useToursData } from "@/app/tours/hooks/useToursData"
@@ -71,20 +71,20 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
   // Loading State
   if (isLoading) {
     return (
-      <section className="py-8 sm:py-10 md:py-12 px-4">
+      <section className="py-12 md:py-20 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
-              <Award className="w-3 h-3" />
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-mulish font-semibold mb-4">
+              <Award className="w-4 h-4" />
               Featured Experiences
             </div>
-            <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-foreground mb-3">
+            <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-text-primary mb-4">
               Handpicked Adventures
             </h2>
           </div>
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-            <p className="text-lg text-muted-foreground">Loading featured tours...</p>
+            <p className="text-lg font-poppins text-text-muted">Loading featured tours...</p>
           </div>
         </div>
       </section>
@@ -94,76 +94,96 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
   // Error State
   if (isError) {
     return (
-      <section className="py-8 sm:py-10 md:py-12 px-4">
+      <section className="py-12 md:py-20 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
-              <Award className="w-3 h-3" />
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-mulish font-semibold mb-4">
+              <Award className="w-4 h-4" />
               Featured Experiences
             </div>
-            <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-foreground mb-3">
+            <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-text-primary mb-4">
               Handpicked Adventures
             </h2>
           </div>
           <div className="flex flex-col items-center justify-center py-12">
-            <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-            <p className="text-lg text-muted-foreground">Unable to load featured tours</p>
-            <p className="text-sm text-muted-foreground mt-2">Please try again later</p>
+            <AlertCircle className="h-12 w-12 text-accent mb-4" />
+            <p className="text-lg font-poppins text-text-muted">Unable to load featured tours</p>
+            <p className="text-sm font-mulish text-text-muted mt-2">Please try again later</p>
           </div>
         </div>
       </section>
     )
   }
 
+  // Show only top 3 tours for Figma design
+  const displayTours = topTours.slice(0, 3)
+
   return (
-    <section className="py-8 sm:py-10 md:py-12 px-4">
+    <section className="py-12 md:py-16 lg:py-24 px-4 md:px-10 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-lg">
-            <Award className="w-3 h-3" />
-            Featured Experiences
-          </div>
-          <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-foreground mb-3">
-            Handpicked Adventures
-          </h2>
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4 sm:px-0">
-            Discover extraordinary experiences curated by our trusted local partners
-          </p>
-          {filters.destination || filters.duration || filters.travelStyle ? (
-            <p className="text-sm text-primary font-semibold mt-2">
-              Showing top {topTours.length} featured tours based on your filters
+        {/* Section Header */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
+          {/* Left Side - Title */}
+          <div className="flex flex-col gap-4 lg:gap-[43.35px]">
+            <p className="font-poppins font-light text-base lg:text-[18.85px] text-black">
+              Tour Packages
             </p>
-          ) : null}
+            <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-[56.54px] lg:leading-[85px] text-black max-w-[592px]">
+              Explore Our Exclusive Tour Packages
+            </h2>
+          </div>
+
+          {/* Right Side - View More Button */}
+          <Link
+            href="/tours"
+            className="hidden lg:flex items-center gap-[7.54px] group"
+          >
+            <span className="text-[#495560] text-base group-hover:text-black transition-colors">
+              View More
+            </span>
+            <div className="relative flex items-center justify-center bg-black rounded-full overflow-hidden" style={{ width: '42.4px', height: '42.4px', padding: '9.42px' }}>
+              <ArrowUpRight className="relative z-10 text-white transition-transform duration-300 group-hover:rotate-45" style={{ width: '22.62px', height: '22.62px' }} />
+
+              {/* Radial expanding hover overlay */}
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+            </div>
+          </Link>
         </div>
 
-        {topTours.length === 0 ? (
-          <div className="text-center py-8 sm:py-12">
-            <p className="text-muted-foreground text-base sm:text-lg mb-4">
+        {/* Tour Cards */}
+        {displayTours.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-text-muted font-poppins text-lg mb-4">
               No tours found matching your criteria
             </p>
-            <p className="text-xs sm:text-sm text-muted-foreground">
+            <p className="text-sm font-mulish text-text-muted">
               Try adjusting your filters to see more results
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-            {topTours.map((tour) => (
-              <TourCard key={tour.id} tour={tour} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-[19.22px]">
+            {displayTours.map((tour) => (
+              <TourCard key={tour.id} tour={tour} variant="featured" />
             ))}
           </div>
         )}
 
-        <div className="text-center mt-6 sm:mt-8">
-          <Button
-            size="lg"
-            className="rounded-full px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-linear-to-r from-primary to-primary"
-            asChild
+        {/* Mobile View More Button */}
+        <div className="lg:hidden text-center mt-8">
+          <Link
+            href="/tours"
+            className="inline-flex items-center gap-2 group"
           >
-            <Link href="/tours">
-              Explore All Tours
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
-            </Link>
-          </Button>
+            <span className="font-mulish font-semibold text-base text-[#495560]">
+              View More
+            </span>
+            <div className="relative flex items-center justify-center w-10 h-10 bg-black rounded-full overflow-hidden p-2">
+              <ArrowUpRight className="relative z-10 w-5 h-5 text-white transition-transform duration-300 group-hover:rotate-45" />
+
+              {/* Radial expanding hover overlay */}
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+            </div>
+          </Link>
         </div>
       </div>
     </section>

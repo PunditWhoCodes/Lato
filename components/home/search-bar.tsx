@@ -1,171 +1,165 @@
 "use client"
 
-import { useState } from "react"
+import { MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { MapPin, Calendar, Users, Globe, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
-import type { SearchFilters } from "@/types"
+import { useState } from "react"
 
-interface SearchBarProps {
-  onSearch: (filters: SearchFilters) => void
-}
-
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
-export function SearchBar({ onSearch }: SearchBarProps) {
-  const [filters, setFilters] = useState<SearchFilters>({
-    destination: "",
-    month: "",
-    year: new Date().getFullYear(),
-    duration: "",
-    travelStyle: "",
-  })
+export function SearchBar() {
+  const [fromTo, setFromTo] = useState("")
+  const [departReturn, setDepartReturn] = useState("")
+  const [passengerClass, setPassengerClass] = useState("")
 
   const handleSearch = () => {
-    onSearch(filters)
+    // TODO: Implement search functionality
+    console.log({ fromTo, departReturn, passengerClass })
   }
 
-  const updateFilter = (key: keyof SearchFilters, value: string | number) => {
-    setFilters((prev) => ({ ...prev, [key]: value }))
-  }
-
-  const handleYearChange = (direction: "prev" | "next") => {
-    setFilters((prev) => ({
-      ...prev,
-      year: direction === "prev" ? prev.year - 1 : prev.year + 1,
-    }))
+  const handleSwap = () => {
+    console.log("Swap clicked")
   }
 
   return (
-    <div className="max-w-4xl mx-auto mb-6">
-      <div className="relative group">
-        <div className="absolute inset-0 bg-linear-to-r from-primary to-secondary rounded-3xl md:rounded-full opacity-20 blur-xl group-hover:opacity-30 transition-opacity"></div>
-        <div className="relative bg-card/90 dark:bg-card/95 backdrop-blur-sm rounded-3xl md:rounded-full p-2 shadow-2xl border border-border">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
-            {/* Destination Field */}
-            <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-              <MapPin className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-              <Input
-                placeholder="Where to?"
-                value={filters.destination}
-                onChange={(e) => updateFilter("destination", e.target.value)}
-                className="border-0 bg-transparent text-base placeholder:text-muted-foreground/70 focus-visible:ring-0 px-3 py-2 md:py-1"
-              />
-            </div>
-
-            {/* Separator */}
-            <div className="hidden md:block w-px h-8 bg-border"></div>
-
-            {/* Date Field */}
-            <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-              <Calendar className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="border-0 bg-transparent text-base focus:ring-0 px-3 justify-start font-normal hover:bg-transparent hover:text-muted-foreground"
-                  >
-                    {filters.month ? `${filters.month} ${filters.year}` : "When?"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 p-0" align="start">
-                  <div className="p-6">
-                    {/* Year Header with Navigation */}
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-2xl font-bold text-foreground">{filters.year}</h3>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleYearChange("prev")}
-                        >
-                          <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleYearChange("next")}
-                        >
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-
-                    {/* Month Grid */}
-                    <div className="grid grid-cols-3 gap-3">
-                      {MONTHS.map((month) => (
-                        <Button
-                          key={month}
-                          variant={filters.month === month ? "default" : "outline"}
-                          className={`h-12 text-sm font-medium ${filters.month === month
-                            ? "bg-foreground text-background hover:bg-foreground/90"
-                            : "bg-muted/30 text-muted-foreground hover:bg-muted/50 border-muted"
-                            }`}
-                          onClick={() => updateFilter("month", month)}
-                        >
-                          {month}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            {/* Separator */}
-            <div className="hidden md:block w-px h-8 bg-border"></div>
-
-            {/* Duration Filter */}
-            <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-              <Users className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-              <Select value={filters.duration} onValueChange={(value) => updateFilter("duration", value)}>
-                <SelectTrigger className="border-0 bg-transparent text-base focus:ring-0 px-3 py-2 md:py-1">
-                  <SelectValue placeholder="Duration" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Any duration</SelectItem>
-                  <SelectItem value="2-3-days">2-3 days</SelectItem>
-                  <SelectItem value="4-7-days">4-7 days</SelectItem>
-                  <SelectItem value="1-2-weeks">1-2 weeks</SelectItem>
-                  <SelectItem value="2-weeks-plus">2+ weeks</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Separator */}
-            <div className="hidden md:block w-px h-8 bg-border"></div>
-
-            {/* Travel Style Field */}
-            <div className="flex items-center flex-1 min-w-0 py-1 md:py-0">
-              <Globe className="ml-4 text-muted-foreground h-5 w-5 shrink-0" />
-              <Select value={filters.travelStyle} onValueChange={(value) => updateFilter("travelStyle", value)}>
-                <SelectTrigger className="border-0 bg-transparent text-base focus:ring-0 px-3 py-2 md:py-1">
-                  <SelectValue placeholder="All adventures" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All adventures</SelectItem>
-                  <SelectItem value="adventure">Adventure</SelectItem>
-                  <SelectItem value="cultural">Cultural</SelectItem>
-                  <SelectItem value="family">Family</SelectItem>
-                  <SelectItem value="nature">Nature</SelectItem>
-                  <SelectItem value="relaxation">Relaxation</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Search Button */}
-            <Button
-              className="rounded-full px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300 md:ml-2 w-full md:w-auto"
-              onClick={handleSearch}
-            >
-              Search
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+    <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-[32px] bg-white/[0.08] backdrop-blur-[55.55px] rounded-[19.69px]">
+      {/* Desktop Layout */}
+      <div className="hidden md:flex flex-row justify-between items-center bg-white mx-auto w-full max-w-[1380px] h-[69px] rounded-[30px]">
+        {/* Three Input Fields Container */}
+        <div className="relative bg-white flex items-center flex-1 h-[69px] rounded-[30px]">
+          {/* First Field - From/To */}
+          <div className="flex items-center flex-1 h-full bg-white border-r border-black/[0.09] rounded-l-[30px] px-4 lg:px-5">
+            <input
+              type="text"
+              value={fromTo}
+              onChange={(e) => setFromTo(e.target.value)}
+              placeholder="Destination"
+              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              style={{
+                fontWeight: 400,
+                color: '#112211',
+              }}
+            />
           </div>
+
+          {/* Swap Icon */}
+          <button
+            onClick={handleSwap}
+            className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px]"
+          >
+            <div className="flex items-center justify-center">
+              <MapPin className="siz-4 text-[#00A792]" />
+            </div>
+          </button>
+
+          {/* Second Field - Depart/Return */}
+          <div className="flex items-center flex-1 h-full bg-white px-4 lg:px-5">
+            <input
+              type="text"
+              value={departReturn}
+              onChange={(e) => setDepartReturn(e.target.value)}
+              placeholder="Departure"
+              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              style={{
+                fontWeight: 400,
+                color: '#',
+              }}
+            />
+          </div>
+
+          {/* Third Field - Passenger/Class */}
+          <div className="flex items-center flex-1 h-full bg-white border-l border-black/[0.2] rounded-r-[30px] px-4 lg:px-5">
+            <input
+              type="text"
+              value={passengerClass}
+              onChange={(e) => setPassengerClass(e.target.value)}
+              placeholder="Passenger - Class"
+              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              style={{
+                fontWeight: 400,
+                color: '#1C1B1F',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Search Button */}
+        <div className="group flex-none ml-4 lg:ml-0 mr-2 lg:mr-4">
+          <Button
+            onClick={handleSearch}
+            className="relative overflow-hidden bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium"
+            style={{
+              width: '150px',
+              height: '50px',
+              fontSize: '16px',
+            }}
+          >
+            <span className="relative z-10">Search</span>
+
+            {/* Radial expanding hover overlay */}
+            <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="md:hidden bg-white rounded-[20px] p-4 space-y-3">
+        {/* First Field - From/To */}
+        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
+          <input
+            type="text"
+            value={fromTo}
+            onChange={(e) => setFromTo(e.target.value)}
+            placeholder="From - To"
+            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
+            style={{
+              fontWeight: 400,
+              color: '#112211',
+            }}
+          />
+        </div>
+
+        {/* Second Field - Depart/Return */}
+        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
+          <input
+            type="text"
+            value={departReturn}
+            onChange={(e) => setDepartReturn(e.target.value)}
+            placeholder="Depart - Return"
+            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
+            style={{
+              fontWeight: 400,
+              color: '#1C1B1F',
+            }}
+          />
+        </div>
+
+        {/* Third Field - Passenger/Class */}
+        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
+          <input
+            type="text"
+            value={passengerClass}
+            onChange={(e) => setPassengerClass(e.target.value)}
+            placeholder="Passenger - Class"
+            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
+            style={{
+              fontWeight: 400,
+              color: '#1C1B1F',
+            }}
+          />
+        </div>
+
+        {/* Search Button */}
+        <div className="group w-full">
+          <Button
+            onClick={handleSearch}
+            className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-full font-montserrat font-medium h-12"
+            style={{
+              fontSize: '16px',
+            }}
+          >
+            <span className="relative z-10">Search</span>
+
+            {/* Radial expanding hover overlay */}
+            <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+          </Button>
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { Loader2, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { notFound } from "next/navigation"
 import { ImageGallery } from "./image-gallery"
 import { TourInfo } from "./tour-info"
 import { SectionNavigation } from "./section-navigation"
@@ -24,8 +23,9 @@ interface TourDetailClientProps {
 
 /**
  * TourDetailClient Component
- * Now integrated with live API data
- * Uses mock data for detailed itinerary until API provides that information
+ * Fully integrated with live API data
+ * Fetches single tour using dedicated endpoint for optimal performance
+ * Uses mock data for detailed itinerary/reviews until API provides that information
  */
 export function TourDetailClient({ tourId }: TourDetailClientProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -196,7 +196,20 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           </div>
 
           <div id="reviews">
-            <ReviewsSection reviews={tourDetail.reviews} rating={tourDetail.rating} />
+            <ReviewsSection
+              reviews={tourDetail.reviews}
+              rating={tourDetail.rating}
+              tourLocation={
+                tour.location
+                  ? {
+                      lat: 0, // TODO: Add coordinates to API or geocode tour.location
+                      lng: 0,
+                      name: tour.location,
+                    }
+                  : undefined
+              }
+              enableGoogleReviews={false} // Disabled until coordinates are available
+            />
           </div>
         </div>
 

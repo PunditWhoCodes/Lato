@@ -7,6 +7,24 @@ import type { Tour, TourDetail } from "@/types"
 import type { APIUserTrip, APIMarketplaceResponse } from "./trips.types"
 
 /**
+ * Helper to generate deterministic rating from UUID
+ * Prevents hydration errors by ensuring same rating on server and client
+ */
+function generateDeterministicRating(uuid: string): number {
+  // Use first 8 characters of UUID to generate a consistent hash
+  let hash = 0
+  const str = uuid.slice(0, 8)
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32-bit integer
+  }
+  // Map hash to rating between 4.5 and 5.0
+  const normalized = Math.abs(hash) % 50 // 0-49
+  return 4.5 + (normalized / 100) // 4.5-4.99
+}
+
+/**
  * Helper to generate tour images based on destination/country
  * In production, these would come from the API or a CDN
  */
@@ -65,13 +83,13 @@ function generateTourBadges(userTrip: APIUserTrip): string[] {
   const badges: string[] = []
 
   if (userTrip.trip?.sample) badges.push("Sample")
-  if (userTrip.user.verified) badges.push("Verified Operator")
+  if (userTrip.user?.verified) badges.push("Verified Operator")
   // Check for special offers based on fee
-  if (userTrip.price && userTrip.fee && userTrip.fee > 0) {
+  if (userTrip?.price && userTrip?.fee && userTrip.fee > 0) {
     badges.push("Special Offer")
   }
-  if (userTrip.travelapp_visits > 50) badges.push("Popular")
-  if (userTrip.user.company?.plan === "pro") badges.push("Premium Partner")
+  if (userTrip?.travelapp_visits > 50) badges.push("Popular")
+  if (userTrip.user?.company?.plan === "pro") badges.push("Premium Partner")
 
   return badges
 }
@@ -93,7 +111,7 @@ function extractHighlights(userTrip: APIUserTrip): string[] {
   }
 
   // Add verified operator
-  if (userTrip.user.verified) {
+  if (userTrip.user?.verified) {
     highlights.push("Verified tour operator")
   }
 
@@ -109,36 +127,89 @@ function extractHighlights(userTrip: APIUserTrip): string[] {
  * Map APIUserTrip to Tour interface
  */
 export function mapUserTripToTour(userTrip: APIUserTrip): Tour {
+  // Validate input
+  if (!userTrip) {
+    console.error("mapUserTripToTour: userTrip is undefined or null")
+    throw new Error("Invalid user trip data: userTrip is undefined")
+  }
+
+  if (!userTrip.id) {
+    console.error("mapUserTripToTour: userTrip.id is missing", userTrip)
+    throw new Error("Invalid user trip data: ID is missing")
+  }
+
+  // Check if this is actually a Trip object instead of UserTrip
+  // The API sometimes returns Trip directly instead of UserTrip
+  const isTrip = 'client_name' in userTrip || 'tripdays' in userTrip
+
+  if (isTrip) {
+    console.warn("Received Trip object instead of UserTrip, creating minimal tour data")
+    const tripData = userTrip as any
+    const title = tripData.titles?.[0]?.content || "Untitled Tour"
+    const country = tripData.country
+
+    return {
+      id: parseInt(tripData.id.split("-")[0], 16),
+      uuid: tripData.id,
+      title,
+      company: "Unknown Company",
+      companyId: "",
+      companyCountry: country?.name || "Unknown",
+      companyFlag: country?.flagEmoticon || "🌍",
+      price: 0,
+      originalPrice: undefined,
+      rating: generateDeterministicRating(tripData.id),
+      reviews: 0,
+      duration: tripData.nrOfDays ? `${tripData.nrOfDays} days` : "Multiple days",
+      groupSize: "Small Group",
+      location: country?.name || "International",
+      destination: country?.iso || "INT",
+      travelStyle: "Exploration",
+      image: getTourImage(country?.iso || "US"),
+      badges: tripData.sample ? ["Sample"] : [],
+      category: "Exploration",
+      difficulty: "Moderate",
+      highlights: [],
+      tourType: "Group Tour",
+    }
+  }
+
   const trip = userTrip.trip
   const title = trip?.titles?.[0]?.content || "Untitled Tour"
   const country = trip?.country
 
-  return {
-    id: parseInt(userTrip.id.split("-")[0], 16), // Convert UUID to number for compatibility
-    title,
-    company: userTrip.user.company?.name || userTrip.user.name,
-    companyId: userTrip.user.companyId,
-    companyCountry: country?.name || "Unknown",
-    companyFlag: country?.flagEmoticon || "🌍",
-    price: userTrip.price || 0,
-    originalPrice: userTrip.price && userTrip.fee ? userTrip.price + userTrip.fee : undefined,
-    rating: 4.5 + Math.random() * 0.5, // Placeholder: API doesn't provide ratings
-    reviews: userTrip.travelapp_visits, // Using visits as a proxy for reviews
-    duration: trip?.nrOfDays ? `${trip.nrOfDays} days` : "Multiple days",
-    groupSize: userTrip.max_travellers
-      ? `Up to ${userTrip.max_travellers} people`
-      : userTrip.group_booking
-        ? "Group"
-        : "Small Group",
-    location: country?.name || "International",
-    destination: country?.iso || "INT",
-    travelStyle: determineTravelStyle(userTrip),
-    image: getTourImage(country?.iso || "US"),
-    badges: generateTourBadges(userTrip),
-    category: determineTravelStyle(userTrip),
-    difficulty: "Moderate", // Default difficulty
-    highlights: extractHighlights(userTrip),
-    tourType: determineTourType(userTrip),
+  try {
+    return {
+      id: parseInt(userTrip.id.split("-")[0], 16), // Convert UUID to number for compatibility
+      uuid: userTrip.id, // Preserve original UUID for API calls
+      title,
+      company: userTrip?.user?.company?.name || userTrip?.user?.name || "Unknown Company",
+      companyId: userTrip?.user?.companyId,
+      companyCountry: country?.name || "Unknown",
+      companyFlag: country?.flagEmoticon || "🌍",
+      price: userTrip?.price || 0,
+      originalPrice: userTrip?.price && userTrip?.fee ? userTrip.price + userTrip.fee : undefined,
+      rating: generateDeterministicRating(userTrip.id), // Deterministic rating based on UUID
+      reviews: userTrip?.travelapp_visits || 0, // Using visits as a proxy for reviews
+      duration: trip?.nrOfDays ? `${trip.nrOfDays} days` : "Multiple days",
+      groupSize: userTrip.max_travellers
+        ? `Up to ${userTrip.max_travellers} people`
+        : userTrip.group_booking
+          ? "Group"
+          : "Small Group",
+      location: country?.name || "International",
+      destination: country?.iso || "INT",
+      travelStyle: determineTravelStyle(userTrip),
+      image: getTourImage(country?.iso || "US"),
+      badges: generateTourBadges(userTrip),
+      category: determineTravelStyle(userTrip),
+      difficulty: "Moderate", // Default difficulty
+      highlights: extractHighlights(userTrip),
+      tourType: determineTourType(userTrip),
+    }
+  } catch (error) {
+    console.error("Error in mapUserTripToTour:", error, { userTrip })
+    throw new Error(`Failed to map user trip: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
@@ -170,7 +241,7 @@ export function mapUserTripToTourDetail(userTrip: APIUserTrip): Partial<TourDeta
       name: user.company?.name || user.name,
       id: user.companyId,
       avatar: user.avatarUrl || user.avatar?.key || "",
-      rating: 4.5 + Math.random() * 0.5,
+      rating: generateDeterministicRating(userTrip.id),
       reviews: userTrip.travelapp_visits,
       verified: user.verified,
       responseTime: "Within 24 hours",

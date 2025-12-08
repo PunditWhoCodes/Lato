@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Loader2, AlertCircle } from "lucide-react"
-import type { Tour } from "@/types"
 import { ToursHeader, FiltersSidebar, ToursToolbar, TourGridCard, TourListCard, NoToursFound } from "../components"
 import type { SearchFilters, ViewMode, SortByType } from "../types"
 import { useToursData } from "../hooks/useToursData"
@@ -18,11 +17,14 @@ export function ToursClient() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  // Fetch tours from API
-  const { tours: apiTours, isLoading, isError, error, totalCount, refetch } = useToursData({
+  // Country Selection State
+  const [selectedCountry, setSelectedCountry] = useState<string>("")
+
+  // Fetch tours from API - now with dynamic country filtering
+  const { tours: apiTours, isLoading, isError, error, refetch } = useToursData({
     page: 1,
     itemsPerPage: 100, // Fetch more items for better filtering
-    countries: "US", // Can be made dynamic based on user preferences
+    countries: selectedCountry || undefined, // Dynamic country selection (undefined = all countries)
   })
 
   // Search and Filter State
@@ -64,12 +66,18 @@ export function ToursClient() {
     setSearchFilters(filters)
   }
 
-  const handleCardClick = (tourId: number, e: React.MouseEvent) => {
+  const handleCountryChange = (countryIso: string) => {
+    setSelectedCountry(countryIso)
+  }
+
+  const handleCardClick = (tourUuid: string, e: React.MouseEvent) => {
     const target = e.target as HTMLElement
     if (target.closest("button") || target.closest("a") || target.closest("[data-prevent-navigation]")) {
       return
     }
-    router.push(`/tours/${tourId}`)
+
+    // Direct navigation with UUID - no need to find tour first
+    router.push(`/tours/${tourUuid}`)
   }
 
   const handleClearFilters = () => {
@@ -80,6 +88,7 @@ export function ToursClient() {
       duration: "",
       travelStyle: "",
     })
+    setSelectedCountry("") // Clear country filter
     setSelectedDestinations([])
     setPriceRange([0, 50000])
     setSelectedOperator("all")
@@ -209,7 +218,7 @@ export function ToursClient() {
 
   return (
     <>
-      <ToursHeader onSearch={handleSearch} />
+      <ToursHeader />
 
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">

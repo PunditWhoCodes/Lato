@@ -1,10 +1,11 @@
 /**
  * Trips API Service
  * Handles all API calls related to trips/usertrips
+ * Now uses local Next.js API routes as proxy (no CORS issues)
  */
 
 import { api } from "@/lib/api/client"
-import { API_BASE_URL, TRIPS_API } from "@/config/apiRoutes"
+import { TRIPS_API } from "@/config/apiRoutes"
 import type {
   APIMarketplaceResponse,
   APISingleTripResponse,
@@ -21,10 +22,7 @@ export async function fetchMarketplaceTrips(
 ): Promise<APIMarketplaceResponse> {
   const endpoint = TRIPS_API.MARKETPLACE(params)
 
-  return api.get<APIMarketplaceResponse>(endpoint, {
-    useAuth: true,
-    baseURL: API_BASE_URL,
-  })
+  return api.get<APIMarketplaceResponse>(endpoint)
 }
 
 /**
@@ -37,10 +35,8 @@ export async function fetchTripById(
 ): Promise<APISingleTripResponse> {
   const endpoint = TRIPS_API.BY_ID(id)
 
-  return api.get<APISingleTripResponse>(endpoint, {
-    useAuth: true,
-    baseURL: API_BASE_URL,
-  })
+  // Calls local Next.js API route, which proxies to external API
+  return api.get<APISingleTripResponse>(endpoint)
 }
 
 /**

@@ -13,7 +13,7 @@ import type { Tour } from "@/types"
 
 interface TourListCardProps {
   tour: Tour
-  onClick: (tourId: number, e: React.MouseEvent) => void
+  onClick: (tourUuid: string, e: React.MouseEvent) => void
 }
 
 export function TourListCard({ tour, onClick }: TourListCardProps) {
@@ -26,7 +26,7 @@ export function TourListCard({ tour, onClick }: TourListCardProps) {
   }
 
   return (
-    <div onClick={(e) => onClick(tour.id, e)}>
+    <div onClick={(e) => onClick(tour.uuid || tour.id.toString(), e)}>
       <Card className="group hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-300 cursor-pointer border-0 shadow-lg bg-card dark:bg-card/95">
         <CardContent className="p-0">
           <div className="flex flex-col sm:flex-row">

@@ -1,69 +1,46 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
+import Image from "next/image"
 
 export function CTASection() {
   return (
-    <section
-      className="
-        py-8 sm:py-10 md:py-12 px-4 relative overflow-hidden
-        bg-linear-to-br from-primary/10 via-background to-secondary/10
-        dark:from-primary/20 dark:via-background dark:to-secondary/20
-        transition-colors duration-500
-      "
-    >
-      {/* Soft radial overlays for depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.08),transparent_70%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(0,0,0,0.3),transparent_70%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_70%_80%,rgba(0,0,0,0.4),transparent_70%)]"></div>
+    <section className="relative w-full h-[500px] sm:h-[600px] md:h-[650px] lg:h-[700px] xl:h-[730px]">
+      {/* Background Image */}
+      <Image
+        src="/cta-img.jpg"
+        alt="Beautiful landscape"
+        fill
+        className="object-cover object-center"
+        priority
+        quality={100}
+      />
 
-      <div className="relative max-w-4xl mx-auto text-center px-2">
-        <h2
-          className="
-            font-heading font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl 
-            mb-3 sm:mb-4 leading-tight 
-            text-foreground
-          "
-        >
-          Ready to Start Your
-          <span className="block mt-1 text-primary">Adventure?</span>
+      {/* Gradient Overlay - subtle top, strong bottom fade to white */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent from-0% via-transparent via-50% to-white to-100%" />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center justify-start pt-16 md:pt-20 lg:pt-28 px-4 h-full">
+        <h2 className="font-poppins font-normal text-3xl md:text-4xl lg:text-[48px] lg:leading-[72px] text-center text-black mb-8 md:mb-10 lg:mb-12 max-w-3xl">
+          Let Lato Plan Your Unforgettable Journey.
         </h2>
 
-        <p className="text-sm sm:text-base md:text-lg mb-6 text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-          Join thousands of travelers discovering amazing experiences through our platform
-        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="group">
+            <Link
+              href="/tours"
+              className="relative overflow-hidden inline-flex items-center justify-center bg-black text-white rounded-full px-8 py-3.5 text-base font-poppins font-medium shadow-lg"
+            >
+              <span className="relative z-10">Talk to a Travel Expert</span>
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
-          <Button
-            size="lg"
-            className="
-              rounded-full px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold
-              bg-primary text-primary-foreground
-              hover:bg-primary/90
-              shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105
-              w-full sm:w-auto
-            "
-            asChild
-          >
-            <Link href="/register">
-              Connect with Local Experts
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
             </Link>
-          </Button>
+          </div>
 
-          <Button
-            size="lg"
-            variant="outline"
-            className="
-              rounded-full px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold
-              border-2 border-primary/70 text-foreground
-              hover:bg-primary/10 dark:hover:bg-primary/20
-              shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105
-              w-full sm:w-auto
-            "
-            asChild
+          {/* <Link
+            href="/contact"
+            className="bg-white border-2 border-black text-black hover:bg-gray-50 rounded-full px-8 py-3.5 text-base font-poppins font-medium transition-all"
           >
-            <Link href="/tours">Book Your Experience Today</Link>
-          </Button>
+            Start Planning 
+          </Link> */}
         </div>
       </div>
     </section>
