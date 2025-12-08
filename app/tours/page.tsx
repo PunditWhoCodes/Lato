@@ -1,5 +1,5 @@
 import { Navigation } from "@/components/navigation"
-import { ToursClient } from "./components/tours-client"
+import { ListingClient } from "./components/listing-client"
 
 /**
  * Tours Listing Page
@@ -9,9 +9,9 @@ import { ToursClient } from "./components/tours-client"
  */
 export default function ToursPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#F7F7F7]">
       <Navigation />
-      <ToursClient />
+      <ListingClient />
     </div>
   )
 }
