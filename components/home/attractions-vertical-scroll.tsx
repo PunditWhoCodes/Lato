@@ -86,8 +86,12 @@ export function AttractionsVerticalScroll() {
       {/* Sticky Header Container */}
       <div className="sticky top-20 md:top-36 bottom-20 h-screen flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10 w-full max-w-7xl">
-          {/* Stacked Cards Container */}
-          <div className="relative h-[600px] md:h-[700px]">
+          <div
+            className="relative h-[600px] md:h-[700px]"
+            style={{
+              clipPath: "inset(0 0 0 0 round 24px 24px 60px 60px)",
+            }}
+          >
             {attractions.map((attraction, index) => {
               // For the first card, it stays fixed at position 0 (doesn't move)
               // For subsequent cards, they slide up from the bottom
