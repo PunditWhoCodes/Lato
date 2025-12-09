@@ -33,7 +33,7 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
   if (variant === "featured") {
     return (
       <Link href={`/tours/${tourLink}`}>
-        <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden border border-black/[0.09]" style={{ borderRadius: '26.8px', padding: '17.08px' }}>
+        <Card className="group max-w-[522px] lg:h-[533px] hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden border border-black/9" style={{ borderRadius: '26.8px', padding: '17.08px' }}>
           {/* Image */}
           <div className="relative overflow-hidden mb-[17.94px]" style={{ borderRadius: '17.08px' }}>
             <ShimmerImage
@@ -51,7 +51,7 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
               <h3 className="font-poppins font-medium text-[#1C2B38] leading-tight flex-1" style={{ fontSize: '17.86px', lineHeight: '22px' }}>
                 {tour.title}
               </h3>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 <Star className="w-[23px] h-[23px] fill-[#FFA432] text-[#FFA432]" />
                 <span className="font-mulish font-semibold text-[#778088]" style={{ fontSize: '16.08px', lineHeight: '20px' }}>
                   {tour.rating}
@@ -81,13 +81,13 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Bus className="w-[16.74px] h-[11.96px] text-[#495560]" />
-                  <span className="font-mulish font-semibold text-[#495560]" style={{ fontSize: '14.29px', lineHeight: '18px' }}>
+                  <span className="font-mulish text-[#495560]" style={{ fontSize: '14.29px', lineHeight: '18px' }}>
                     Transport Facility
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Users className="w-[16.31px] h-[11.96px] text-[#495560]" />
-                  <span className="font-mulish font-semibold text-[#495560]" style={{ fontSize: '14.29px', lineHeight: '18px' }}>
+                  <span className="font-mulish text-[#495560]" style={{ fontSize: '14.29px', lineHeight: '18px' }}>
                     Family Plan
                   </span>
                 </div>
