@@ -78,7 +78,7 @@ export function TestimonialsSection() {
           {[...TESTIMONIALS, ...TESTIMONIALS].map((t, index) => (
             <div
               key={`${t.id}-${index}`}
-              className="relative flex-shrink-0 w-[260px] md:w-[280px] overflow-visible"
+              className="relative shrink-0 w-[260px] md:w-[380px] overflow-visible"
             >
               {/* Image container keeps rounded corners for the image */}
               <div className="w-full h-[300px] md:h-[320px] rounded-3xl overflow-hidden">
@@ -95,10 +95,10 @@ export function TestimonialsSection() {
               <div
                 className={
                   t.position === "left"
-                    ? "absolute top-4 left-0"
+                    ? "absolute top-0 -left-4"
                     : t.position === "center"
-                    ? "absolute bottom-4 left-0"
-                    : "absolute top-4 right-0"
+                    ? "absolute bottom-0 -left-6"
+                    : "absolute top-0 right-0"
                 }
               >
                 <TestimonialFloatingCard {...t} />
