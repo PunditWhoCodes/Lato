@@ -69,7 +69,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <ConditionalFooter />
-          <ConditionalChat />
+          {/* <ConditionalChat /> */}
         </Providers>
       </body>
     </html>
