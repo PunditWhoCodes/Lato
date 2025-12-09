@@ -17,25 +17,25 @@ const attractions: Attraction[] = [
     id: 1,
     name: "Golden Gate Bridge",
     activities: 45,
-    image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&q=80",
+    image: "/top-attractions/attraction-1.png",
   },
   {
     id: 2,
     name: "Park Guell",
     activities: 25,
-    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&q=80",
+    image: "/top-attractions/attraction-2.png",
   },
   {
     id: 3,
     name: "Louvre Museum",
     activities: 95,
-    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80",
+    image: "/top-attractions/attraction-3.png",
   },
   {
     id: 4,
     name: "Rijksmuseum",
     activities: 30,
-    image: "https://images.unsplash.com/photo-1761839257961-4dce65b72d99?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNXx8fGVufDB8fHx8fA%3D%3D",
+    image: "/top-attractions/attraction-4.png",
   },
 ]
 
@@ -132,27 +132,28 @@ export function AttractionsVerticalScroll() {
                     zIndex: index,
                   }}
                 >
-                  <div className="relative w-full h-full rounded-3xl overflow-hidden">
+                  <div
+                    className={`relative w-full h-full overflow-hidden ${
+                      index === 0
+                        ? "rounded-3xl"
+                        : index === attractions.length - 1
+                          ? "rounded-t-3xl rounded-b-[60px]"
+                          : "rounded-3xl"
+                    }`}
+                    style={index === 0 ? { backgroundColor: "#00A792" } : undefined}
+                  >
                     <Image
                       src={attraction.image}
                       alt={attraction.name}
                       fill
-                      className="object-cover"
+                      className={index === 0 ? "object-contain" : "object-cover"}
                       priority={index === 0}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                     />
 
-                    {/* Gradient Overlay */}
-                    {/* <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" /> */}
-
-                    {/* Header on First Card */}
+                    {/* Header on First Card - No blur effect */}
                     {index === 0 && (
-                      <motion.div
-                        className="absolute top-8 md:top-12 left-8 md:left-12 right-8 md:right-12 text-white z-20"
-                        style={{
-                          opacity: contentOpacity,
-                        }}
-                      >
+                      <div className="absolute top-8 md:top-12 left-8 md:left-12 right-8 md:right-12 text-white z-20">
                         <div className="flex items-start justify-between gap-4">
                           <div>
                             <p className="text-white/90 font-normal text-xs md:text-sm mb-2 md:mb-3 drop-shadow-md">
@@ -169,24 +170,32 @@ export function AttractionsVerticalScroll() {
                             </div>
                           </button>
                         </div>
-                      </motion.div>
+                      </div>
                     )}
 
-                    {/* Attraction Name Overlay - Bottom */}
-                    <motion.div
-                      className="absolute bottom-8 md:bottom-12 left-8 md:left-12 text-white z-10"
-                      style={{
-                        opacity: contentOpacity,
-                      }}
-                    >
-                      <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 drop-shadow-lg">
-                        {attraction.name}
-                      </h3>
-                      <p className="text-white/95 text-lg md:text-xl flex items-center gap-2">
-                        <span className="inline-block w-1.5 h-1.5 bg-white rounded-full"></span>
-                        {attraction.activities} activities
-                      </p>
-                    </motion.div>
+                    {/* Centered Name & Activities Overlay for cards 2, 3, 4 */}
+                    {index !== 0 && (
+                      <>
+                        {/* Arrow button at top right */}
+                        <div className="absolute top-8 md:top-12 right-8 md:right-12 z-20">
+                          <div className="relative size-9 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <ArrowUpRight className="relative z-10 text-black size-5" />
+                          </div>
+                        </div>
+
+                        <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
+                          <div className="backdrop-blur-md bg-black/30 rounded-2xl px-8 py-6 flex flex-col items-center">
+                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg text-center">
+                              {attraction.name}
+                            </h3>
+                            <p className="text-white/95 text-lg md:text-xl flex items-center gap-2 mt-3">
+                              <span className="inline-block w-1.5 h-1.5 bg-white rounded-full"></span>
+                              {attraction.activities} activities
+                            </p>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </motion.div>
               )
