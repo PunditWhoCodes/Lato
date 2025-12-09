@@ -19,7 +19,7 @@ export function SearchBar() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-[32px] bg-white/[0.08] backdrop-blur-[55.55px] rounded-[19.69px]">
+    <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-[32px] bg-white/8 backdrop-blur-[55.55px] rounded-[19.69px]">
       {/* Desktop Layout */}
       <div className="hidden md:flex flex-row justify-between items-center bg-white mx-auto w-full max-w-[1380px] h-[69px] rounded-[30px]">
         {/* Three Input Fields Container */}
