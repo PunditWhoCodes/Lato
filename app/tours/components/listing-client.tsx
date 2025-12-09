@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal, X } from "lucide-react"
 import {
@@ -14,6 +14,8 @@ import { AppliedFilters } from "./applied-filters"
 import { ListingFiltersSidebar } from "./listing-filters-sidebar"
 import { ListingTourCard } from "./listing-tour-card"
 import { ListingPagination } from "./listing-pagination"
+
+const ITEMS_PER_PAGE = 12
 
 // Dummy Tour Data
 const DUMMY_TOURS = [
@@ -186,8 +188,6 @@ const DUMMY_TOURS = [
   },
 ]
 
-const ITEMS_PER_PAGE = 9
-
 interface AppliedFilter {
   id: string
   label: string
@@ -213,7 +213,7 @@ export function ListingClient() {
   // Filter states
   const [selectedDestination, setSelectedDestination] = useState(destinationParam)
   const [priceType, setPriceType] = useState<"person" | "day">("person")
-  const [priceRange, setPriceRange] = useState([5000, 50000])
+  const [priceRange, setPriceRange] = useState([2000, 12000])
   const [selectedGroup, setSelectedGroup] = useState<string[]>([])
   const [selectedBestFor, setSelectedBestFor] = useState<string[]>([])
   const [selectedTourStyle, setSelectedTourStyle] = useState<string[]>([])
@@ -227,6 +227,8 @@ export function ListingClient() {
   const [selectedYear, setSelectedYear] = useState(2024)
   const [selectedDays, setSelectedDays] = useState<number[]>([13])
   const [dateType, setDateType] = useState<"start" | "end">("start")
+  const [startDate, setStartDate] = useState<number | null>(null)
+  const [endDate, setEndDate] = useState<number | null>(null)
 
   // Mobile filters state
   const [showMobileFilters, setShowMobileFilters] = useState(false)
@@ -299,10 +301,12 @@ export function ListingClient() {
   // Reset all filters
   const handleResetFilters = () => {
     handleClearAllFilters()
-    setPriceRange([5000, 50000])
+    setPriceRange([2000, 12000])
     setPriceType("person")
     setExpandedTravelStyles([])
     setOperatorSearch("")
+    setStartDate(null)
+    setEndDate(null)
   }
 
   // Apply filters
@@ -432,6 +436,10 @@ export function ListingClient() {
                       setSelectedDays={setSelectedDays}
                       dateType={dateType}
                       setDateType={setDateType}
+                      startDate={startDate}
+                      setStartDate={setStartDate}
+                      endDate={endDate}
+                      setEndDate={setEndDate}
                       onApply={handleApplyFilters}
                       onReset={handleResetFilters}
                     />
@@ -475,6 +483,10 @@ export function ListingClient() {
                 setSelectedDays={setSelectedDays}
                 dateType={dateType}
                 setDateType={setDateType}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
                 onApply={handleApplyFilters}
                 onReset={handleResetFilters}
               />

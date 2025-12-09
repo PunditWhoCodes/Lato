@@ -65,6 +65,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
   if (viewMode === "list") {
     return (
       <article
+        data-tour-card
         onClick={onClick}
         className="bg-white rounded-[10px] overflow-hidden cursor-pointer group flex border border-[#E8E8E8] hover:shadow-md transition-shadow"
       >
@@ -183,6 +184,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
   // Grid View
   return (
     <article
+      data-tour-card
       onClick={onClick}
       className="bg-white rounded-[10px] overflow-hidden cursor-pointer group border border-[#E8E8E8] hover:shadow-md transition-shadow"
     >
