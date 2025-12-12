@@ -2,6 +2,52 @@ import { NextRequest, NextResponse } from "next/server"
 
 const EXTERNAL_API_URL = process.env.EXTERNAL_API_URL || "https://api.latotravelapp.com"
 const BEARER_TOKEN = process.env.API_BEARER_TOKEN
+const FETCH_TIMEOUT = 15000 // 15 seconds timeout
+const MAX_RETRIES = 2
+
+/**
+ * Fetch with timeout and retry logic
+ */
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  retries = MAX_RETRIES
+): Promise<Response> {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT)
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    })
+    clearTimeout(timeoutId)
+    return response
+  } catch (error) {
+    clearTimeout(timeoutId)
+
+    // Check if it's a timeout or network error
+    const isTimeout = error instanceof Error && (
+      error.name === 'AbortError' ||
+      error.message.includes('timeout') ||
+      error.message.includes('TIMEOUT')
+    )
+    const isNetworkError = error instanceof Error && (
+      error.message.includes('fetch failed') ||
+      error.message.includes('ECONNREFUSED') ||
+      error.message.includes('ENOTFOUND')
+    )
+
+    // Retry on timeout or network errors
+    if ((isTimeout || isNetworkError) && retries > 0) {
+      console.log(`Retrying fetch... (${MAX_RETRIES - retries + 1}/${MAX_RETRIES})`)
+      await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second before retry
+      return fetchWithRetry(url, options, retries - 1)
+    }
+
+    throw error
+  }
+}
 
 export async function GET(
   request: NextRequest,
@@ -33,15 +79,14 @@ export async function GET(
 
     console.log(`Fetching trip from: ${externalUrl}`)
 
-    // Make request to external API
-    const response = await fetch(externalUrl, {
+    // Make request to external API with timeout and retry
+    const response = await fetchWithRetry(externalUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${BEARER_TOKEN}`,
       },
-      // Add caching (optional, adjust based on your needs)
-      next: { revalidate: 600 }, // Cache for 10 minutes
+      cache: 'no-store', // Disable cache for dynamic data
     })
 
     // Check if the response is ok
@@ -91,12 +136,30 @@ export async function GET(
   } catch (error) {
     console.error("Trip API Error:", error)
 
+    // Determine error type for better user feedback
+    let errorMessage = "Failed to fetch trip"
+    let statusCode = 500
+
+    if (error instanceof Error) {
+      if (error.name === 'AbortError' || error.message.includes('timeout') || error.message.includes('TIMEOUT')) {
+        errorMessage = "Request timed out. The server took too long to respond."
+        statusCode = 504 // Gateway Timeout
+      } else if (error.message.includes('fetch failed') || error.message.includes('ECONNREFUSED')) {
+        errorMessage = "Unable to connect to the travel API. Please try again later."
+        statusCode = 503 // Service Unavailable
+      } else if (error.message.includes('ENOTFOUND')) {
+        errorMessage = "API server not found. Please check your connection."
+        statusCode = 503
+      }
+    }
+
     return NextResponse.json(
       {
-        error: "Failed to fetch trip",
+        error: errorMessage,
         message: error instanceof Error ? error.message : "Unknown error",
+        code: error instanceof Error ? (error as any).code : undefined,
       },
-      { status: 500 }
+      { status: statusCode }
     )
   }
 }
