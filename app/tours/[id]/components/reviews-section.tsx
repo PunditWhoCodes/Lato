@@ -1,188 +1,197 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Star, Loader2, ExternalLink } from "lucide-react"
-import { ShimmerImage } from "@/components/ui/shimmer-image"
-import type { TourDetail } from "@/types"
-import { ReviewsSectionProps } from "../types"
-import { useGoogleReviews } from "../hooks/useGoogleReviews"
-import { GOOGLE_MAPS_CONFIG } from "@/config/google-maps"
+import Image from "next/image"
+import { Star, BadgeCheck } from "lucide-react"
 
-interface ReviewsSectionWithGoogleProps extends ReviewsSectionProps {
-  tourLocation?: { lat: number; lng: number; name?: string }
-  enableGoogleReviews?: boolean
+interface Review {
+  id: number | string
+  user: {
+    name: string
+    avatar?: string
+    verified?: boolean
+  }
+  rating: number
+  date: string
+  title?: string
+  comment: string
 }
 
+interface ReviewsSectionProps {
+  reviews?: Review[]
+  rating?: number
+  totalReviews?: number
+  tourName?: string
+}
+
+// Default reviews data
+const defaultReviews: Review[] = [
+  {
+    id: 1,
+    user: {
+      name: "Leonie",
+      avatar: "",
+      verified: true
+    },
+    rating: 5,
+    date: "Jan 2, 2018",
+    title: "Peru Best Tours are awesome",
+    comment: "The most amazing place I have ever been, such breath taking scenery. Gorgeous friendly people. Loved it."
+  }
+]
+
+// Rating distribution data
+const ratingDistribution = [
+  { stars: 5, count: 1 },
+  { stars: 4, count: 0 },
+  { stars: 3, count: 0 },
+  { stars: 2, count: 0 },
+  { stars: 1, count: 0 }
+]
+
 export function ReviewsSection({
-  reviews: fallbackReviews,
-  rating: fallbackRating,
-  tourLocation,
-  enableGoogleReviews = true
-}: ReviewsSectionWithGoogleProps) {
-  // Fetch Google reviews if enabled and location is provided
-  const { data: googleData, isLoading, error } = useGoogleReviews({
-    lat: tourLocation?.lat,
-    lng: tourLocation?.lng,
-    name: tourLocation?.name,
-    enabled: enableGoogleReviews && Boolean(tourLocation) && GOOGLE_MAPS_CONFIG.features.enableGoogleReviews,
-  })
-
-  // Determine which reviews to show
-  const shouldUseGoogleReviews =
-    enableGoogleReviews &&
-    googleData?.success &&
-    googleData.data.reviews.length > 0
-
-  const displayReviews = shouldUseGoogleReviews
-    ? googleData!.data.reviews
-    : fallbackReviews
-
-  const displayRating = shouldUseGoogleReviews
-    ? googleData!.data.rating
-    : fallbackRating
-
-  const totalReviewCount = shouldUseGoogleReviews
-    ? googleData!.data.totalReviews
-    : fallbackReviews.length
+  reviews = defaultReviews,
+  rating = 5.0,
+  totalReviews = 1,
+  tourName = "Best of the Andes"
+}: ReviewsSectionProps) {
+  // Calculate max count for bar scaling
+  const maxCount = Math.max(...ratingDistribution.map(r => r.count), 1)
 
   return (
-    <section id="reviews" className="space-y-6 pt-4">
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <div className="flex items-center gap-3">
-          <h3 className="font-heading font-bold text-2xl">Reviews ({totalReviewCount})</h3>
-          {shouldUseGoogleReviews && (
-            <Badge variant="secondary" className="gap-1">
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              </svg>
-              Google Reviews
-            </Badge>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-          <span className="font-bold text-lg">{displayRating.toFixed(1)}</span>
-          <span className="text-muted-foreground">average</span>
+    <div className="py-8">
+      {/* Section Header */}
+      <h2 className="text-xl font-semibold text-[#1C1B1F] mb-2">Customer Reviews</h2>
+      <p className="text-[15px] text-[#6B7280] mb-6">
+        Read what other travelers have to say about <span className="font-semibold text-[#1C1B1F]">{tourName}</span>
+      </p>
+
+      {/* Rating Summary Box - Teal border and background */}
+      <div className="border border-[#00A79233] bg-[#00A79208] rounded-2xl p-6 mb-6">
+        <div className="flex items-center gap-8">
+          {/* Left - Large Rating Number */}
+          <div className="shrink-0">
+            <div className="text-5xl font-bold text-[#1C1B1F]">{rating.toFixed(1)}</div>
+            <div className="flex items-center gap-0.5 mt-2">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-5 h-5 ${
+                    i < Math.floor(rating)
+                      ? "fill-[#FFA432] text-[#FFA432]"
+                      : "fill-[#E5E5E5] text-[#E5E5E5]"
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="text-sm text-[#6B7280] mt-1">based on {totalReviews} review{totalReviews !== 1 ? 's' : ''}</p>
+          </div>
+
+          {/* Right - Rating Bars */}
+          <div className="flex-1 space-y-2">
+            {ratingDistribution.map(({ stars, count }) => (
+              <div key={stars} className="flex items-center gap-3">
+                {/* Star icons */}
+                <div className="flex items-center gap-0.5 w-24 shrink-0">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < stars
+                          ? "fill-[#FFA432] text-[#FFA432]"
+                          : "fill-[#D1D5DB] text-[#D1D5DB]"
+                      }`}
+                    />
+                  ))}
+                </div>
+                {/* Progress bar */}
+                <div className="flex-1 h-2.5 bg-white rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#00A699] rounded-full transition-all"
+                    style={{ width: count > 0 ? `${(count / maxCount) * 100}%` : '0%' }}
+                  />
+                </div>
+                {/* Count */}
+                <span className="text-sm text-[#6B7280] w-6 text-right">{count}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Loading State */}
-      {isLoading && enableGoogleReviews && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <span className="ml-3 text-muted-foreground">Loading reviews from Google...</span>
-        </div>
-      )}
+      {/* Individual Reviews */}
+      <div className="space-y-4">
+        {reviews.map((review) => (
+          <div key={review.id} className="border border-[#E5E5E5] rounded-2xl p-5">
+            {/* Top Row - Avatar, Name, Verified, Date */}
+            <div className="flex items-start gap-3 mb-3">
+              {/* Avatar */}
+              <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[#4ADE80] flex items-center justify-center">
+                {review.user.avatar ? (
+                  <Image
+                    src={review.user.avatar}
+                    alt={review.user.name}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <span className="text-white text-lg font-semibold">
+                    {review.user.name.charAt(0)}
+                  </span>
+                )}
+              </div>
 
-      {/* Error State (fallback to mock reviews) */}
-      {error && enableGoogleReviews && !isLoading && (
-        <div className="bg-muted/50 border border-border rounded-lg p-4 mb-4">
-          <p className="text-sm text-muted-foreground">
-            Unable to load Google reviews. Showing sample reviews below.
-          </p>
-        </div>
-      )}
-
-      {/* Reviews List */}
-      {!isLoading && (
-        <div className="space-y-6">
-          {displayReviews.map((review) => (
-            <Card key={review.id} className="bg-card dark:bg-card/95 border-border">
-              <CardContent className="p-6">
-                <div className="flex gap-4">
-                  <Avatar>
-                    <AvatarImage src={review.user.avatar || "/placeholder.svg"} />
-                    <AvatarFallback>{review.user.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-semibold">{review.user.name}</h4>
-                          {review.source === 'google' && (
-                            <Badge variant="outline" className="text-xs">
-                              <svg className="w-2.5 h-2.5 mr-1" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                              </svg>
-                              Verified
-                            </Badge>
-                          )}
-                        </div>
-                        {review.user.location && (
-                          <p className="text-sm text-muted-foreground">{review.user.location}</p>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <div className="flex items-center gap-1 mb-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <p className="text-sm text-muted-foreground">{review.date}</p>
-                      </div>
-                    </div>
-                    <p className="text-muted-foreground leading-relaxed mb-3">{review.comment}</p>
-                    {review.images && review.images.length > 0 && (
-                      <div className="flex gap-2 mb-3 overflow-x-auto">
-                        {review.images.map((image, index) => (
-                          <div key={index} className="w-20 h-20 shrink-0">
-                            <ShimmerImage
-                              src={image || "/placeholder.svg?height=80&width=80&query=review+photo"}
-                              alt={`Review photo ${index + 1}`}
-                              className="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-                              shimmerClassName="rounded-lg"
-                              onError={(e) => {
-                                e.currentTarget.src = "/photo-review.png"
-                              }}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      {review.helpful !== undefined && (
-                        <Button variant="ghost" size="sm" className="h-auto p-0">
-                          Helpful ({review.helpful})
-                        </Button>
-                      )}
-                      {review.googleReviewUrl && (
-                        <a
-                          href={review.googleReviewUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-xs hover:text-primary transition-colors"
-                        >
-                          View on Google <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
+              {/* Name + Verified */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h4 className="font-semibold text-[#1C1B1F]">{review.user.name}</h4>
+                  {review.user.verified && (
+                    <span className="inline-flex items-center gap-1">
+                      <BadgeCheck className="w-4 h-4 text-[#3EB368]" />
+                      <span className="text-sm text-[#6B7280]">Verified Traveler</span>
+                    </span>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+              </div>
 
-      {/* No Reviews State */}
-      {!isLoading && displayReviews.length === 0 && (
-        <div className="text-center py-12 bg-muted/30 rounded-lg border border-dashed">
-          <Star className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
-          <h4 className="font-semibold text-lg mb-2">No reviews yet</h4>
-          <p className="text-muted-foreground">Be the first to review this tour!</p>
-        </div>
+              {/* Date */}
+              <span className="text-sm text-[#6B7280] shrink-0">{review.date}</span>
+            </div>
+
+            {/* Star Rating Row */}
+            <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < review.rating
+                        ? "fill-[#FFA432] text-[#FFA432]"
+                        : "fill-[#E5E5E5] text-[#E5E5E5]"
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="font-semibold text-[#1C1B1F]">{review.rating.toFixed(1)}</span>
+              <span className="text-sm text-[#6B7280]">{review.rating.toFixed(1)} out of 5</span>
+            </div>
+
+            {/* Review Title */}
+            {review.title && (
+              <h5 className="font-semibold text-[#1C1B1F] mb-2">{review.title}</h5>
+            )}
+
+            {/* Review Comment */}
+            <p className="text-[15px] text-[#6B7280] leading-relaxed">{review.comment}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Show More Reviews Link */}
+      {totalReviews > reviews.length && (
+        <button className="mt-6 text-sm text-[#00A699] font-medium hover:underline">
+          Show all {totalReviews} reviews
+        </button>
       )}
-    </section>
+    </div>
   )
 }
