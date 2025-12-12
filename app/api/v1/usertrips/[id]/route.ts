@@ -49,6 +49,8 @@ async function fetchWithRetry(
   }
 }
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -57,10 +59,22 @@ export async function GET(
     // Await params in Next.js 15+
     const { id } = await context.params
 
-    // Validate ID
+    // Validate ID exists
     if (!id || id === 'undefined' || id.trim() === '') {
       return NextResponse.json(
         { error: "Trip ID is required and must be valid" },
+        { status: 400 }
+      )
+    }
+
+    if (!UUID_REGEX.test(id)) {
+      console.warn(`Invalid UUID format received: ${id}`)
+      return NextResponse.json(
+        {
+          error: "Invalid trip ID format. Expected UUID format.",
+          message: "The tour ID must be a valid UUID. This tour may not be available.",
+          receivedId: id
+        },
         { status: 400 }
       )
     }
