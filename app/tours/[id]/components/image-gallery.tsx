@@ -1,102 +1,138 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Heart, Share2, ChevronLeft, ChevronRight, Camera } from "lucide-react"
-import { ShimmerImage } from "@/components/ui/shimmer-image"
-import { useSavedTours } from "@/lib/saved-tours-context"
-import { cn } from "@/lib/utils"
-import { ImageGalleryProps } from "../types"
+import { useState } from "react"
+import Image from "next/image"
+import { Images, LayoutGrid, X } from "lucide-react"
 
-export function ImageGallery({ images, title, tourId, currentImageIndex, setCurrentImageIndex }: ImageGalleryProps) {
-  const { toggleSaveTour, isTourSaved } = useSavedTours()
-  const isSaved = isTourSaved(tourId)
+interface ImageGalleryProps {
+  images: string[]
+  title: string
+  discountPercent?: number
+}
 
-  const nextImage = () => {
-    setCurrentImageIndex((currentImageIndex + 1) % images.length)
-  }
+export function ImageGallery({ images, title, discountPercent }: ImageGalleryProps) {
+  const [showAllPhotos, setShowAllPhotos] = useState(false)
 
-  const prevImage = () => {
-    setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length)
-  }
-
-  const handleSaveClick = () => {
-    toggleSaveTour(tourId)
-  }
+  // Ensure we have at least 4 images for the grid
+  const displayImages = images.length >= 4 ? images : [...images, ...images, ...images, ...images].slice(0, 4)
 
   return (
-    <div className="relative">
-      <div className="relative aspect-video rounded-xl overflow-hidden">
-        <ShimmerImage
-          src={images[currentImageIndex] || "/placeholder.svg?height=400&width=600&query=tour+image"}
-          alt={title}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.currentTarget.src = "/guided-city-tour.png"
-          }}
-        />
-        <Button
-          variant="ghost"
-          size="sm"
-          className={cn(
-            "absolute top-4 right-4 backdrop-blur-sm transition-all hover:scale-110",
-            isSaved
-              ? "bg-primary hover:bg-primary/90"
-              : "bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95"
+    <>
+      {/* Desktop Gallery Grid - Main image left, 3 stacked images right */}
+      <div className="hidden md:flex gap-2 h-[420px] md:h-[550px] rounded-2xl overflow-hidden">
+        {/* Main Large Image - Left Side with OFF Badge */}
+        <div className="relative w-[80%] h-full rounded-2xl overflow-hidden">
+          <Image
+            src={displayImages[0]}
+            alt={title}
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* OFF Badge - Top Left */}
+          {discountPercent && discountPercent > 0 && (
+            <div className="absolute top-4 left-4 bg-[#F23813] text-white px-4 py-1.5 rounded-full text-sm font-semibold">
+              -{discountPercent}% OFF
+            </div>
           )}
-          onClick={handleSaveClick}
-          aria-label={isSaved ? "Remove from saved tours" : "Save tour"}
-        >
-          <Heart className={cn("h-5 w-5 transition-all", isSaved ? "fill-white text-white" : "text-foreground")} />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="absolute top-4 right-16 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
-        >
-          <Share2 className="h-5 w-5 text-foreground" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
-          onClick={prevImage}
-        >
-          <ChevronLeft className="h-5 w-5 text-foreground" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-background/80 dark:bg-background/90 hover:bg-background dark:hover:bg-background/95 backdrop-blur-sm"
-          onClick={nextImage}
-        >
-          <ChevronRight className="h-5 w-5 text-foreground" />
-        </Button>
-        <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-          <Camera className="w-4 h-4 inline mr-1" />
-          {currentImageIndex + 1} / {images.length}
+        </div>
+
+        {/* Right Side - 3 images stacked in single column */}
+        <div className="w-[20%] flex flex-col gap-2">
+          <div className="relative flex-1 rounded-xl overflow-hidden">
+            <Image
+              src={displayImages[1]}
+              alt={`${title} - Image 2`}
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="relative flex-1 rounded-xl overflow-hidden">
+            <Image
+              src={displayImages[2]}
+              alt={`${title} - Image 3`}
+              fill
+              className="object-cover"
+            />
+          </div>
+          {/* Last image with View All Photos button */}
+          <div className="relative flex-1 rounded-xl overflow-hidden">
+            <Image
+              src={displayImages[3]}
+              alt={`${title} - Image 4`}
+              fill
+              className="object-cover"
+            />
+            {/* View All Photos Button - Bottom Right */}
+            <button
+              onClick={() => setShowAllPhotos(true)}
+              className="absolute bottom-3 right-3 bg-white px-4 py-2 rounded-full flex items-center gap-2 text-[#1C1B1F] hover:bg-gray-100 transition-colors shadow-md"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span className="text-sm font-medium">View all photos</span>
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex gap-2 mt-4 overflow-x-auto">
-        {images.map((image, index) => (
+
+      {/* Mobile Gallery */}
+      <div className="md:hidden relative">
+        <div className="relative h-[280px] rounded-2xl overflow-hidden">
+          <Image
+            src={displayImages[0]}
+            alt={title}
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* OFF Badge - Top Left */}
+          {discountPercent && discountPercent > 0 && (
+            <div className="absolute top-3 left-3 bg-[#F23813] text-white px-3 py-1 rounded-full text-xs font-semibold">
+              -{discountPercent}% OFF
+            </div>
+          )}
+          {/* View All Photos Button */}
           <button
-            key={index}
-            onClick={() => setCurrentImageIndex(index)}
-            className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
-              index === currentImageIndex ? "border-primary" : "border-transparent"
-            }`}
+            onClick={() => setShowAllPhotos(true)}
+            className="absolute bottom-3 right-3 bg-white px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-[#1C1B1F]"
           >
-            <ShimmerImage
-              src={image || "/placeholder.svg?height=80&width=80&query=tour+thumbnail"}
-              alt=""
-              className="w-full h-full object-cover"
-              shimmerClassName="rounded-lg"
-              onError={(e) => {
-                e.currentTarget.src = "/vibrant-city-tour.png"
-              }}
-            />
+            <Images className="w-3.5 h-3.5" />
+            View all
           </button>
-        ))}
+        </div>
       </div>
-    </div>
+
+      {/* Full Screen Photo Gallery Modal */}
+      {showAllPhotos && (
+        <div className="fixed inset-0 bg-black z-50 flex flex-col">
+          {/* Modal Header */}
+          <div className="flex items-center justify-between px-6 py-4 bg-black/80">
+            <h3 className="text-white text-lg font-medium">{title}</h3>
+            <button
+              onClick={() => setShowAllPhotos(false)}
+              className="text-white hover:text-gray-300 p-2"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Photo Grid */}
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+              {images.map((image, index) => (
+                <div key={index} className="relative aspect-[4/3] rounded-lg overflow-hidden">
+                  <Image
+                    src={image}
+                    alt={`${title} - Image ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
