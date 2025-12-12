@@ -4,8 +4,9 @@ import { useState } from "react"
 import { Star, Clock, Users, Heart, CarFrontIcon, Car } from "lucide-react"
 import Image from "next/image"
 
-interface TourCardData {
+export interface TourCardData {
   id: number
+  uuid?: string
   image: string
   title: string
   subtitle: string
