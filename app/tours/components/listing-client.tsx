@@ -1,192 +1,46 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
-import { ChevronDown, LayoutGrid, List, SlidersHorizontal, X } from "lucide-react"
+import { ChevronDown, LayoutGrid, List, SlidersHorizontal, X, Loader2, AlertCircle } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
 import { ListingHero } from "./listing-hero"
 import { AppliedFilters } from "./applied-filters"
 import { ListingFiltersSidebar } from "./listing-filters-sidebar"
-import { ListingTourCard } from "./listing-tour-card"
+import { ListingTourCard, type TourCardData } from "./listing-tour-card"
 import { ListingPagination } from "./listing-pagination"
+import { useMarketplaceTrips, mapUserTripToTour } from "../api"
+import type { Tour } from "@/types"
+import type { APIUserTrip } from "../api"
 
 const ITEMS_PER_PAGE = 12
 
-// Dummy Tour Data
-const DUMMY_TOURS = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
+/**
+ * Map Tour from API to TourCardData format for the listing card
+ */
+function mapTourToCardData(tour: Tour): TourCardData {
+  return {
+    id: tour.id,
+    uuid: tour.uuid,
+    image: tour.image || "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
+    title: tour.title,
+    subtitle: tour.companyCountry || tour.location,
+    location: tour.location,
+    rating: Number(tour.rating?.toFixed(1)) || 4.5,
+    groupSize: tour.groupSize || "Small Group",
+    originalPrice: tour.originalPrice,
+    price: tour.price || 0,
+    duration: tour.duration || "Multiple days",
     hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 5,
-    image: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 225.00,
-    price: 142.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 6,
-    image: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 7,
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 8,
-    image: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 235.00,
-    price: 215.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 9,
-    image: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 10,
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 11,
-    image: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-  {
-    id: 12,
-    image: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
-    title: "Rainbow Mountain",
-    subtitle: "Peru",
-    location: "Ecuador Packages",
-    rating: 4.3,
-    groupSize: "14 People Group",
-    originalPrice: 237.00,
-    price: 217.00,
-    duration: "2 hours",
-    hasTransport: true,
-    hasFamilyPlan: true,
-  },
-]
+    hasFamilyPlan: tour.tourType === "Group Tour",
+  }
+}
 
 interface AppliedFilter {
   id: string
@@ -232,6 +86,33 @@ export function ListingClient() {
 
   // Mobile filters state
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+
+  // Fetch tours from API
+  const {
+    data: apiResponse,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useMarketplaceTrips({
+    page: currentPage,
+    step: ITEMS_PER_PAGE,
+    sample: true,
+  })
+
+  // Map API UserTrips to Tour format, then to TourCardData
+  const apiTours = useMemo(() => {
+    if (!apiResponse?.data) return []
+    return apiResponse.data.map((userTrip: APIUserTrip) => {
+      try {
+        const tour = mapUserTripToTour(userTrip)
+        return mapTourToCardData(tour)
+      } catch (err) {
+        console.error("Error mapping tour:", err)
+        return null
+      }
+    }).filter((tour): tour is TourCardData => tour !== null)
+  }, [apiResponse])
 
   // Generate applied filters
   const appliedFilters: AppliedFilter[] = useMemo(() => {
@@ -315,14 +196,16 @@ export function ListingClient() {
     setShowMobileFilters(false)
   }
 
-  // Handle tour card click
-  const handleCardClick = (tourId: number) => {
-    router.push(`/tours/${tourId}`)
+  // Handle tour card click - use UUID for navigation
+  const handleCardClick = (tour: TourCardData) => {
+    // Use UUID if available (from API), otherwise fall back to numeric id
+    const routeId = tour.uuid || tour.id.toString()
+    router.push(`/tours/${routeId}`)
   }
 
-  // Sort tours
+  // Sort tours from API
   const sortedTours = useMemo(() => {
-    const sorted = [...DUMMY_TOURS]
+    const sorted = [...apiTours]
     switch (sortBy) {
       case "price-low":
         return sorted.sort((a, b) => a.price - b.price)
@@ -334,14 +217,14 @@ export function ListingClient() {
       default:
         return sorted.sort((a, b) => b.rating - a.rating)
     }
-  }, [sortBy])
+  }, [sortBy, apiTours])
 
-  // Paginate tours
-  const totalPages = Math.ceil(sortedTours.length / ITEMS_PER_PAGE)
-  const paginatedTours = sortedTours.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  )
+  // Total count from API response
+  const totalCount = apiResponse?.count || 0
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE)
+
+  // Tours are already paginated from API
+  const paginatedTours = sortedTours
 
   const getSortLabel = () => {
     switch (sortBy) {
@@ -499,7 +382,7 @@ export function ListingClient() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               {/* Results Count */}
               <p className="text-[#1C1B1F] text-[14px] font-medium">
-                {sortedTours.length} Results
+                {isLoading ? "Loading..." : `${totalCount} Results`}
               </p>
 
               {/* Sort & View Toggle */}
@@ -571,38 +454,71 @@ export function ListingClient() {
               </div>
             </div>
 
-            {/* Tours Grid/List */}
-            {viewMode === "grid" ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                {paginatedTours.map((tour) => (
-                  <ListingTourCard
-                    key={tour.id}
-                    tour={tour}
-                    viewMode="grid"
-                    onClick={() => handleCardClick(tour.id)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {paginatedTours.map((tour) => (
-                  <ListingTourCard
-                    key={tour.id}
-                    tour={tour}
-                    viewMode="list"
-                    onClick={() => handleCardClick(tour.id)}
-                  />
-                ))}
+            {/* Loading State */}
+            {isLoading && (
+              <div className="flex flex-col items-center justify-center py-20">
+                <Loader2 className="h-10 w-10 animate-spin text-[#00A792] mb-4" />
+                <p className="text-[#495560] text-[14px]">Loading tours...</p>
               </div>
             )}
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <ListingPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
+            {/* Error State */}
+            {isError && !isLoading && (
+              <div className="flex flex-col items-center justify-center py-20">
+                <AlertCircle className="h-10 w-10 text-red-500 mb-4" />
+                <h3 className="text-[#1C1B1F] font-semibold text-[16px] mb-2">Unable to load tours</h3>
+                <p className="text-[#495560] text-[14px] mb-4 text-center max-w-md">
+                  {(error as Error)?.message || "We couldn't load the tours. Please try again."}
+                </p>
+                <Button onClick={() => refetch()} className="bg-[#00A792] hover:bg-[#008577]">
+                  Try Again
+                </Button>
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!isLoading && !isError && paginatedTours.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-20">
+                <p className="text-[#495560] text-[14px]">No tours found. Try adjusting your filters.</p>
+              </div>
+            )}
+
+            {/* Tours Grid/List */}
+            {!isLoading && !isError && paginatedTours.length > 0 && (
+              <>
+                {viewMode === "grid" ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                    {paginatedTours.map((tour) => (
+                      <ListingTourCard
+                        key={tour.uuid || tour.id}
+                        tour={tour}
+                        viewMode="grid"
+                        onClick={() => handleCardClick(tour)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    {paginatedTours.map((tour) => (
+                      <ListingTourCard
+                        key={tour.uuid || tour.id}
+                        tour={tour}
+                        viewMode="list"
+                        onClick={() => handleCardClick(tour)}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <ListingPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>
