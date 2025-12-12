@@ -1,65 +1,111 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Star, Shield, Award } from "lucide-react"
-import { ChatButton } from "@/components/chat-button"
-import type { TourDetail } from "@/types"
+import { Star, BadgeCheck, MessageCircle } from "lucide-react"
 
 interface CompanySectionProps {
-  company: TourDetail["company"]
+  company: {
+    name: string
+    id: string
+    avatar: string
+    rating: number
+    reviews: number
+    verified: boolean
+    description?: string
+    country?: string
+    countryFlag?: string
+    yearsOfExperience?: number
+  }
 }
 
 export function CompanySection({ company }: CompanySectionProps) {
+  const defaultDescription = `${company.name} offers curated travel experiences across Peru's most iconic landscapes and cultural sites. The company combines guided adventures with meaningful cultural immersion to provide travelers with a deeper understanding of the region. Each journey is designed to be seamless, authentic, and memorable.`
+
   return (
-    <section id="company" className="space-y-6 pt-4">
-      <h3 className="font-heading font-bold text-2xl mb-6">About the Company</h3>
-      <Card className="bg-card dark:bg-card/95 border-border">
-        <CardContent className="p-6">
-          <div className="flex gap-4">
-            <Avatar className="w-16 h-16">
-              <AvatarImage src={company.avatar || "/placeholder.svg"} />
-              <AvatarFallback>{company.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <h4 className="font-heading font-bold text-xl">{company.name}</h4>
-                <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-full">
-                  <span className="text-sm">{company.countryFlag}</span>
-                  <span className="text-xs text-muted-foreground">{company.country}</span>
-                </div>
+    <div className="py-8">
+      <h2 className="text-xl font-semibold text-[#1C1B1F] mb-4">About Company</h2>
+
+      {/* Company Card */}
+      <div className="border border-[#00A79233] bg-[#00A79208] p-5 rounded-2xl">
+        {/* Top Row - Avatar, Name, Verified Badge, Buttons */}
+        <div className="flex items-start gap-4 mb-4">
+          {/* Avatar */}
+          <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 bg-[#E5E5E5]">
+            <Image
+              src={company.avatar || "/placeholder.svg"}
+              alt={company.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Company Info */}
+          <div className="flex-1">
+            {/* Name + Verified + Buttons Row */}
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-3">
+                <h3 className="text-lg font-semibold text-[#1C1B1F]">{company.name}</h3>
                 {company.verified && (
-                  <Badge variant="outline" className="text-green-600 border-green-600">
-                    <Shield className="w-3 h-3 mr-1" />
-                    Verified
-                  </Badge>
+                  <span className="inline-flex items-center gap-1.5 bg-[#E8F5F4] px-3 py-1.5 rounded-full">
+                    <BadgeCheck className="w-4 h-4 text-[#3EB368]" />
+                    <span className="text-sm text-[#6B7280] font-medium">
+                      Verified Company
+                    </span>
+                  </span>
                 )}
               </div>
-              <div className="flex items-center gap-4 mb-3">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span className="font-semibold">{company.rating}</span>
-                  <span className="text-muted-foreground">({company.reviews} reviews)</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Award className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">5 years experience</span>
-                </div>
-              </div>
-              <p className="text-muted-foreground mb-4">{company.responseTime}</p>
-              <div className="flex gap-2">
-                <Button asChild>
-                  <Link href={`/companies/${company.id}`}>View Profile</Link>
-                </Button>
-                <ChatButton companyId={company.id} variant="outline" />
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/companies/${company.id}`}
+                  className="group relative overflow-hidden px-5 py-2 border border-[#1C1B1F] rounded-full text-sm font-medium text-[#1C1B1F] transition-colors"
+                >
+                  <span className="relative z-10 group-hover:text-white transition-colors duration-300">View Profile</span>
+                  <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                </Link>
+                <button className="group relative overflow-hidden px-5 py-2 bg-[#1C1B1F] text-white rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                  <span className="relative z-10">Chat Now</span>
+                  <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                </button>
               </div>
             </div>
+
+            {/* Rating Row - Stars + Rating Badge + Experience */}
+            <div className="flex items-center gap-2 mt-3">
+              {/* 5 Stars */}
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < Math.floor(company.rating)
+                        ? "fill-[#FFA432] text-[#FFA432]"
+                        : "fill-[#E5E5E5] text-[#E5E5E5]"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Rating Badge */}
+              <span className="bg-[#00A699] text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                {company.rating.toFixed(1)}
+              </span>
+
+              {/* Years of Experience */}
+              <span className="text-sm text-[#6B7280]">
+                {company.yearsOfExperience || 5} Years of Experience
+              </span>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-    </section>
+        </div>
+
+        {/* Description - Inside the card */}
+        <p className="text-[15px] text-[#6B7280] leading-relaxed">
+          {company.description || defaultDescription}
+        </p>
+      </div>
+    </div>
   )
 }
