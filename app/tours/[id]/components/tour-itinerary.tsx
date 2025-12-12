@@ -1,77 +1,200 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ShimmerImage } from "@/components/ui/shimmer-image"
-import type { TourDetail } from "@/types"
-import { TourItineraryProps } from "../types"
+import { useState } from "react"
+import { ChevronDown, ChevronUp, Bed, MapPin, Flag } from "lucide-react"
 
-export function TourItinerary({ itinerary, onDayClick }: TourItineraryProps) {
+interface ItineraryDay {
+  day: number
+  title: string
+  location: string
+  description: string
+  accommodation?: string
+  meals?: string[]
+}
+
+interface TourItineraryProps {
+  itinerary?: ItineraryDay[]
+}
+
+// Dummy Figma-style itinerary data
+const defaultItinerary: ItineraryDay[] = [
+  {
+    day: 1,
+    title: "Arrival in Lima",
+    location: "Lima",
+    description: "Private transfer from airport to hotel. Optional city tour in the afternoon.",
+    accommodation: "Hotel",
+    meals: ["Dinner"]
+  },
+  {
+    day: 2,
+    title: "Lima to Cusco",
+    location: "Cusco",
+    description: "Morning flight to Cusco. Guided city walk including Plaza de Armas.",
+    accommodation: "Hotel",
+    meals: ["Breakfast", "Lunch"]
+  },
+  {
+    day: 3,
+    title: "Sacred Valley Tour",
+    location: "Sacred Valley",
+    description: "Visit Pisac Market and Ollantaytambo ruins. Lunch in Urubamba.",
+    accommodation: "Hotel",
+    meals: ["Breakfast", "Lunch", "Dinner"]
+  },
+  {
+    day: 4,
+    title: "Machu Picchu",
+    location: "Machu Picchu",
+    description: "Train to Aguas Calientes. Guided tour of Machu Picchu ruins.",
+    accommodation: "Hotel",
+    meals: ["Breakfast", "Lunch"]
+  },
+  {
+    day: 5,
+    title: "Return to Cusco",
+    location: "Cusco",
+    description: "Return from Machu Picchu to Cusco. Free afternoon.",
+    accommodation: "Hotel",
+    meals: ["Breakfast"]
+  },
+  {
+    day: 6,
+    title: "Cusco City Tour",
+    location: "Cusco",
+    description: "Visit Sacsayhuamán, Q'enqo, Puca Pucara, and Tambomachay.",
+    accommodation: "Hotel",
+    meals: ["Breakfast", "Lunch"]
+  },
+  {
+    day: 7,
+    title: "Departure",
+    location: "Cusco",
+    description: "Transfer to airport for flight back home.",
+    meals: ["Breakfast"]
+  }
+]
+
+export function TourItinerary({ itinerary = defaultItinerary }: TourItineraryProps) {
+  const [expandedDays, setExpandedDays] = useState<number[]>(itinerary.map(d => d.day))
+  const [collapsed, setCollapsed] = useState(false)
+
+  const toggleDay = (day: number) => {
+    setExpandedDays(prev =>
+      prev.includes(day)
+        ? prev.filter(d => d !== day)
+        : [...prev, day]
+    )
+  }
+
   return (
-    <section id="itinerary" className="space-y-6 pt-4">
-      <h3 className="font-heading font-bold text-2xl mb-6">Daily Itinerary</h3>
+    <div className="py-8 relative">
+      {/* Collapse all button top-right */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="flex items-center gap-1 text-[14px] text-[#374151] rounded-full border border-[#E5E7EB] font-medium p-2"
+        >
+          {collapsed ? (
+            <>
+              Expand all
+            </>
+          ) : (
+            <>
+              Collapse all
+            </>
+          )}
+        </button>
+      </div>
 
-      <div className="space-y-6">
-        {itinerary.map((item, index) => (
-          <Card
-            key={index}
-            className="overflow-hidden hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-300 group border-0 bg-linear-to-br from-card to-muted/20 dark:from-card/95 dark:to-muted/10 cursor-pointer"
-            onClick={() => onDayClick(index)}
-          >
-            <CardContent className="p-0">
-              <div className="grid md:grid-cols-3 gap-0">
-                <div className="relative aspect-video md:aspect-square overflow-hidden">
-                  <ShimmerImage
-                    src={
-                      item.image ||
-                      `/placeholder.svg?height=200&width=300&query=${encodeURIComponent(item.title) || "/placeholder.svg"}`
-                    }
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.currentTarget.src = "/guided-city-tour.png"
-                    }}
-                  />
-                  <div className="absolute top-4 left-4">
-                    <div className="w-14 h-14 bg-linear-to-br from-primary via-primary to-primary dark:to-primary/80 rounded-2xl flex items-center justify-center text-white font-bold shadow-2xl border-2 border-background/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                      <span className="text-lg">{index + 1}</span>
+      <div className="relative">
+        {itinerary.map((item, index) => {
+          const isFirst = index === 0
+          const isLast = index === itinerary.length - 1
+          const isExpanded = expandedDays.includes(item.day) && !collapsed
+
+          return (
+            <div key={item.day} className="relative">
+              {/* Vertical line - centered through dots */}
+              {index !== itinerary.length - 1 && (
+                <div
+                  className="absolute left-[9px] top-[24px] bottom-0 w-[2px] bg-[#00A699]"
+                />
+              )}
+
+              <div className="flex gap-3 pb-6">
+                {/* Dot or special icons - fixed width container for alignment */}
+                <div className="relative z-10 shrink-0 w-5 h-5 flex items-center justify-center">
+                  {isFirst ? (
+                    <MapPin className="w-5 h-5 text-[#00A699]" />
+                  ) : isLast ? (
+                    <div className="w-5 h-5 rounded-full bg-[#EF4444] flex items-center justify-center">
+                      <Flag className="w-3 h-3 text-white" />
                     </div>
-                  </div>
-                  <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  ) : (
+                    <div className="w-3 h-3 rounded-full bg-[#00A699]" />
+                  )}
                 </div>
 
-                <div className="md:col-span-2 p-8">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex-1">
-                      <h4 className="font-heading font-bold text-2xl mb-3 group-hover:text-primary transition-colors leading-tight">
-                        {item.title}
-                      </h4>
-                      <div className="flex items-center gap-4 text-muted-foreground mb-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-primary rounded-full"></div>
-                          <span className="text-sm font-medium">
-                            Stop {index + 1} of {itinerary.length}
-                          </span>
-                        </div>
+                {/* Content */}
+                <div className="flex-1">
+                  <button
+                    onClick={() => toggleDay(item.day)}
+                    className="w-full text-left"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-base font-semibold text-[#1C1B1F]">{`Day ${item.day} -`}</span> {" "}
+                        <span className="text-base font-semibold text-[#1C1B1F]">{item.title}</span>
+                        <p className="text-[13px] text-[#6B7280] flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-3 h-3 text-[#6B7280]" /> {item.location}
+                        </p>
                       </div>
+                      {isExpanded ? (
+                        <ChevronUp className="w-4 h-4 text-[#6B7280]" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-[#6B7280]" />
+                      )}
                     </div>
-                    <Badge
-                      variant="secondary"
-                      className="capitalize bg-primary/10 text-primary border-primary/20 font-medium px-3 py-1"
-                    >
-                      {index === 0 ? "Start" : index === itinerary.length - 1 ? "End" : `Day ${index + 1}`}
-                    </Badge>
-                  </div>
+                  </button>
 
-                  <div className="mb-6">
-                    <p className="text-muted-foreground">{item.description}</p>
-                  </div>
+                  {/* Description accordion */}
+                  {isExpanded && (
+                    <div className="mt-2 text-[14px] text-[#6B7280] leading-relaxed whitespace-pre-line">
+                      {item.description}
+                    </div>
+                  )}
+
+                  {/* Accommodation outside accordion */}
+                  {item.accommodation && (
+                    <div className="flex items-center gap-2 mt-2 bg-[#F9FAFB] p-6 rounded-md">
+                      <Bed className="size-4 text-[#00A699]" />
+                      <span className="text-base text-[#111928] font-semibold">Accommodation:</span>
+                      <span className="text-[13px] text-[#6B7280] text-center font-medium">
+                        {item.accommodation}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Meals */}
+                  {item.meals && item.meals.length > 0 && (
+                    <div className="flex gap-2 flex-wrap mt-1">
+                      {item.meals.map((meal, i) => (
+                        <span
+                          key={i}
+                          className="text-[12px] px-2 py-0.5 bg-[#F3F4F6] rounded-md text-[#6B7280]"
+                        >
+                          {meal}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            </div>
+          )
+        })}
       </div>
-    </section>
+    </div>
   )
 }
