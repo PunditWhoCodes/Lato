@@ -30,7 +30,7 @@ export default async function TourDetailPage({ params }: PageProps) {
   // Validate that we have an ID
   if (!tourId) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white">
         <Navigation />
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col items-center justify-center min-h-[50vh]">
@@ -46,25 +46,12 @@ export default async function TourDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Navigation />
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
-          <Link href="/" className="hover:text-foreground">
-            Home
-          </Link>
-          <span>/</span>
-          <Link href="/tours" className="hover:text-foreground">
-            Tours
-          </Link>
-          <span>/</span>
-          <span className="text-foreground">Tour Details</span>
-        </nav>
-
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <TourDetailClient tourId={tourId} />
-      </div>
+      </main>
     </div>
   )
 }
