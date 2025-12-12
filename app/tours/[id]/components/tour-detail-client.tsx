@@ -88,20 +88,38 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
 
   // Error State
   if (isError) {
+    const isInvalidUUID = error?.message?.includes("Invalid tour ID") || error?.message?.includes("UUID")
+
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
         <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-        <h2 className="text-2xl font-semibold text-[#1C1B1F] mb-2">Unable to load tour</h2>
+        <h2 className="text-2xl font-semibold text-[#1C1B1F] mb-2">
+          {isInvalidUUID ? "Tour Not Found" : "Unable to load tour"}
+        </h2>
         <p className="text-[#6B7280] mb-6 text-center max-w-md">
-          {error?.message || "We couldn't load this tour. Please try again."}
+          {isInvalidUUID
+            ? "This tour may no longer be available or the link is invalid."
+            : error?.message || "We couldn't load this tour. Please try again."}
         </p>
-        <Button
-          onClick={() => refetch()}
-          size="lg"
-          className="bg-[#00A699] hover:bg-[#008F84] text-white rounded-full"
-        >
-          Try Again
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            onClick={() => window.location.href = '/tours'}
+            size="lg"
+            variant="outline"
+            className="rounded-full"
+          >
+            Browse Tours
+          </Button>
+          {!isInvalidUUID && (
+            <Button
+              onClick={() => refetch()}
+              size="lg"
+              className="bg-[#00A699] hover:bg-[#008F84] text-white rounded-full"
+            >
+              Try Again
+            </Button>
+          )}
+        </div>
       </div>
     )
   }
