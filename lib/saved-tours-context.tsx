@@ -13,6 +13,8 @@ const SavedToursContext = createContext<SavedToursContextType | undefined>(undef
 
 const STORAGE_KEY = "lato_saved_tours"
 
+const DEFAULT_SAVED_TOURS = [1, 2, 3, 4, 5]
+
 export function SavedToursProvider({ children }: { children: React.ReactNode }) {
   const [savedTours, setSavedTours] = useState<number[]>([])
   const [isHydrated, setIsHydrated] = useState(false)
@@ -22,10 +24,14 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
         const parsed = JSON.parse(stored)
-        setSavedTours(Array.isArray(parsed) ? parsed : [])
+        setSavedTours(Array.isArray(parsed) ? parsed : DEFAULT_SAVED_TOURS)
+      } else {
+        setSavedTours(DEFAULT_SAVED_TOURS)
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SAVED_TOURS))
       }
     } catch (error) {
       console.error("Failed to load saved tours:", error)
+      setSavedTours(DEFAULT_SAVED_TOURS)
     } finally {
       setIsHydrated(true)
     }
