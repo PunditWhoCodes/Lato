@@ -16,18 +16,20 @@ export function ProtectedRoute({
   children: ReactNode
   redirectTo?: string
 }) {
-  const { user, isLoading } = useNewAuth()
+  const { user, isLoading, isHydrated } = useNewAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    // Only redirect after hydration is complete and we're not loading
+    if (isHydrated && !isLoading && !user) {
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/'
       const redirectUrl = `${redirectTo}?redirect=${encodeURIComponent(currentPath)}`
       router.push(redirectUrl)
     }
-  }, [user, isLoading, router, redirectTo])
+  }, [user, isLoading, isHydrated, router, redirectTo])
 
-  if (isLoading) {
+  // Show loading while hydrating or loading
+  if (!isHydrated || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
