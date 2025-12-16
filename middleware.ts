@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import {
+  isPasswordProtectionEnabled,
+  getAuthCredentials,
+  parseBasicAuthHeader,
+  validateCredentials,
+  createUnauthorizedResponse,
+} from '@/lib/utils/basic-auth'
 
 const protectedRoutes = [
   '/saved-trips',
   '/messages',
+  '/chats',
   '/dashboard',
   '/profile',
   '/settings',
@@ -13,6 +21,23 @@ const authRoutes = ['/login', '/register']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  if (isPasswordProtectionEnabled()) {
+    const credentials = getAuthCredentials()
+
+    if (credentials) {
+      const authHeader = request.headers.get('authorization')
+      const providedCredentials = parseBasicAuthHeader(authHeader)
+
+      if (!providedCredentials) {
+        return createUnauthorizedResponse('Lato Staging')
+      }
+
+      if (!validateCredentials(providedCredentials, credentials)) {
+        return createUnauthorizedResponse('Lato Staging')
+      }
+    }
+  }
 
   const accessToken = request.cookies.get('lato_access_token')?.value
   const isAuthenticated = !!accessToken
