@@ -21,6 +21,10 @@ export const useStore = create<StoreState>()(
           sidebarOpen: state.sidebarOpen,
           theme: state.theme,
         }),
+        onRehydrateStorage: () => (state) => {
+          // Set hydrated to true after rehydration completes
+          state?.setHydrated(true)
+        },
       }
     ),
     {
