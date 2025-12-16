@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MessageCircle, User, LogOut, Settings, Heart, ChevronDown, Menu, X, Check, MailIcon } from "lucide-react"
+import { MessageCircle, User, LogOut, Settings, Heart, ChevronDown, Menu, X, Check, MailIcon, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/lib/auth"
@@ -28,7 +28,7 @@ const currencies = [
 
 export function Navigation() {
   const pathname = usePathname()
-  const { user, logout } = useAuth()
+  const { user, logout, isHydrated } = useAuth()
   const { savedToursCount } = useSavedTours()
   const { getTotalUnread } = useEnhancedMessages()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -36,6 +36,7 @@ export function Navigation() {
 
   const totalUnreadMessages = getTotalUnread()
   const isWishlistPage = pathname === "/wishlist" || pathname === "/saved-trips"
+  const isChatsPage = pathname === "/chats" || pathname.startsWith("/chats/")
 
   return (
     <nav className="bg-[#FFFFFF] sticky top-0 z-50 border-b border-gray-100">
@@ -99,7 +100,12 @@ export function Navigation() {
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            {user ? (
+            {!isHydrated ? (
+              // Show loading placeholder while hydrating
+              <div className="w-24 h-10 flex items-center justify-center">
+                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+              </div>
+            ) : user ? (
               <>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -145,8 +151,12 @@ export function Navigation() {
                 </Link>
 
                 <Link
-                  href="/messages"
-                  className="p-2 rounded-full text-gray-700 hover:text-[#00A699] transition-colors relative"
+                  href="/chats"
+                  className={`p-2 rounded-full transition-colors relative ${
+                    isChatsPage
+                      ? "text-[#00A699]"
+                      : "text-gray-700 hover:text-[#00A699]"
+                  }`}
                 >
                   <MailIcon className="h-5 w-5" />
                   {totalUnreadMessages > 0 && (
@@ -186,7 +196,7 @@ export function Navigation() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="px-3 py-2 rounded-md cursor-pointer text-[#495560] hover:bg-[#F0FDFC] hover:text-[#7BBCB0] focus:bg-[#F0FDFC] focus:text-[#7BBCB0]">
-                      <Link href="/messages" className="flex items-center">
+                      <Link href="/chats" className="flex items-center">
                         <MessageCircle className="mr-2 h-4 w-4" />
                         Messages
                       </Link>
@@ -277,7 +287,11 @@ export function Navigation() {
               Contact Us
             </Link>
 
-            {user ? (
+            {!isHydrated ? (
+              <div className="border-t pt-3 flex items-center justify-center py-4">
+                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+              </div>
+            ) : user ? (
               <>
                 <div className="border-t pt-3 space-y-3">
                   <div className="py-2">
@@ -314,8 +328,10 @@ export function Navigation() {
                     )}
                   </Link>
                   <Link
-                    href="/messages"
-                    className="flex items-center py-2 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+                    href="/chats"
+                    className={`flex items-center py-2 text-base font-medium transition-colors ${
+                      isChatsPage ? "text-[#00A699]" : "text-muted-foreground hover:text-primary"
+                    }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <MessageCircle className="h-5 w-5 mr-2" />
