@@ -6,6 +6,7 @@ import type { User } from '@/lib/types/auth'
 export function useAuth() {
   const user = useStore((state) => state.user)
   const isLoading = useStore((state) => state.isLoading)
+  const isHydrated = useStore((state) => state.isHydrated)
   const error = useStore((state) => state.error)
   const login = useStore((state) => state.login)
   const register = useStore((state) => state.register)
@@ -18,6 +19,7 @@ export function useAuth() {
   return {
     user,
     isLoading,
+    isHydrated,
     error,
     isAuthenticated: isAuthenticated(),
 
