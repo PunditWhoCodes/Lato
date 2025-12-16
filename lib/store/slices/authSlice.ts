@@ -9,12 +9,14 @@ export interface AuthSlice {
   user: User | null
   isLoading: boolean
   error: string | null
+  isHydrated: boolean
 
   // Actions
   setUser: (user: User | null) => void
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
   clearError: () => void
+  setHydrated: (hydrated: boolean) => void
 
   // Authentication methods
   login: (data: LoginRequest) => Promise<void>
@@ -37,6 +39,7 @@ export const createAuthSlice: StateCreator<
   user: null,
   isLoading: false,
   error: null,
+  isHydrated: false,
 
   // Setters
   setUser: (user) => {
@@ -53,6 +56,10 @@ export const createAuthSlice: StateCreator<
 
   clearError: () => {
     set({ error: null }, false, 'auth/clearError')
+  },
+
+  setHydrated: (hydrated) => {
+    set({ isHydrated: hydrated }, false, 'auth/setHydrated')
   },
 
   clearUser: () => {
