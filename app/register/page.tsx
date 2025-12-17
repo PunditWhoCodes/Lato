@@ -8,6 +8,8 @@ import { Eye, EyeOff, ChevronLeft, ChevronDown } from "lucide-react"
 import { RegisterOTPStep } from "@/components/auth/RegisterOTPStep"
 import { RegisterSelectTypeStep, UserType } from "@/components/auth/RegisterSelectTypeStep"
 import { RegisterVerifiedStep } from "@/components/auth/RegisterVerifiedStep"
+import { useStore } from "@/lib/store"
+import { setAccessTokenCookie } from "@/lib/utils/token"
 
 type RegistrationStep = "form" | "otp" | "select_type" | "verified"
 
@@ -28,6 +30,7 @@ const countries = [
 
 export default function RegisterPage() {
   const router = useRouter()
+  const setUser = useStore((state) => state.setUser)
 
   const [currentStep, setCurrentStep] = useState<RegistrationStep>("form")
   const [name, setName] = useState("")
@@ -85,6 +88,20 @@ export default function RegisterPage() {
   }
 
   const handleVerificationComplete = () => {
+    const mockUser = {
+      id: `user-${Date.now()}`,
+      email: email,
+      name: name,
+      role: (userType || "TRAVELER") as "TRAVELER" | "PROVIDER" | "ADMIN",
+      emailVerified: true,
+      createdAt: new Date().toISOString(),
+    }
+
+    const mockToken = `mock_token_register_${Date.now()}`
+    setAccessTokenCookie(mockToken, 86400 * 30)
+
+    setUser(mockUser)
+
     router.push("/")
   }
 

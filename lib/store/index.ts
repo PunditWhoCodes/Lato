@@ -3,6 +3,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { createAuthSlice, type AuthSlice } from './slices/authSlice'
 import { createUISlice, type UISlice } from './slices/uiSlice'
 import { createSearchSlice, type SearchSlice } from './slices/searchSlice'
+import { getAccessTokenCookie } from '@/lib/utils/token'
 
 export type StoreState = AuthSlice & UISlice & SearchSlice
 
@@ -22,6 +23,12 @@ export const useStore = create<StoreState>()(
           theme: state.theme,
         }),
         onRehydrateStorage: () => (state) => {
+          if (typeof window !== 'undefined' && state?.user) {
+            const hasValidCookie = !!getAccessTokenCookie()
+            if (!hasValidCookie) {
+              state.setUser(null)
+            }
+          }
           // Set hydrated to true after rehydration completes
           state?.setHydrated(true)
         },

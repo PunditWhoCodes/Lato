@@ -79,9 +79,30 @@ export const clearRefreshToken = (): void => {
   Cookies.remove(REFRESH_TOKEN_KEY)
 }
 
+// Cookie-based access token for middleware compatibility
+// This is separate from localStorage token - middleware reads cookies
+const ACCESS_TOKEN_COOKIE_KEY = 'lato_access_token'
+
+export const setAccessTokenCookie = (token: string, expiresInSeconds: number): void => {
+  Cookies.set(ACCESS_TOKEN_COOKIE_KEY, token, {
+    expires: expiresInSeconds / 86400,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  })
+}
+
+export const getAccessTokenCookie = (): string | null => {
+  return Cookies.get(ACCESS_TOKEN_COOKIE_KEY) || null
+}
+
+export const clearAccessTokenCookie = (): void => {
+  Cookies.remove(ACCESS_TOKEN_COOKIE_KEY)
+}
+
 export const clearAllTokens = (): void => {
   clearAccessToken()
   clearRefreshToken()
+  clearAccessTokenCookie()
 }
 
 export const parseJwtPayload = (token: string): any | null => {

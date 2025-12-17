@@ -6,6 +6,7 @@ import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { useStore } from "@/lib/store"
+import { setAccessTokenCookie } from "@/lib/utils/token"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -32,6 +33,9 @@ export default function LoginPage() {
         emailVerified: true,
         createdAt: new Date().toISOString(),
       }
+
+      const mockToken = `mock_token_${Date.now()}`
+      setAccessTokenCookie(mockToken, 86400 * 30)
 
       setUser(mockUser)
       setIsLoading(false)
@@ -153,6 +157,8 @@ export default function LoginPage() {
                     emailVerified: true,
                     createdAt: new Date().toISOString(),
                   }
+                  const mockToken = `mock_token_google_${Date.now()}`
+                  setAccessTokenCookie(mockToken, 86400 * 30)
                   setUser(mockUser)
                   setIsLoading(false)
                   const redirectTo = searchParams.get("redirect") || "/"
@@ -185,6 +191,8 @@ export default function LoginPage() {
                     emailVerified: true,
                     createdAt: new Date().toISOString(),
                   }
+                  const mockToken = `mock_token_apple_${Date.now()}`
+                  setAccessTokenCookie(mockToken, 86400 * 30)
                   setUser(mockUser)
                   setIsLoading(false)
                   const redirectTo = searchParams.get("redirect") || "/"
