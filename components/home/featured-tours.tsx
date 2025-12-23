@@ -134,7 +134,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
           </div>
 
           {/* Right Side - View More Button */}
-          <Link
+          {/* <Link
             href="/tours"
             className="hidden lg:flex items-center gap-[7.54px] group"
           >
@@ -144,10 +144,9 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
             <div className="relative flex items-center justify-center bg-black rounded-full overflow-hidden" style={{ width: '42.4px', height: '42.4px', padding: '9.42px' }}>
               <ArrowUpRight className="relative z-10 text-white transition-transform duration-300 group-hover:rotate-45" style={{ width: '22.62px', height: '22.62px' }} />
 
-              {/* Radial expanding hover overlay */}
               <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
             </div>
-          </Link>
+          </Link> */}
         </div>
 
         {/* Tour Cards */}
