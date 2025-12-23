@@ -9,6 +9,7 @@ export const enhancedMockConversations: EnhancedConversation[] = [
       avatar: "https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=200&h=200&fit=crop",
       verified: true,
       rating: 4.8,
+      reviewCount: 290,
       responseTime: "Usually responds within 1 hour",
       isOnline: true,
       lastSeen: new Date().toISOString(),
@@ -106,6 +107,7 @@ export const enhancedMockConversations: EnhancedConversation[] = [
       avatar: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=200&h=200&fit=crop",
       verified: true,
       rating: 4.9,
+      reviewCount: 412,
       responseTime: "Usually responds within 30 minutes",
       isOnline: false,
       lastSeen: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), // 3 hours ago
@@ -154,6 +156,7 @@ export const enhancedMockConversations: EnhancedConversation[] = [
       avatar: "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=200&h=200&fit=crop",
       verified: true,
       rating: 4.7,
+      reviewCount: 186,
       responseTime: "Usually responds within 2 hours",
       isOnline: false,
       lastSeen: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
@@ -223,6 +226,7 @@ export const enhancedMockConversations: EnhancedConversation[] = [
       avatar: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=200&h=200&fit=crop",
       verified: true,
       rating: 4.6,
+      reviewCount: 127,
       responseTime: "Usually responds within 3 hours",
       isOnline: true,
       lastSeen: new Date().toISOString(),
