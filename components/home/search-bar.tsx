@@ -1,22 +1,173 @@
 "use client"
 
-import { MapPin } from "lucide-react"
+import { MapPin, ChevronDown, ChevronLeft, ChevronRight, Calendar, Minus, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
+
+const destinations = [
+  "Thailand", "Japan", "Indonesia", "Vietnam", "Malaysia",
+  "Singapore", "Philippines", "South Korea", "China", "India",
+  "Italy", "Spain", "Greece", "France", "Portugal",
+  "Germany", "Netherlands", "Switzerland", "Turkey", "Croatia",
+  "Morocco", "Egypt", "Kenya", "South Africa", "Tanzania",
+  "Peru", "Brazil", "Argentina", "Mexico", "Colombia"
+]
 
 export function SearchBar() {
-  const [fromTo, setFromTo] = useState("")
-  const [departReturn, setDepartReturn] = useState("")
-  const [passengerClass, setPassengerClass] = useState("")
+  // Destination state
+  const [destination, setDestination] = useState("")
+  const [showDestinationDropdown, setShowDestinationDropdown] = useState(false)
+
+  // Date state
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [showCalendar, setShowCalendar] = useState(false)
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+
+  // Passengers state
+  const [adults, setAdults] = useState(1)
+  const [children, setChildren] = useState(0)
+  const [showPassengerDropdown, setShowPassengerDropdown] = useState(false)
+
+  // Refs for desktop
+  const destinationDesktopRef = useRef<HTMLDivElement>(null)
+  const calendarDesktopRef = useRef<HTMLDivElement>(null)
+  const passengerDesktopRef = useRef<HTMLDivElement>(null)
+
+  // Refs for mobile
+  const destinationMobileRef = useRef<HTMLDivElement>(null)
+  const calendarMobileRef = useRef<HTMLDivElement>(null)
+  const passengerMobileRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node
+
+      // Check destination dropdowns (both desktop and mobile)
+      const isOutsideDestination =
+        (!destinationDesktopRef.current || !destinationDesktopRef.current.contains(target)) &&
+        (!destinationMobileRef.current || !destinationMobileRef.current.contains(target))
+
+      if (isOutsideDestination && showDestinationDropdown) {
+        setShowDestinationDropdown(false)
+      }
+
+      // Check calendar dropdowns (both desktop and mobile)
+      const isOutsideCalendar =
+        (!calendarDesktopRef.current || !calendarDesktopRef.current.contains(target)) &&
+        (!calendarMobileRef.current || !calendarMobileRef.current.contains(target))
+
+      if (isOutsideCalendar && showCalendar) {
+        setShowCalendar(false)
+      }
+
+      // Check passenger dropdowns (both desktop and mobile)
+      const isOutsidePassenger =
+        (!passengerDesktopRef.current || !passengerDesktopRef.current.contains(target)) &&
+        (!passengerMobileRef.current || !passengerMobileRef.current.contains(target))
+
+      if (isOutsidePassenger && showPassengerDropdown) {
+        setShowPassengerDropdown(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [showDestinationDropdown, showCalendar, showPassengerDropdown])
 
   const handleSearch = () => {
-    // TODO: Implement search functionality
-    console.log({ fromTo, departReturn, passengerClass })
+    console.log({ destination, selectedDate, adults, children })
   }
 
-  const handleSwap = () => {
-    console.log("Swap clicked")
+  // Calendar helpers
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const firstDay = new Date(year, month, 1)
+    const lastDay = new Date(year, month + 1, 0)
+    const daysInMonth = lastDay.getDate()
+    const startingDay = firstDay.getDay()
+    return { daysInMonth, startingDay }
   }
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return ""
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+  }
+
+  const isToday = (day: number) => {
+    const today = new Date()
+    return (
+      day === today.getDate() &&
+      currentMonth.getMonth() === today.getMonth() &&
+      currentMonth.getFullYear() === today.getFullYear()
+    )
+  }
+
+  const isSelected = (day: number) => {
+    if (!selectedDate) return false
+    return (
+      day === selectedDate.getDate() &&
+      currentMonth.getMonth() === selectedDate.getMonth() &&
+      currentMonth.getFullYear() === selectedDate.getFullYear()
+    )
+  }
+
+  const handleDateSelect = useCallback((day: number) => {
+    const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+    setSelectedDate(newDate)
+    setShowCalendar(false)
+  }, [currentMonth])
+
+  const goToPrevMonth = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
+  }
+
+  const goToNextMonth = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
+  }
+
+  // Passenger summary text
+  const getPassengerSummary = () => {
+    const parts = []
+    if (adults > 0) parts.push(`${adults} Adult${adults > 1 ? "s" : ""}`)
+    if (children > 0) parts.push(`${children} Child${children > 1 ? "ren" : ""}`)
+    return parts.length > 0 ? parts.join(", ") : "Passengers"
+  }
+
+  // Handle passenger count changes
+  const handleAdultsChange = (e: React.MouseEvent, delta: number) => {
+    e.stopPropagation()
+    setAdults(prev => Math.max(1, prev + delta))
+  }
+
+  const handleChildrenChange = (e: React.MouseEvent, delta: number) => {
+    e.stopPropagation()
+    setChildren(prev => Math.max(0, prev + delta))
+  }
+
+  // Handle done button
+  const handlePassengerDone = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowPassengerDropdown(false)
+  }
+
+  // Handle destination select
+  const handleDestinationSelect = (e: React.MouseEvent, dest: string) => {
+    e.stopPropagation()
+    setDestination(dest)
+    setShowDestinationDropdown(false)
+  }
+
+  // Handle day select
+  const handleDayClick = (e: React.MouseEvent, day: number) => {
+    e.stopPropagation()
+    handleDateSelect(day)
+  }
+
+  const { daysInMonth, startingDay } = getDaysInMonth(currentMonth)
 
   return (
     <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-[32px] bg-white/8 backdrop-blur-[55.55px] rounded-[19.69px]">
@@ -24,59 +175,209 @@ export function SearchBar() {
       <div className="hidden md:flex flex-row justify-between items-center bg-white mx-auto w-full max-w-[1380px] h-[69px] rounded-[30px]">
         {/* Three Input Fields Container */}
         <div className="relative bg-white flex items-center flex-1 h-[69px] rounded-[30px]">
-          {/* First Field - From/To */}
-          <div className="flex items-center flex-1 h-full bg-white border-r border-black/[0.09] rounded-l-[30px] px-4 lg:px-5">
-            <input
-              type="text"
-              value={fromTo}
-              onChange={(e) => setFromTo(e.target.value)}
-              placeholder="Destination"
-              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
-              style={{
-                fontWeight: 400,
-                color: '#112211',
+          {/* First Field - Destination Dropdown */}
+          <div ref={destinationDesktopRef} className="relative flex items-center flex-1 h-full bg-white border-r border-black/[0.09] rounded-l-[30px] px-4 lg:px-5">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowDestinationDropdown(!showDestinationDropdown)
+                setShowCalendar(false)
+                setShowPassengerDropdown(false)
               }}
-            />
+              className="w-full h-full flex items-center outline-none bg-transparent font-montserrat text-sm lg:text-base"
+            >
+              <span className={destination ? "text-[#112211]" : "text-[#112211]/50"}>
+                {destination || "Destination"}
+              </span>
+            </button>
+
+            {/* Destination Dropdown */}
+            {showDestinationDropdown && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+                {destinations.map((dest) => (
+                  <button
+                    key={dest}
+                    onClick={(e) => handleDestinationSelect(e, dest)}
+                    className={`w-full px-4 py-3 text-left text-sm hover:bg-[#F0FDFC] transition-colors ${
+                      destination === dest ? "bg-[#E6F7F5] text-[#00A792]" : "text-[#112211]"
+                    }`}
+                  >
+                    {dest}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Swap Icon */}
           <button
-            onClick={handleSwap}
             className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px]"
           >
             <div className="flex items-center justify-center">
-              <MapPin className="siz-4 text-[#00A792]" />
+              <MapPin className="size-4 text-[#00A792]" />
             </div>
           </button>
 
-          {/* Second Field - Depart/Return */}
-          <div className="flex items-center flex-1 h-full bg-white px-4 lg:px-5">
-            <input
-              type="text"
-              value={departReturn}
-              onChange={(e) => setDepartReturn(e.target.value)}
-              placeholder="Departure"
-              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
-              style={{
-                fontWeight: 400,
-                color: '#',
+          {/* Second Field - Calendar Dropdown */}
+          <div ref={calendarDesktopRef} className="relative flex items-center flex-1 h-full bg-white px-4 lg:px-5">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowCalendar(!showCalendar)
+                setShowDestinationDropdown(false)
+                setShowPassengerDropdown(false)
               }}
-            />
+              className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base"
+            >
+              <span className={selectedDate ? "text-[#112211]" : "text-[#112211]/50"}>
+                {selectedDate ? formatDate(selectedDate) : "Departure"}
+              </span>
+              <Calendar className="w-5 h-5 text-[#112211]/50" />
+            </button>
+
+            {/* Calendar Dropdown */}
+            {showCalendar && (
+              <div
+                className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4 w-[300px]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Calendar Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    onClick={goToPrevMonth}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-[#112211]" />
+                  </button>
+                  <span className="font-medium text-[#112211]">
+                    {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                  </span>
+                  <button
+                    onClick={goToNextMonth}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5 text-[#112211]" />
+                  </button>
+                </div>
+
+                {/* Day Headers */}
+                <div className="grid grid-cols-7 gap-1 mb-2">
+                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                    <div key={day} className="text-center text-xs font-medium text-gray-500 py-1">
+                      {day}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Calendar Days */}
+                <div className="grid grid-cols-7 gap-1">
+                  {/* Empty cells for days before the first day of the month */}
+                  {Array.from({ length: startingDay }).map((_, index) => (
+                    <div key={`empty-${index}`} className="w-9 h-9" />
+                  ))}
+                  {/* Actual days */}
+                  {Array.from({ length: daysInMonth }).map((_, index) => {
+                    const day = index + 1
+                    return (
+                      <button
+                        key={day}
+                        onClick={(e) => handleDayClick(e, day)}
+                        className={`w-9 h-9 rounded-full text-sm transition-colors ${
+                          isSelected(day)
+                            ? "bg-[#00A792] text-white"
+                            : isToday(day)
+                            ? "bg-[#E6F7F5] text-[#00A792]"
+                            : "hover:bg-gray-100 text-[#112211]"
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Third Field - Passenger/Class */}
-          <div className="flex items-center flex-1 h-full bg-white border-l border-black/[0.2] rounded-r-[30px] px-4 lg:px-5">
-            <input
-              type="text"
-              value={passengerClass}
-              onChange={(e) => setPassengerClass(e.target.value)}
-              placeholder="Passenger - Class"
-              className="w-full h-full outline-none bg-transparent font-montserrat text-sm lg:text-base"
-              style={{
-                fontWeight: 400,
-                color: '#1C1B1F',
+          {/* Third Field - Passenger Dropdown */}
+          <div ref={passengerDesktopRef} className="relative flex items-center flex-1 h-full bg-white border-l border-black/[0.2] rounded-r-[30px] px-4 lg:px-5">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowPassengerDropdown(!showPassengerDropdown)
+                setShowDestinationDropdown(false)
+                setShowCalendar(false)
               }}
-            />
+              className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base"
+            >
+              <span className={adults > 0 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}>
+                {getPassengerSummary()}
+              </span>
+              <ChevronDown className={`w-5 h-5 text-[#112211]/50 transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
+            </button>
+
+            {/* Passenger Dropdown */}
+            {showPassengerDropdown && (
+              <div
+                className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4 w-[250px]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Adults Row */}
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-[#112211] font-medium">Adults</span>
+                  <div className="flex items-center border border-gray-200 rounded-lg">
+                    <button
+                      onClick={(e) => handleAdultsChange(e, -1)}
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
+                      {adults}
+                    </span>
+                    <button
+                      onClick={(e) => handleAdultsChange(e, 1)}
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Children Row */}
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-[#112211] font-medium">Children</span>
+                  <div className="flex items-center border border-gray-200 rounded-lg">
+                    <button
+                      onClick={(e) => handleChildrenChange(e, -1)}
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
+                      {children}
+                    </span>
+                    <button
+                      onClick={(e) => handleChildrenChange(e, 1)}
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Done Button */}
+                <div className="group pt-3">
+                  <button
+                    onClick={handlePassengerDone}
+                    className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium h-10 text-sm"
+                  >
+                    <span className="relative z-10">Done</span>
+                    <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -101,49 +402,198 @@ export function SearchBar() {
 
       {/* Mobile Layout */}
       <div className="md:hidden bg-white rounded-[20px] p-4 space-y-3">
-        {/* First Field - From/To */}
-        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
-          <input
-            type="text"
-            value={fromTo}
-            onChange={(e) => setFromTo(e.target.value)}
-            placeholder="From - To"
-            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
-            style={{
-              fontWeight: 400,
-              color: '#112211',
+        {/* First Field - Destination Dropdown */}
+        <div ref={destinationMobileRef} className="relative">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setShowDestinationDropdown(!showDestinationDropdown)
+              setShowCalendar(false)
+              setShowPassengerDropdown(false)
             }}
-          />
+            className="w-full flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
+          >
+            <span className={`font-montserrat text-sm ${destination ? "text-[#112211]" : "text-[#112211]/50"}`}>
+              {destination || "Destination"}
+            </span>
+          </button>
+
+          {/* Destination Dropdown - Mobile */}
+          {showDestinationDropdown && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+              {destinations.map((dest) => (
+                <button
+                  key={dest}
+                  onClick={(e) => handleDestinationSelect(e, dest)}
+                  className={`w-full px-4 py-3 text-left text-sm hover:bg-[#F0FDFC] transition-colors ${
+                    destination === dest ? "bg-[#E6F7F5] text-[#00A792]" : "text-[#112211]"
+                  }`}
+                >
+                  {dest}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Second Field - Depart/Return */}
-        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
-          <input
-            type="text"
-            value={departReturn}
-            onChange={(e) => setDepartReturn(e.target.value)}
-            placeholder="Depart - Return"
-            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
-            style={{
-              fontWeight: 400,
-              color: '#1C1B1F',
+        {/* Second Field - Calendar Dropdown */}
+        <div ref={calendarMobileRef} className="relative">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setShowCalendar(!showCalendar)
+              setShowDestinationDropdown(false)
+              setShowPassengerDropdown(false)
             }}
-          />
+            className="w-full flex items-center justify-between h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
+          >
+            <span className={`font-montserrat text-sm ${selectedDate ? "text-[#112211]" : "text-[#112211]/50"}`}>
+              {selectedDate ? formatDate(selectedDate) : "Departure"}
+            </span>
+            <Calendar className="w-5 h-5 text-[#112211]/50" />
+          </button>
+
+          {/* Calendar Dropdown - Mobile */}
+          {showCalendar && (
+            <div
+              className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Calendar Header */}
+              <div className="flex items-center justify-between mb-4">
+                <button
+                  onClick={goToPrevMonth}
+                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <ChevronLeft className="w-5 h-5 text-[#112211]" />
+                </button>
+                <span className="font-medium text-[#112211]">
+                  {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                </span>
+                <button
+                  onClick={goToNextMonth}
+                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <ChevronRight className="w-5 h-5 text-[#112211]" />
+                </button>
+              </div>
+
+              {/* Day Headers */}
+              <div className="grid grid-cols-7 gap-1 mb-2">
+                {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                  <div key={day} className="text-center text-xs font-medium text-gray-500 py-1">
+                    {day}
+                  </div>
+                ))}
+              </div>
+
+              {/* Calendar Days */}
+              <div className="grid grid-cols-7 gap-1">
+                {Array.from({ length: startingDay }).map((_, index) => (
+                  <div key={`empty-mobile-${index}`} className="w-9 h-9" />
+                ))}
+                {Array.from({ length: daysInMonth }).map((_, index) => {
+                  const day = index + 1
+                  return (
+                    <button
+                      key={day}
+                      onClick={(e) => handleDayClick(e, day)}
+                      className={`w-9 h-9 rounded-full text-sm transition-colors ${
+                        isSelected(day)
+                          ? "bg-[#00A792] text-white"
+                          : isToday(day)
+                          ? "bg-[#E6F7F5] text-[#00A792]"
+                          : "hover:bg-gray-100 text-[#112211]"
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Third Field - Passenger/Class */}
-        <div className="flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4">
-          <input
-            type="text"
-            value={passengerClass}
-            onChange={(e) => setPassengerClass(e.target.value)}
-            placeholder="Passenger - Class"
-            className="w-full h-full outline-none bg-transparent font-montserrat text-sm"
-            style={{
-              fontWeight: 400,
-              color: '#1C1B1F',
+        {/* Third Field - Passenger Dropdown */}
+        <div ref={passengerMobileRef} className="relative">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setShowPassengerDropdown(!showPassengerDropdown)
+              setShowDestinationDropdown(false)
+              setShowCalendar(false)
             }}
-          />
+            className="w-full flex items-center justify-between h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
+          >
+            <span className={`font-montserrat text-sm ${adults > 0 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}`}>
+              {getPassengerSummary()}
+            </span>
+            <ChevronDown className={`w-5 h-5 text-[#112211]/50 transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
+          </button>
+
+          {/* Passenger Dropdown - Mobile */}
+          {showPassengerDropdown && (
+            <div
+              className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Adults Row */}
+              <div className="flex items-center justify-between py-3">
+                <span className="text-[#112211] font-medium">Adults</span>
+                <div className="flex items-center border border-gray-200 rounded-lg">
+                  <button
+                    onClick={(e) => handleAdultsChange(e, -1)}
+                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
+                    {adults}
+                  </span>
+                  <button
+                    onClick={(e) => handleAdultsChange(e, 1)}
+                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Children Row */}
+              <div className="flex items-center justify-between py-3">
+                <span className="text-[#112211] font-medium">Children</span>
+                <div className="flex items-center border border-gray-200 rounded-lg">
+                  <button
+                    onClick={(e) => handleChildrenChange(e, -1)}
+                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
+                    {children}
+                  </span>
+                  <button
+                    onClick={(e) => handleChildrenChange(e, 1)}
+                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Done Button */}
+              <div className="group pt-3">
+                <button
+                  onClick={handlePassengerDone}
+                  className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium h-10 text-sm"
+                >
+                  <span className="relative z-10">Done</span>
+                  <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Search Button */}
