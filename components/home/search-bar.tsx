@@ -170,13 +170,13 @@ export function SearchBar() {
   const { daysInMonth, startingDay } = getDaysInMonth(currentMonth)
 
   return (
-    <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-[32px] bg-white/8 backdrop-blur-[55.55px] rounded-[19.69px]">
+    <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-8 bg-white/8 backdrop-blur-[55.55px] rounded-[19.69px]">
       {/* Desktop Layout */}
       <div className="hidden md:flex flex-row justify-between items-center bg-white mx-auto w-full max-w-[1380px] h-[69px] rounded-[30px]">
         {/* Three Input Fields Container */}
         <div className="relative bg-white flex items-center flex-1 h-[69px] rounded-[30px]">
           {/* First Field - Destination Dropdown */}
-          <div ref={destinationDesktopRef} className="relative flex items-center flex-1 h-full bg-white border-r border-black/[0.09] rounded-l-[30px] px-4 lg:px-5">
+          <div ref={destinationDesktopRef} className="relative flex items-center flex-1 h-full bg-white border-r border-black/9 rounded-l-[30px] px-4 lg:px-5">
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -232,7 +232,7 @@ export function SearchBar() {
               <span className={selectedDate ? "text-[#112211]" : "text-[#112211]/50"}>
                 {selectedDate ? formatDate(selectedDate) : "Departure"}
               </span>
-              <Calendar className="w-5 h-5 text-[#112211]/50" />
+              <Calendar className="w-5 h-5 text-[#00A792]" />
             </button>
 
             {/* Calendar Dropdown */}
@@ -313,7 +313,7 @@ export function SearchBar() {
               <span className={adults > 0 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}>
                 {getPassengerSummary()}
               </span>
-              <ChevronDown className={`w-5 h-5 text-[#112211]/50 transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
+              <ChevronDown className={`w-5 h-5 text-[#00A792] transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
             </button>
 
             {/* Passenger Dropdown */}
