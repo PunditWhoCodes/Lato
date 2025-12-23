@@ -32,7 +32,7 @@ export default function RegisterPage() {
   const router = useRouter()
   const setUser = useStore((state) => state.setUser)
 
-  const [currentStep, setCurrentStep] = useState<RegistrationStep>("form")
+  const [currentStep, setCurrentStep] = useState<RegistrationStep>("select_type")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [country, setCountry] = useState("Greece")
@@ -67,7 +67,7 @@ export default function RegisterPage() {
 
     setTimeout(() => {
       setIsLoading(false)
-      setCurrentStep("select_type")
+      setCurrentStep("verified")
     }, 1000)
   }
 
@@ -83,7 +83,7 @@ export default function RegisterPage() {
 
     setTimeout(() => {
       setIsLoading(false)
-      setCurrentStep("verified")
+      setCurrentStep("form")
     }, 1000)
   }
 
@@ -107,11 +107,11 @@ export default function RegisterPage() {
 
   const handleBack = () => {
     switch (currentStep) {
+      case "form":
+        setCurrentStep("select_type")
+        break
       case "otp":
         setCurrentStep("form")
-        break
-      case "select_type":
-        setCurrentStep("otp")
         break
       case "verified":
         break
