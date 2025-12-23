@@ -122,7 +122,7 @@ export function ListingFiltersSidebar({
   const [openDestination, setOpenDestination] = useState(false)
   const [openOperator, setOpenOperator] = useState(false)
   const [selectedOperator, setSelectedOperator] = useState("Brazil")
-  const [travelerCount, setTravelerCount] = useState(10)
+  const [travelerRange, setTravelerRange] = useState([3, 15])
   const [durationRange, setDurationRange] = useState([5, 21])
 
   const toggleValue = (value: string, list: string[], setter: (v: string[]) => void) =>
@@ -318,11 +318,12 @@ export function ListingFiltersSidebar({
           {tourStyleRadio === "Group" && (
             <div className="pl-0 mt-3">
               <p className="text-[12px] text-[#778088] mb-2">How Many Travelers?</p>
-              <SingleSlider
+              <DualRangeSlider
                 min={3}
                 max={20}
-                value={travelerCount}
-                onChange={setTravelerCount}
+                values={travelerRange}
+                onChange={setTravelerRange}
+                formatLabel={(v, type) => type === "min" ? `Min. ${v}` : `${v}+`}
               />
             </div>
           )}
