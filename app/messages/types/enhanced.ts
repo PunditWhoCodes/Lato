@@ -22,6 +22,7 @@ export interface EnhancedConversation {
     avatar: string
     verified: boolean
     rating: number
+    reviewCount: number // Number of reviews for this company
     responseTime: string // "Usually responds within 1 hour"
     isOnline: boolean // NEW: Real-time online status
     lastSeen: string // NEW: ISO timestamp of last activity
