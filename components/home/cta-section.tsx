@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export function CTASection() {
   return (
-    <section className="relative w-full h-[500px] sm:h-[600px] md:h-[650px] lg:h-[700px] xl:h-[730px]">
+    <section className="relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/7] xl:aspect-[16/6] max-h-[730px]">
       {/* Background Image */}
       <Image
         src="/cta-img.jpg"
@@ -14,8 +14,8 @@ export function CTASection() {
         quality={100}
       />
 
-      {/* Gradient Overlay - subtle top, strong bottom fade to white */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent from-0% via-transparent via-50% to-white to-100%" />
+      {/* Gradient Overlay - fade to white at bottom */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-60% to-white" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-start pt-16 md:pt-20 lg:pt-28 px-4 h-full">
