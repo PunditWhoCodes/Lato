@@ -114,9 +114,32 @@ export function ListingClient() {
     }).filter((tour): tour is TourCardData => tour !== null)
   }, [apiResponse])
 
-  // Generate applied filters
   const appliedFilters: AppliedFilter[] = useMemo(() => {
     const filters: AppliedFilter[] = []
+
+    if (startDate !== null) {
+      const suffix = startDate === 1 || startDate === 21 || startDate === 31 ? "st"
+        : startDate === 2 || startDate === 22 ? "nd"
+        : startDate === 3 || startDate === 23 ? "rd"
+        : "th"
+      filters.push({
+        id: "startDate",
+        label: `Start: ${selectedMonth} ${startDate}${suffix}, ${selectedYear}`,
+        type: "startDate",
+      })
+    }
+
+    if (endDate !== null) {
+      const suffix = endDate === 1 || endDate === 21 || endDate === 31 ? "st"
+        : endDate === 2 || endDate === 22 ? "nd"
+        : endDate === 3 || endDate === 23 ? "rd"
+        : "th"
+      filters.push({
+        id: "endDate",
+        label: `End: ${selectedMonth} ${endDate}${suffix}, ${selectedYear}`,
+        type: "endDate",
+      })
+    }
 
     selectedDays.forEach((day) => {
       filters.push({
@@ -143,11 +166,17 @@ export function ListingClient() {
     })
 
     return filters
-  }, [selectedDays, selectedGroup, selectedBestFor, selectedTourStyle, selectedTravelStyleTypes])
+  }, [startDate, endDate, selectedMonth, selectedYear, selectedDays, selectedGroup, selectedBestFor, selectedTourStyle, selectedTravelStyleTypes])
 
   // Remove individual filter
   const handleRemoveFilter = (id: string, type: string) => {
     switch (type) {
+      case "startDate":
+        setStartDate(null)
+        break
+      case "endDate":
+        setEndDate(null)
+        break
       case "day":
         setSelectedDays(selectedDays.filter((d) => d.toString() !== id))
         break
@@ -176,6 +205,8 @@ export function ListingClient() {
     setDurationMin("")
     setDurationMax("")
     setTourStyleRadio("")
+    setStartDate(null)
+    setEndDate(null)
     setCurrentPage(1)
   }
 
