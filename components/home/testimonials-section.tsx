@@ -30,7 +30,7 @@ const TESTIMONIALS = [
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
     rating: 5,
     text: "The customization options and direct chat with tour providers made my African safari exactly what I wanted. Highly recommend!",
-    position: "right",
+    position: "left",
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ const TESTIMONIALS = [
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
     rating: 5,
     text: "Incredible service! From booking to the actual experience, everything was seamless. The local guides were amazing.",
-    position: "left",
+    position: "center",
   },
   {
     id: 5,
@@ -48,7 +48,7 @@ const TESTIMONIALS = [
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
     rating: 5,
     text: "Lato helped me discover hidden gems in Southeast Asia. The smart filters made finding perfect experiences so easy!",
-    position: "center",
+    position: "left",
   },
   {
     id: 6,
@@ -57,7 +57,7 @@ const TESTIMONIALS = [
     avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
     rating: 5,
     text: "Outstanding platform for adventure seekers. Secure payments and trusted guides made our family vacation stress-free!",
-    position: "right",
+    position: "center",
   },
 ]
 
@@ -96,9 +96,7 @@ export function TestimonialsSection() {
                 className={
                   t.position === "left"
                     ? "absolute top-0 -left-4"
-                    : t.position === "center"
-                    ? "absolute bottom-0 -left-6"
-                    : "absolute top-0 right-0"
+                    : "absolute bottom-0 -left-6"
                 }
               >
                 <TestimonialFloatingCard {...t} />
