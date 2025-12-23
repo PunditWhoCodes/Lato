@@ -10,6 +10,7 @@ import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
 import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
+import { ChatInfoSidebar } from "@/components/chat/ChatInfoSidebar"
 
 export default function ChatConversationPage() {
   const params = useParams()
@@ -18,6 +19,7 @@ export default function ChatConversationPage() {
   const [newMessage, setNewMessage] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedFilter, setSelectedFilter] = useState<"all" | "unread">("all")
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
@@ -55,6 +57,16 @@ export default function ChatConversationPage() {
     }
   }, [currentConversation?.messages])
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsSidebarOpen(false)
+      }
+    }
+    window.addEventListener("keydown", handleEscape)
+    return () => window.removeEventListener("keydown", handleEscape)
+  }, [])
+
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp)
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true }).toUpperCase()
@@ -84,6 +96,52 @@ export default function ChatConversationPage() {
   // Get initials for company avatar
   const getInitials = (name: string) => {
     return name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase()
+  }
+
+  // Get local time from timezone
+  const getLocalTime = (timezone?: string) => {
+    if (!timezone) return null
+    try {
+      return new Date().toLocaleTimeString("en-US", {
+        timeZone: timezone,
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      })
+    } catch {
+      return null
+    }
+  }
+
+  // Format date label like WhatsApp (Today, Yesterday, Day name, or Date)
+  const formatDateLabel = (timestamp: string) => {
+    const date = new Date(timestamp)
+    const today = new Date()
+    const yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - 1)
+
+    const isToday = date.toDateString() === today.toDateString()
+    const isYesterday = date.toDateString() === yesterday.toDateString()
+
+    if (isToday) return "Today"
+    if (isYesterday) return "Yesterday"
+
+    // Check if within last 7 days
+    const daysDiff = Math.floor((today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+    if (daysDiff < 7) {
+      return date.toLocaleDateString("en-US", { weekday: "long" })
+    }
+
+    // Otherwise show date
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+  }
+
+  // Check if we should show date separator
+  const shouldShowDateSeparator = (currentTimestamp: string, previousTimestamp?: string) => {
+    if (!previousTimestamp) return true
+    const currentDate = new Date(currentTimestamp).toDateString()
+    const previousDate = new Date(previousTimestamp).toDateString()
+    return currentDate !== previousDate
   }
 
   return (
@@ -196,34 +254,57 @@ export default function ChatConversationPage() {
                 >
                   <ArrowLeft className="w-5 h-5 text-gray-600" />
                 </Link>
-                <Avatar className="w-10 h-10 lg:w-12 lg:h-12">
-                  <AvatarImage src={currentConversation.company.avatar || "/placeholder.svg"} />
-                  <AvatarFallback className="bg-[#00A699] text-white">
-                    {currentConversation.company.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="font-bold text-[17px] text-[#1C1B1F]">
-                    {currentConversation.company.name}
-                  </h2>
-                  <p className="text-sm text-gray-500">#{currentConversation.company.id.toUpperCase()}</p>
-                </div>
+                <button
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="flex items-center gap-3 lg:gap-4 hover:bg-gray-50 rounded-lg p-1 -m-1 transition-colors cursor-pointer"
+                  aria-label="View chat info"
+                >
+                  <Avatar className="w-10 h-10 lg:w-12 lg:h-12">
+                    <AvatarImage src={currentConversation.company.avatar || "/placeholder.svg"} />
+                    <AvatarFallback className="bg-[#00A699] text-white">
+                      {currentConversation.company.name.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="text-left">
+                    <h2 className="font-bold text-[17px] text-[#1C1B1F]">
+                      {currentConversation.company.name}
+                    </h2>
+                    <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          currentConversation.company.isOnline ? "bg-green-500" : "bg-gray-400"
+                        }`}
+                      />
+                      <span>{currentConversation.company.isOnline ? "Online" : "Offline"}</span>
+                      <span className="text-gray-300">•</span>
+                      <span>{currentConversation.company.responseTime}</span>
+                      {currentConversation.company.timezone && getLocalTime(currentConversation.company.timezone) && (
+                        <>
+                          <span className="text-gray-300">•</span>
+                          <span>Local: {getLocalTime(currentConversation.company.timezone)}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </button>
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="flex justify-center items-center py-2 px-4 bg-[#00A79221] rounded-full transition-colors gap-2 text-[#00A792]"
                   aria-label="Voice call"
                 >
-                  <Phone className="w-5 h-5 text-[#00A699]" />
+                  <Phone className="size-4 text-[#00A699]" />
+                  <p>Call</p>
                 </button>
-                <button
+                {/* <button
                   className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors"
                   aria-label="Video call"
                 >
                   <Video className="w-5 h-5 text-[#00A699]" />
-                </button>
+                </button> */}
                 <button
-                  className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  className={`p-2.5 hover:bg-gray-100 rounded-lg transition-colors ${isSidebarOpen ? 'bg-gray-100' : ''}`}
                   aria-label="View info"
                 >
                   <Info className="w-5 h-5 text-[#00A699]" />
@@ -236,50 +317,67 @@ export default function ChatConversationPage() {
               ref={messagesContainerRef}
               className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#F7F7F7]"
             >
-              {currentConversation.messages.map((message) => (
-                <div key={message.id}>
-                  {message.sender === "company" ? (
-                    // Incoming message (from company)
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#E6F7F5] flex items-center justify-center shrink-0">
-                        <span className="text-sm font-semibold text-[#00A699]">
-                          {getInitials(currentConversation.company.name)}
+              {currentConversation.messages.map((message, index) => {
+                const previousMessage = currentConversation.messages[index - 1]
+                const showDateSeparator = shouldShowDateSeparator(
+                  message.timestamp,
+                  previousMessage?.timestamp
+                )
+
+                return (
+                  <div key={message.id}>
+                    {/* Date Separator */}
+                    {showDateSeparator && (
+                      <div className="flex justify-center mb-6">
+                        <span className="px-4 py-1.5 bg-white rounded-full text-sm shadow-sm border border-[#00A792]">
+                          {formatDateLabel(message.timestamp)}
                         </span>
                       </div>
-                      <div className="max-w-[60%]">
-                        <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-md px-5 py-3.5 shadow-sm">
-                          <p className="text-[#00A699] text-[15px] leading-relaxed">
-                            {message.text}
+                    )}
+
+                    {message.sender === "company" ? (
+                      // Incoming message (from company)
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-[#E6F7F5] flex items-center justify-center shrink-0">
+                          <span className="text-sm font-semibold text-[#00A699]">
+                            {getInitials(currentConversation.company.name)}
+                          </span>
+                        </div>
+                        <div className="max-w-[60%]">
+                          <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-md px-5 py-3.5 shadow-sm">
+                            <p className="text-[#00A699] text-[15px] leading-relaxed">
+                              {message.text}
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-400 mt-2 ml-1">
+                            {formatTime(message.timestamp)}
                           </p>
                         </div>
-                        <p className="text-xs text-gray-400 mt-2 ml-1">
-                          {formatTime(message.timestamp)}
-                        </p>
                       </div>
-                    </div>
-                  ) : (
-                    // Outgoing message (from user)
-                    <div className="flex items-start justify-end gap-3">
-                      <div className="max-w-[60%]">
-                        <div className="bg-[#00A699] rounded-2xl rounded-tr-md px-5 py-3.5">
-                          <p className="text-white text-[15px] leading-relaxed">
-                            {message.text}
+                    ) : (
+                      // Outgoing message (from user)
+                      <div className="flex items-start justify-end gap-3">
+                        <div className="max-w-[60%]">
+                          <div className="bg-[#00A699] rounded-2xl rounded-tr-md px-5 py-3.5">
+                            <p className="text-white text-[15px] leading-relaxed">
+                              {message.text}
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-400 mt-2 text-right mr-1">
+                            {formatTime(message.timestamp)}
                           </p>
                         </div>
-                        <p className="text-xs text-gray-400 mt-2 text-right mr-1">
-                          {formatTime(message.timestamp)}
-                        </p>
+                        <Avatar className="w-10 h-10 shrink-0 rounded-lg">
+                          <AvatarImage src={user?.avatar || "/placeholder.svg"} className="rounded-lg" />
+                          <AvatarFallback className="bg-orange-400 text-white rounded-lg">
+                            {user?.name?.charAt(0) || "U"}
+                          </AvatarFallback>
+                        </Avatar>
                       </div>
-                      <Avatar className="w-10 h-10 shrink-0">
-                        <AvatarImage src={user?.avatar || "/placeholder.svg"} />
-                        <AvatarFallback className="bg-orange-400 text-white">
-                          {user?.name?.charAt(0) || "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                )
+              })}
               <div ref={messagesEndRef} />
             </div>
 
@@ -331,6 +429,13 @@ export default function ChatConversationPage() {
               </form>
             </div>
           </div>
+
+          <ChatInfoSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+            company={currentConversation.company}
+            tour={currentConversation.tour}
+          />
         </div>
       </div>
     </ProtectedRoute>
