@@ -16,6 +16,8 @@ import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
 import { useEnhancedMessages } from "@/contexts/EnhancedMessagesContext"
+import { DestinationsDropdownTrigger, DestinationsDropdownPanel } from "@/components/navigation/DestinationsDropdown"
+import { TravelStyleDropdownTrigger, TravelStyleDropdownPanel } from "@/components/navigation/TravelStyleDropdown"
 
 const currencies = [
   { code: "USD", symbol: "$", name: "US Dollar" },
@@ -33,13 +35,22 @@ export function Navigation() {
   const { getTotalUnread } = useEnhancedMessages()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0])
+  const [openDropdown, setOpenDropdown] = useState<"destinations" | "travel-style" | null>(null)
+
+  const handleDropdownOpen = (dropdown: "destinations" | "travel-style") => {
+    setOpenDropdown(dropdown)
+  }
+
+  const handleDropdownClose = () => {
+    setOpenDropdown(null)
+  }
 
   const totalUnreadMessages = getTotalUnread()
   const isWishlistPage = pathname === "/wishlist" || pathname === "/saved-trips"
   const isChatsPage = pathname === "/chats" || pathname.startsWith("/chats/")
 
   return (
-    <nav className="bg-[#FFFFFF] sticky top-0 z-50 border-b border-gray-100">
+    <nav className="bg-[#FFFFFF] sticky top-0 z-50 border-b border-gray-100 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link href="/" className="flex items-center">
@@ -65,19 +76,17 @@ export function Navigation() {
               Explore Places
             </Link>
 
-            <Link
-              href="/destinations"
-              className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
-            >
-              Destinations
-            </Link>
+            <DestinationsDropdownTrigger
+              isOpen={openDropdown === "destinations"}
+              onOpen={() => handleDropdownOpen("destinations")}
+              onClose={handleDropdownClose}
+            />
 
-            <Link
-              href="/travel-styles"
-              className="text-gray-700 hover:text-black transition-colors font-normal text-[15px]"
-            >
-              Travel Styles
-            </Link>
+            <TravelStyleDropdownTrigger
+              isOpen={openDropdown === "travel-style"}
+              onOpen={() => handleDropdownOpen("travel-style")}
+              onClose={handleDropdownClose}
+            />
 
             <Link
               href="/contact"
@@ -243,6 +252,16 @@ export function Navigation() {
           </div>
         </div>
       </div>
+
+      {/* Dropdown Panels - Full width below navbar */}
+      <DestinationsDropdownPanel
+        isOpen={openDropdown === "destinations"}
+        onClose={handleDropdownClose}
+      />
+      <TravelStyleDropdownPanel
+        isOpen={openDropdown === "travel-style"}
+        onClose={handleDropdownClose}
+      />
 
       {mobileMenuOpen && (
         <div className="lg:hidden border-t bg-background max-h-[calc(100vh-4rem)] overflow-y-auto transition-colors">
