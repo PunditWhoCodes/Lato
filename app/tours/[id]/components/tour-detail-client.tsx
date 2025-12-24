@@ -1,18 +1,34 @@
 "use client"
 
+import { useRef, useState } from "react"
 import { Loader2, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ImageGallery } from "./image-gallery"
 import { TourHeader } from "./tour-header"
 import { TourInfo } from "./tour-info"
 import { BookingSidebar } from "./booking-sidebar"
-import { WhatsIncluded } from "./whats-included"
 import { HighlightsSection } from "./highlights-section"
 import { TourItinerary } from "./tour-itinerary"
 import { JoinExperience } from "./join-experience"
 import { CompanySection } from "./company-section"
 import { RelatedTours } from "./related-tours"
 import { ReviewsSection } from "./reviews-section"
+import { SectionNavigation } from "./section-navigation"
+import {
+  WhatsIncluded,
+  AccommodationContent,
+  FlightsContent,
+  MealsContent,
+  GuidesContent,
+  TransportContent,
+  AdditionalServicesContent,
+  InsuranceExcludedContent,
+  FlightsExcludedContent,
+  GuidesExcludedContent,
+  TransportExcludedContent,
+} from "./whats-included"
+import { WhereYouWillStay } from "./where-you-will-stay"
+import { CustomerPhotos } from "./customer-photos"
 import { useTourDetail } from "../hooks/useTourDetail"
 
 interface TourDetailClientProps {
@@ -41,18 +57,18 @@ const staticTourData = {
     "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600"
   ],
   included: [
-    "Buffet lunch in the Sacred Valley",
-    "Travel insurance",
-    "24/7 Support",
-    "Accredited tour guides",
-    "All breakfasts",
-    "Hotel nights"
+    { title: "Accommodation", content: <AccommodationContent /> },
+    { title: "Flights", content: <FlightsContent /> },
+    { title: "Meals", content: <MealsContent /> },
+    { title: "Guides", content: <GuidesContent /> },
+    { title: "Transport", content: <TransportContent /> },
+    { title: "Additional Services", content: <AdditionalServicesContent /> }
   ],
   notIncluded: [
-    "Treks to/from Machu Picchu",
-    "Entrance fees",
-    "Souws shot breakfast",
-    "Flights"
+    { title: "Insurance", content: <InsuranceExcludedContent /> },
+    { title: "Flights", content: <FlightsExcludedContent /> },
+    { title: "Guides", content: <GuidesExcludedContent /> },
+    { title: "Transport", content: <TransportExcludedContent /> }
   ],
   highlights: [
     "Explore the entire city of Arequipa and the colorful Santa Catalina Convent",
@@ -75,6 +91,41 @@ const staticTourData = {
 
 export function TourDetailClient({ tourId }: TourDetailClientProps) {
   const { tour, isLoading, isError, error, refetch } = useTourDetail({ tourId })
+
+  // Section navigation state
+  const [activeSection, setActiveSection] = useState("highlights")
+
+  // Refs for scrolling to sections
+  const highlightsRef = useRef<HTMLDivElement>(null)
+  const itineraryRef = useRef<HTMLDivElement>(null)
+  const companyRef = useRef<HTMLDivElement>(null)
+  const reviewsRef = useRef<HTMLDivElement>(null)
+
+  // Handle section change and scroll
+  const handleSectionChange = (sectionId: string) => {
+    setActiveSection(sectionId)
+
+    const scrollToRef = (ref: React.RefObject<HTMLDivElement | null>) => {
+      if (ref.current) {
+        ref.current.scrollIntoView({ behavior: "smooth", block: "start" })
+      }
+    }
+
+    switch (sectionId) {
+      case "highlights":
+        scrollToRef(highlightsRef)
+        break
+      case "itinerary":
+        scrollToRef(itineraryRef)
+        break
+      case "company":
+        scrollToRef(companyRef)
+        break
+      case "reviews":
+        scrollToRef(reviewsRef)
+        break
+    }
+  }
 
   // Loading State
   if (isLoading) {
@@ -164,7 +215,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
     : 0
 
   return (
-    <div className="bg-white">
+    <div>
       {/* Tour Header - Breadcrumb, Title, Rating, Heart */}
       <div className="mb-6">
         <TourHeader
@@ -183,7 +234,6 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
         discountPercent={discountPercent}
       />
 
-
       {/* Main Content Grid - Two Columns */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
         {/* Main Content - Left Side (2/3) */}
@@ -200,38 +250,59 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
               languages={tourData.languages}
             />
           </div>
-          <div className="px-5 py-2 bg-white rounded-3xl border border-[#E5E7EB]">
+
+          {/* Section Navigation */}
+          <SectionNavigation
+            activeSection={activeSection}
+            onSectionChange={handleSectionChange}
+          />
+          <div className="py-2">
+
+            {/* Highlights Section with Map */}
+            <div ref={highlightsRef} className="scroll-mt-24">
+              <HighlightsSection
+                highlights={tourData.highlights}
+                startLocation="Lima, Peru"
+                endLocation="Lima, Peru"
+              />
+            </div>
+
+            {/* Tour Itinerary - Day by Day */}
+            <div ref={itineraryRef} className="scroll-mt-24">
+              <TourItinerary />
+            </div>
+
             {/* What's Included / Excluded */}
             <WhatsIncluded
               included={tourData.included}
               notIncluded={tourData.notIncluded}
             />
 
-            {/* Highlights Section with Map */}
-            <HighlightsSection
-              highlights={tourData.highlights}
-              startLocation="Lima, Peru"
-              endLocation="Lima, Peru"
-            />
+            {/* Where You Will Stay */}
+            <WhereYouWillStay />
 
-            {/* Tour Itinerary - Day by Day */}
-            <TourItinerary />
+            {/* Customer Photos */}
+            <CustomerPhotos />
           </div>
           {/* Get Trip Exclusive Discount CTA */}
           <JoinExperience />
 
           {/* About Company Section */}
-          <CompanySection company={tourData.company} />
+          <div ref={companyRef} className="scroll-mt-24">
+            <CompanySection company={tourData.company} />
+          </div>
 
           {/* Discover More Places - Related Tours */}
           <RelatedTours tourName={tourData.title} />
 
           {/* Customer Reviews */}
-          <ReviewsSection
-            rating={tourData.rating}
-            totalReviews={tourData.reviewCount}
-            tourName={tourData.title}
-          />
+          <div ref={reviewsRef} className="scroll-mt-24">
+            <ReviewsSection
+              rating={tourData.rating}
+              totalReviews={tourData.reviewCount}
+              tourName={tourData.title}
+            />
+          </div>
         </div>
 
         {/* Sidebar - Right Side (1/3) */}
