@@ -33,7 +33,7 @@ export function TourHeader({
           Top Destinations
         </Link>
         <span className="text-[#D1D5DB]">/</span>
-        <span className="text-[#1C1B1F] font-medium">{destination}</span>
+        <span className="text-[#00A792] font-medium">{destination}</span>
       </nav>
 
       {/* Title Row with Heart Icon */}
@@ -57,7 +57,18 @@ export function TourHeader({
 
             {/* Rating */}
             <div className="flex items-center gap-1.5">
-              <Star className="w-4 h-4 fill-[#FFA432] text-[#FFA432]" />
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < Math.floor(rating)
+                        ? "fill-[#FFA432] text-[#FFA432]"
+                        : "fill-gray-200 text-gray-200"
+                    }`}
+                  />
+                ))}
+              </div>
               <span className="text-sm font-medium text-[#1C1B1F]">{rating.toFixed(1)}</span>
               <span className="text-sm text-[#818181]">({reviewCount} reviews)</span>
             </div>
