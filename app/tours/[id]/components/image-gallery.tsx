@@ -19,7 +19,7 @@ export function ImageGallery({ images, title, discountPercent }: ImageGalleryPro
   return (
     <>
       {/* Desktop Gallery Grid - Main image left, 3 stacked images right */}
-      <div className="hidden md:flex gap-2 h-[420px] md:h-[550px] rounded-2xl overflow-hidden">
+      <div className="hidden md:flex gap-2 h-[420px] md:h-[550px] rounded-2xl overflow-hidden bg-white p-3">
         {/* Main Large Image - Left Side with OFF Badge */}
         <div className="relative w-[80%] h-full rounded-2xl overflow-hidden">
           <Image
