@@ -1,29 +1,42 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { SectionNavigationProps } from "../types"
+import { cn } from "@/lib/utils"
 
-export function SectionNavigation({ activeSection, onSectionClick }: SectionNavigationProps) {
-  const sections = [
-    { id: "overview", label: "Overview" },
-    { id: "itinerary", label: "Itinerary" },
-    { id: "company", label: "Company" },
-    { id: "reviews", label: "Reviews" },
-  ]
+interface SectionNavigationProps {
+  activeSection: string
+  onSectionChange: (section: string) => void
+}
 
+const sections = [
+  { id: "highlights", label: "Highlights" },
+  { id: "itinerary", label: "Itinerary" },
+  { id: "company", label: "Company" },
+  { id: "reviews", label: "Reviews" },
+]
+
+export function SectionNavigation({
+  activeSection,
+  onSectionChange,
+}: SectionNavigationProps) {
   return (
-    <div className="sticky top-20 z-30 bg-background/95 dark:bg-background/98 backdrop-blur supports-backdrop-filter:bg-background/60 dark:supports-backdrop-filter:bg-background/70 border border-border rounded-lg p-2 transition-colors">
-      <div className="grid grid-cols-4 gap-2">
+    <div className="sticky top-20 z-40 py-6">
+      <div className="flex justify-center">
+        <nav className="flex items-center gap-4 md:gap-8 bg-white rounded-full px-4 md:px-8 py-3 border border-black/5 shadow-sm">
         {sections.map((section) => (
-          <Button
+          <button
             key={section.id}
-            variant={activeSection === section.id ? "default" : "ghost"}
-            onClick={() => onSectionClick(section.id)}
-            className="justify-center"
+            onClick={() => onSectionChange(section.id)}
+            className={cn(
+              "font-poppins text-sm md:text-base transition-colors",
+              activeSection === section.id
+                ? "text-[#00A792] rounded-full bg-[#7BBCB038] px-4 py-1 border border-[#00A792]"
+                : "text-black font-extralight hover:text-[#00A792] hover:rounded-full hover:bg-[#7BBCB038] px-4 py-1"
+            )}
           >
             {section.label}
-          </Button>
+          </button>
         ))}
+        </nav>
       </div>
     </div>
   )
