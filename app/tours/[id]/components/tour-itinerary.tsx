@@ -90,7 +90,8 @@ export function TourItinerary({ itinerary = defaultItinerary }: TourItineraryPro
   return (
     <div className="py-8 relative">
       {/* Collapse all button top-right */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between mb-4">
+        <h2 className="text-xl font-semibold text-[#1C1B1F] mr-2">Itinerary</h2>
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="flex items-center gap-1 text-[14px] text-[#374151] rounded-full border border-[#E5E7EB] font-medium p-2"
