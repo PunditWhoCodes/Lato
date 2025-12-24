@@ -21,7 +21,7 @@ export interface ReviewsSectionProps {
 
 export interface SectionNavigationProps {
   activeSection: string
-  onSectionClick: (section: string) => void
+  onSectionChange: (section: string) => void
 }
 
 export interface TourInfoProps {
