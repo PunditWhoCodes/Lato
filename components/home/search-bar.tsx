@@ -26,6 +26,7 @@ export function SearchBar() {
   // Passengers state
   const [adults, setAdults] = useState(1)
   const [children, setChildren] = useState(0)
+  const [rooms, setRooms] = useState(1)
   const [showPassengerDropdown, setShowPassengerDropdown] = useState(false)
 
   // Refs for desktop
