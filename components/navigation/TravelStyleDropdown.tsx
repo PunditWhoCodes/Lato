@@ -1,9 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import Image from "next/image"
-import { ChevronDown, ChevronUp, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
 const travelStyles = [
   {
@@ -111,22 +110,17 @@ export function TravelStyleDropdownPanel({ isOpen, onClose }: TravelStyleDropdow
                 <ul className="space-y-3">
                   {style.items.map((item) => (
                     <li key={item}>
-                      <Link
-                        href={`/travel-styles/${item.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and")}`}
-                        onClick={onClose}
+                      <span
                         onMouseEnter={() => setHoveredItem(item)}
                         onMouseLeave={() => setHoveredItem(null)}
-                        className={`flex items-center gap-1 text-[15px] transition-colors ${
+                        className={`text-[15px] transition-colors cursor-default ${
                           hoveredItem === item
                             ? "text-[#00A792]"
                             : "text-[#1C1B1F]"
                         }`}
                       >
                         {item}
-                        {hoveredItem === item && (
-                          <ChevronRight className="h-4 w-4 text-[#00A792]" />
-                        )}
-                      </Link>
+                      </span>
                     </li>
                   ))}
                 </ul>
