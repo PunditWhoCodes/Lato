@@ -256,3 +256,262 @@ export interface APIErrorResponse {
   statusCode: number
   error?: string
 }
+
+// ============================================
+// Trip Detail Response Types (Full Structure)
+// ============================================
+
+// Image
+export interface APIImage {
+  id: string
+  site: string
+  s3Key: string
+  bgId: string | null
+  eventId: string | null
+  ord: number
+  hotelId: string | null
+  poiId: string | null
+  destinationId: string | null
+  transportationId: string | null
+  s3: {
+    key: string
+  }
+  url: string
+  originUrl: string
+}
+
+// Location
+export interface APILocation {
+  id: string
+  name: string
+  coordinates: [number, number] // [longitude, latitude]
+  address: {
+    country_code: string | null
+    state: string | null
+    city: string | null
+    postal_code: string | null
+    street: string | null
+  }
+}
+
+// Translation/Content (used for titles, descriptions, etc.)
+export interface APITranslation {
+  id: string
+  content: string
+  language_code: string
+  language: Language
+  creator?: APIUser
+  eventId?: string | null
+  priceDescriptionId?: string | null
+  includedId?: string | null
+  notIncludedId?: string | null
+  hotelId?: string | null
+  eventTitleId?: string | null
+  tripTitleId?: string | null
+  tripdayTitleId?: string | null
+  tripDescriptionId?: string | null
+  destinationTitleId?: string | null
+  destinationDescriptionId?: string | null
+  transportationTitleId?: string | null
+  transportationDescriptionId?: string | null
+}
+
+// Library Image Relation (for events/activities)
+export interface APILibraryImageRelation {
+  id: string
+  ord: number
+  libraryImageId: string
+  eventId: string | null
+  hotelId: string | null
+  poiId: string | null
+  destinationId: string | null
+  transportationId: string | null
+  libraryImage: {
+    id: string
+    name: string
+    site: string
+    s3Key: string
+    url: string
+    originUrl: string
+    userId: string
+    locationId: string
+    countryIso: string
+  }
+}
+
+// Room (within Hotel)
+export interface APIRoom {
+  id: string
+  name: string
+  description: string
+  roomType: string
+  maxOccupancy: number
+  amenities: string[]
+}
+
+// Hotel/Accommodation
+export interface APIHotel {
+  id: string
+  name: string
+  tripdayId: string
+  ord: number
+  created_at: string
+  updated_at: string
+  userId: string
+  locationId: string
+  countryIso: string
+  board: string
+  origin: string
+  originCode: string
+  website: string | null
+  primaryEmail: string | null
+  phoneNumber: string | null
+  chain: string
+  chainRef: string
+  showVoucher: boolean
+  rating: number
+  bookingStatus: string
+  bookingRef: string
+  accommodationType: string
+  images: APIImage[]
+  libraryImageRelations: APILibraryImageRelation[]
+  location: APILocation
+  titles: APITranslation[]
+  descriptions: APITranslation[]
+  rooms: APIRoom[]
+  nrOfNights: number
+  checkInDayNumber: number
+}
+
+// Event/Activity
+export interface APIEvent {
+  id: string
+  tripdayId: string
+  ord: number
+  dayIndex: number | null
+  time: string | null
+  endTime: string | null
+  name: string | null
+  created_at: string
+  updated_at: string
+  userId: string
+  locationId: string
+  countryIso: string
+  website: string | null
+  primaryEmail: string | null
+  phoneNumber: string | null
+  chain: string
+  chainRef: string | null
+  showVoucher: boolean
+  isOptional: boolean
+  images: APIImage[]
+  libraryImageRelations: APILibraryImageRelation[]
+  location: APILocation
+  documents: APIDocument[]
+  titles: APITranslation[]
+  descriptions: APITranslation[]
+}
+
+// Transportation
+export interface APITransportation {
+  id: string
+  tripdayId: string
+  ord: number
+  type: string
+  carrier: string | null
+  departure_time: string | null
+  arrival_time: string | null
+  duration: number | null
+  from_location: APILocation | null
+  to_location: APILocation | null
+  images: APIImage[]
+  libraryImageRelations: APILibraryImageRelation[]
+  titles: APITranslation[]
+  descriptions: APITranslation[]
+  departureDate: string | null
+  arrivalDate: string | null
+  flightDurationInMinutes: number | null
+}
+
+// Document
+export interface APIDocument {
+  id: string
+  name: string
+  url: string
+  type: string
+}
+
+// Destination (within tripday)
+export interface APIDestination {
+  id: string
+  created_at: string
+  updated_at: string
+  tripdayId: string
+  locationId: string
+  userId: string
+  showExtraDestinationContent: boolean
+  images: APIImage[]
+  libraryImageRelations: APILibraryImageRelation[]
+  location: APILocation
+  documents: APIDocument[]
+  titles: APITranslation[]
+  descriptions: APITranslation[]
+}
+
+// Trip Day (day-by-day itinerary)
+export interface APITripday {
+  id: string
+  dayNumber: number
+  tripdayIndex: number
+  locationId: string
+  tripId: string
+  nrOfNights: number
+  libraryImageId: string | null
+  image: APIImage | null
+  libraryImage: APILibraryImageRelation | null
+  location: APILocation
+  documents: APIDocument[]
+  titles: APITranslation[]
+  destination: APIDestination | null
+  hotels: APIHotel[]
+  events: APIEvent[]
+  transportations: APITransportation[]
+}
+
+// Currency
+export interface APICurrency {
+  iso: string
+  name: string
+  symbol: string
+}
+
+// Full Trip Detail Response (from /usertrips/[uuid])
+export interface APITripDetailResponse {
+  id: string
+  client_name: string
+  nrOfDays: number
+  created_at: string
+  updated_at: string
+  sample: boolean
+  share: boolean
+  collaboratorCanEdit: boolean
+  countryIso: string
+  leadBookerId: string | null
+  trips_contacts_contacts: any[]
+  userTrips: (APIUserTrip & {
+    currency: APICurrency
+    chatmessages: any[]
+    notes: any[]
+    tasks: any[]
+  })[]
+  tripdays: APITripday[]
+  tripdocs: APIDocument[]
+  flights: any[]
+  defaultDocuments: APIDocument[]
+  country: APICountry
+  priceDescriptions: APITranslation[]
+  includeds: APITranslation[]
+  notIncludeds: APITranslation[]
+  titles: APITranslation[]
+  descriptions: APITranslation[]
+}
