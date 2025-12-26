@@ -4,46 +4,59 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Eye, EyeOff } from "lucide-react"
-import { useStore } from "@/lib/store"
-import { setAccessTokenCookie } from "@/lib/utils/token"
+import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { useAuth } from "@/lib/hooks/useAuth"
+import { signInWithGoogle, signInWithApple } from "@/lib/api/auth"
 
 export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const setUser = useStore((state) => state.setUser)
+  const { login, isLoading, error, clearError } = useAuth()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [localError, setLocalError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    setLocalError(null)
+    clearError()
 
-    setTimeout(() => {
-      const mockUser = {
-        id: "user-1",
-        email: email || "demo@lato.com",
-        name: email ? email.split("@")[0] : "Demo User",
-        role: "TRAVELER" as const,
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-        emailVerified: true,
-        createdAt: new Date().toISOString(),
-      }
+    if (!email || !password) {
+      setLocalError("Please enter both email and password")
+      return
+    }
 
-      const mockToken = `mock_token_${Date.now()}`
-      setAccessTokenCookie(mockToken, 86400 * 30)
-
-      setUser(mockUser)
-      setIsLoading(false)
-
+    try {
+      await login({ email, password })
       const redirectTo = searchParams.get("redirect") || "/"
       router.push(redirectTo)
-    }, 800)
+    } catch (err) {
+      // Error is handled by the store, but we can also show local error
+      const errorMessage = err instanceof Error ? err.message : "Login failed. Please try again."
+      setLocalError(errorMessage)
+    }
   }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle()
+    } catch (err) {
+      setLocalError(err instanceof Error ? err.message : "Failed to sign in with Google")
+    }
+  }
+
+  const handleAppleSignIn = async () => {
+    try {
+      await signInWithApple()
+    } catch (err) {
+      setLocalError(err instanceof Error ? err.message : "Failed to sign in with Apple")
+    }
+  }
+
+  const displayError = localError || error
 
   return (
     <div className="min-h-screen relative flex items-center justify-center">
@@ -80,6 +93,13 @@ export default function LoginPage() {
             Welcome back!
           </h2>
 
+          {/* Error Message */}
+          {displayError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+              {displayError}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm text-[#1C1B1F] mb-2">Email address</label>
@@ -90,6 +110,7 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 className="w-full px-4 py-3 border border-[#E5E7EB] rounded-xl text-[#1C1B1F] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#00A699] transition-colors"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -103,6 +124,7 @@ export default function LoginPage() {
                   placeholder="Enter Password"
                   className="w-full px-4 py-3 border border-[#E5E7EB] rounded-xl text-[#1C1B1F] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#00A699] transition-colors pr-12"
                   required
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
@@ -114,25 +136,37 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-black">
-              <input
-                type="checkbox"
-                id="remember"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded border-[#D1D5DB] text-[#00A699] focus:ring-[#00A699]"
-              />
-              <label htmlFor="remember" className="text-sm">
-                Remember for 30 days
-              </label>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-black">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-[#D1D5DB] text-[#00A699] focus:ring-[#00A699]"
+                />
+                <label htmlFor="remember" className="text-sm">
+                  Remember for 30 days
+                </label>
+              </div>
+              <Link href="/forgot-password" className="text-sm text-[#00A699] hover:underline">
+                Forgot password?
+              </Link>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#00A699] hover:bg-[#008F84] text-white font-medium py-3.5 rounded-full transition-colors disabled:opacity-50"
+              className="w-full bg-[#00A699] hover:bg-[#008F84] text-white font-medium py-3.5 rounded-full transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Logging in...
+                </>
+              ) : (
+                "Login"
+              )}
             </button>
           </form>
 
@@ -145,26 +179,7 @@ export default function LoginPage() {
           <div className="space-y-3">
             <button
               type="button"
-              onClick={() => {
-                setIsLoading(true)
-                setTimeout(() => {
-                  const mockUser = {
-                    id: "user-google-1",
-                    email: "user@gmail.com",
-                    name: "Sarah Johnson",
-                    role: "TRAVELER" as const,
-                    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
-                    emailVerified: true,
-                    createdAt: new Date().toISOString(),
-                  }
-                  const mockToken = `mock_token_google_${Date.now()}`
-                  setAccessTokenCookie(mockToken, 86400 * 30)
-                  setUser(mockUser)
-                  setIsLoading(false)
-                  const redirectTo = searchParams.get("redirect") || "/"
-                  router.push(redirectTo)
-                }, 800)
-              }}
+              onClick={handleGoogleSignIn}
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-[#E5E7EB] rounded-full hover:bg-[#F9FAFB] transition-colors disabled:opacity-50"
             >
@@ -179,26 +194,7 @@ export default function LoginPage() {
 
             <button
               type="button"
-              onClick={() => {
-                setIsLoading(true)
-                setTimeout(() => {
-                  const mockUser = {
-                    id: "user-apple-1",
-                    email: "user@icloud.com",
-                    name: "Alex Thompson",
-                    role: "TRAVELER" as const,
-                    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-                    emailVerified: true,
-                    createdAt: new Date().toISOString(),
-                  }
-                  const mockToken = `mock_token_apple_${Date.now()}`
-                  setAccessTokenCookie(mockToken, 86400 * 30)
-                  setUser(mockUser)
-                  setIsLoading(false)
-                  const redirectTo = searchParams.get("redirect") || "/"
-                  router.push(redirectTo)
-                }, 800)
-              }}
+              onClick={handleAppleSignIn}
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-[#E5E7EB] rounded-full hover:bg-[#F9FAFB] transition-colors disabled:opacity-50"
             >
