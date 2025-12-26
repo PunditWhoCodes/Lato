@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth"
 import { SavedToursProvider } from "@/lib/saved-tours-context"
 import { SavedCompaniesProvider } from "@/lib/saved-companies-context"
 import { EnhancedMessagesProvider } from "@/contexts/EnhancedMessagesContext"
+import { SupabaseAuthListener } from "@/components/auth/SupabaseAuthListener"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { getQueryClient } from "@/lib/query-client"
@@ -15,6 +16,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SupabaseAuthListener />
       <AuthProvider>
         <SavedToursProvider>
           <SavedCompaniesProvider>
