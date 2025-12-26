@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react"
 
 interface CustomerPhotosProps {
   photos?: string[]
+  images?: string[]  // Alias for photos
 }
 
 const defaultPhotos = [
@@ -18,7 +19,9 @@ const defaultPhotos = [
   "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=400&fit=crop",
 ]
 
-export function CustomerPhotos({ photos = defaultPhotos }: CustomerPhotosProps) {
+export function CustomerPhotos({ photos, images }: CustomerPhotosProps) {
+  // Use images prop if provided, otherwise fall back to photos, then default
+  const displayPhotos = (images && images.length > 0) ? images : (photos && photos.length > 0) ? photos : defaultPhotos
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export function CustomerPhotos({ photos = defaultPhotos }: CustomerPhotosProps) 
   }, [])
 
   // Duplicate photos for seamless infinite scroll
-  const duplicatedPhotos = [...photos, ...photos]
+  const duplicatedPhotos = [...displayPhotos, ...displayPhotos]
 
   return (
     <div className="py-8">
@@ -87,7 +90,7 @@ export function CustomerPhotos({ photos = defaultPhotos }: CustomerPhotosProps) 
           >
             <Image
               src={photo}
-              alt={`Customer photo ${(index % photos.length) + 1}`}
+              alt={`Customer photo ${(index % displayPhotos.length) + 1}`}
               width={240}
               height={240}
               className="w-full h-full object-cover"
