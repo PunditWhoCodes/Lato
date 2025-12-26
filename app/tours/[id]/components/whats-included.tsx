@@ -11,8 +11,10 @@ interface IncludedItem {
 }
 
 interface WhatsIncludedProps {
-  included: IncludedItem[]
-  notIncluded: IncludedItem[]
+  included?: IncludedItem[] | string[]  // Can be array of items or simple strings
+  notIncluded?: IncludedItem[] | string[]
+  includedHtml?: string  // Raw HTML from API
+  notIncludedHtml?: string  // Raw HTML from API
 }
 
 function AccordionItem({
@@ -294,27 +296,126 @@ function TransportExcludedContent() {
   )
 }
 
-export function WhatsIncluded({ included, notIncluded }: WhatsIncludedProps) {
+// Simple list item component for string arrays
+function SimpleListItem({
+  text,
+  isIncluded,
+}: {
+  text: string
+  isIncluded: boolean
+}) {
+  return (
+    <div className="flex items-start gap-3 py-2">
+      {isIncluded ? (
+        <Check className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+      ) : (
+        <X className="w-4 h-4 text-[#DC2626] shrink-0 mt-0.5" />
+      )}
+      <span className="text-sm text-[#4B5563]">{text}</span>
+    </div>
+  )
+}
+
+// HTML content renderer
+function HtmlContent({
+  html,
+  isIncluded,
+}: {
+  html: string
+  isIncluded: boolean
+}) {
+  return (
+    <div className="space-y-2">
+      <div
+        className={cn(
+          "text-sm [&_ul]:list-none [&_ul]:space-y-2 [&_li]:flex [&_li]:items-start [&_li]:gap-2",
+          "[&_li]:before:content-[''] [&_li]:before:mt-1.5 [&_li]:before:w-4 [&_li]:before:h-4 [&_li]:before:shrink-0",
+          "[&_li]:before:rounded-full",
+          isIncluded
+            ? "[&_li]:before:bg-[#059669] [&_li]:before:content-['✓'] [&_li]:before:text-white [&_li]:before:text-xs [&_li]:before:flex [&_li]:before:items-center [&_li]:before:justify-center"
+            : "[&_li]:before:bg-[#DC2626] [&_li]:before:content-['✕'] [&_li]:before:text-white [&_li]:before:text-xs [&_li]:before:flex [&_li]:before:items-center [&_li]:before:justify-center"
+        )}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    </div>
+  )
+}
+
+export function WhatsIncluded({
+  included = [],
+  notIncluded = [],
+  includedHtml,
+  notIncludedHtml
+}: WhatsIncludedProps) {
+  // Check if we have HTML content from API
+  const hasIncludedHtml = includedHtml && includedHtml.trim().length > 0
+  const hasNotIncludedHtml = notIncludedHtml && notIncludedHtml.trim().length > 0
+
+  // Check if items are strings or objects
+  const isIncludedStrings = included.length > 0 && typeof included[0] === 'string'
+  const isNotIncludedStrings = notIncluded.length > 0 && typeof notIncluded[0] === 'string'
+
+  // If no content at all, don't render
+  if (!hasIncludedHtml && !hasNotIncludedHtml && included.length === 0 && notIncluded.length === 0) {
+    return null
+  }
+
   return (
     <div className="py-8">
       {/* What's Included Section */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-[#1C1B1F] mb-4">What&apos;s Included</h2>
-        <div>
-          {included.map((item, index) => (
-            <AccordionItem key={index} item={item} isIncluded={true} />
-          ))}
-        </div>
+
+        {/* Render HTML content from API */}
+        {hasIncludedHtml && (
+          <HtmlContent html={includedHtml} isIncluded={true} />
+        )}
+
+        {/* Render string array */}
+        {!hasIncludedHtml && isIncludedStrings && (
+          <div className="space-y-1">
+            {(included as string[]).map((item, index) => (
+              <SimpleListItem key={index} text={item} isIncluded={true} />
+            ))}
+          </div>
+        )}
+
+        {/* Render legacy IncludedItem array with accordion */}
+        {!hasIncludedHtml && !isIncludedStrings && included.length > 0 && (
+          <div>
+            {(included as IncludedItem[]).map((item, index) => (
+              <AccordionItem key={index} item={item} isIncluded={true} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* What's Excluded Section */}
       <div>
         <h2 className="text-xl font-semibold text-[#1C1B1F] mb-4">What&apos;s Excluded</h2>
-        <div>
-          {notIncluded.map((item, index) => (
-            <AccordionItem key={index} item={item} isIncluded={false} />
-          ))}
-        </div>
+
+        {/* Render HTML content from API */}
+        {hasNotIncludedHtml && (
+          <HtmlContent html={notIncludedHtml} isIncluded={false} />
+        )}
+
+        {/* Render string array */}
+        {!hasNotIncludedHtml && isNotIncludedStrings && (
+          <div className="space-y-1">
+            {(notIncluded as string[]).map((item, index) => (
+              <SimpleListItem key={index} text={item} isIncluded={false} />
+            ))}
+          </div>
+        )}
+
+        {/* Render legacy IncludedItem array with accordion */}
+        {!hasNotIncludedHtml && !isNotIncludedStrings && notIncluded.length > 0 && (
+          <div>
+            {(notIncluded as IncludedItem[]).map((item, index) => (
+              <AccordionItem key={index} item={item} isIncluded={false} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
