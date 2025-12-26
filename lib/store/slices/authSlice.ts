@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand'
 import type { StoreState } from '../index'
 import type { User, LoginRequest, RegisterRequest } from '@/lib/types/auth'
 import * as authApi from '@/lib/api/auth'
-import { setAccessToken, setRefreshToken, clearAllTokens, getAccessToken } from '@/lib/utils/token'
+import { setAccessToken, setRefreshToken, clearAllTokens, getAccessToken, setAccessTokenCookie, clearAccessTokenCookie } from '@/lib/utils/token'
 
 export interface AuthSlice {
   // State
@@ -66,18 +66,16 @@ export const createAuthSlice: StateCreator<
     set({ user: null, error: null }, false, 'auth/clearUser')
   },
 
-  // Login with email/password
   login: async (data) => {
     try {
       set({ isLoading: true, error: null }, false, 'auth/login/start')
 
       const response = await authApi.login(data)
 
-      // Store tokens
       setAccessToken(response.tokens.accessToken, response.tokens.expiresIn)
       setRefreshToken(response.tokens.refreshToken)
+      setAccessTokenCookie(response.tokens.accessToken, response.tokens.expiresIn)
 
-      // Store user
       set(
         { user: response.user, isLoading: false, error: null },
         false,
@@ -90,18 +88,16 @@ export const createAuthSlice: StateCreator<
     }
   },
 
-  // Register new user
   register: async (data) => {
     try {
       set({ isLoading: true, error: null }, false, 'auth/register/start')
 
       const response = await authApi.register(data)
 
-      // Store tokens
       setAccessToken(response.tokens.accessToken, response.tokens.expiresIn)
       setRefreshToken(response.tokens.refreshToken)
+      setAccessTokenCookie(response.tokens.accessToken, response.tokens.expiresIn)
 
-      // Store user
       set(
         { user: response.user, isLoading: false, error: null },
         false,
@@ -114,7 +110,6 @@ export const createAuthSlice: StateCreator<
     }
   },
 
-  // Logout
   logout: async () => {
     try {
       const token = getAccessToken()
@@ -124,13 +119,11 @@ export const createAuthSlice: StateCreator<
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
-      // Always clear local state and tokens
       clearAllTokens()
       set({ user: null, error: null, isLoading: false }, false, 'auth/logout')
     }
   },
 
-  // Refresh user session
   refreshSession: async () => {
     try {
       const token = getAccessToken()
@@ -143,11 +136,9 @@ export const createAuthSlice: StateCreator<
       set({ user, error: null }, false, 'auth/refreshSession/success')
     } catch (error) {
       console.error('Session refresh error:', error)
-      // Don't clear user on refresh error, just log it
     }
   },
 
-  // Check if user is authenticated
   isAuthenticated: () => {
     return get().user !== null
   },
