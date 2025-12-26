@@ -5,11 +5,19 @@ import { Check } from "lucide-react"
 
 interface ListingHeroProps {
   destination: string
+  tourCount?: number
 }
 
-export function ListingHero({ destination }: ListingHeroProps) {
-  const displayName =
-    destination.charAt(0).toUpperCase() + destination.slice(1).toLowerCase()
+export function ListingHero({ destination, tourCount }: ListingHeroProps) {
+  // Handle "All Destinations" case - don't capitalize as a single word
+  const displayName = destination === "All Destinations"
+    ? "All Destinations"
+    : destination.charAt(0).toUpperCase() + destination.slice(1).toLowerCase()
+
+  // Format tour count for display
+  const tourCountDisplay = tourCount !== undefined && tourCount > 0
+    ? `${tourCount.toLocaleString()}+`
+    : "9,900+"
 
   return (
     <section className="bg-[#F7F7F7]">
@@ -53,7 +61,7 @@ export function ListingHero({ destination }: ListingHeroProps) {
 
               {/* Features — stacked vertically */}
               <div className="flex flex-col gap-3 text-left mx-auto w-fit">
-                <Feature text={`Choose from 9,900+ ${displayName} tours`} />
+                <Feature text={`Choose from ${tourCountDisplay} ${displayName} tours`} />
                 <Feature text="500+ verified reviews from Lato traveler’s" />
                 <Feature text="24/7 customer support" />
               </div>
