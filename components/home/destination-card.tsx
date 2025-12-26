@@ -9,6 +9,7 @@ interface DestinationCardProps {
   image: string
   href: string
   tourCount?: number
+  flag?: string
 }
 
 export function DestinationCard({
@@ -16,6 +17,7 @@ export function DestinationCard({
   image,
   href,
   tourCount,
+  flag,
 }: DestinationCardProps) {
   return (
     <Link href={href}>
@@ -32,11 +34,12 @@ export function DestinationCard({
 
         {/* Destination Name */}
         <h3 className="text-center font-poppins text-lg md:text-xl font-medium text-black mb-1">
+          {flag && <span className="mr-2">{flag}</span>}
           {name}
         </h3>
 
         {/* Tour Count */}
-        {tourCount && (
+        {tourCount !== undefined && tourCount > 0 && (
           <p className="text-center text-sm text-gray-500 font-mulish">
             {tourCount}+ Tours
           </p>
