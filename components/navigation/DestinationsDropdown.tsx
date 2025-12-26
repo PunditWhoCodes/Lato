@@ -4,13 +4,15 @@ import { useState } from "react"
 import Link from "next/link"
 import { ChevronDown, ChevronUp, ChevronRight } from "lucide-react"
 
+// Static continent data
 const continents = [
-  { id: "africa", name: "Africa", places: 23 },
-  { id: "europe", name: "Europe", places: 23 },
-  { id: "asia", name: "Asia", places: 23 },
-  { id: "south-america", name: "South America", places: 23 },
+  { id: "africa", name: "Africa", places: 20 },
+  { id: "europe", name: "Europe", places: 22 },
+  { id: "asia", name: "Asia", places: 20 },
+  { id: "south-america", name: "South America", places: 19 },
 ]
 
+// Static destinations by continent
 const destinations: Record<string, string[]> = {
   africa: [
     "Morocco", "Egypt", "Kenya", "Tanzania", "South Africa",
@@ -22,7 +24,7 @@ const destinations: Record<string, string[]> = {
     "Italy", "Spain", "Turkey", "France", "Greece",
     "Portugal", "Germany", "Netherlands", "Switzerland", "Austria",
     "Czech Republic", "Poland", "Croatia", "Hungary", "Belgium",
-    "Ireland", "Scotland", "Norway", "Sweden", "Denmark",
+    "Ireland", "United Kingdom", "Norway", "Sweden", "Denmark",
     "Finland", "Iceland",
   ],
   asia: [
@@ -37,6 +39,97 @@ const destinations: Record<string, string[]> = {
     "Costa Rica", "Panama", "Mexico", "Guatemala", "Cuba",
     "Dominican Republic", "Puerto Rico", "Jamaica", "Belize",
   ],
+}
+
+// Country name to ISO code mapping for API routing
+const COUNTRY_NAME_TO_CODE: Record<string, string> = {
+  // Africa
+  "Morocco": "MA",
+  "Egypt": "EG",
+  "Kenya": "KE",
+  "Tanzania": "TZ",
+  "South Africa": "ZA",
+  "Tunisia": "TN",
+  "Ghana": "GH",
+  "Nigeria": "NG",
+  "Ethiopia": "ET",
+  "Rwanda": "RW",
+  "Uganda": "UG",
+  "Zambia": "ZM",
+  "Zimbabwe": "ZW",
+  "Botswana": "BW",
+  "Namibia": "NA",
+  "Senegal": "SN",
+  "Madagascar": "MG",
+  "Mauritius": "MU",
+  "Seychelles": "SC",
+  "Cape Verde": "CV",
+  // Europe
+  "Italy": "IT",
+  "Spain": "ES",
+  "Turkey": "TR",
+  "France": "FR",
+  "Greece": "GR",
+  "Portugal": "PT",
+  "Germany": "DE",
+  "Netherlands": "NL",
+  "Switzerland": "CH",
+  "Austria": "AT",
+  "Czech Republic": "CZ",
+  "Poland": "PL",
+  "Croatia": "HR",
+  "Hungary": "HU",
+  "Belgium": "BE",
+  "Ireland": "IE",
+  "United Kingdom": "GB",
+  "Norway": "NO",
+  "Sweden": "SE",
+  "Denmark": "DK",
+  "Finland": "FI",
+  "Iceland": "IS",
+  // Asia
+  "Japan": "JP",
+  "Thailand": "TH",
+  "Vietnam": "VN",
+  "Indonesia": "ID",
+  "Malaysia": "MY",
+  "Singapore": "SG",
+  "Philippines": "PH",
+  "South Korea": "KR",
+  "China": "CN",
+  "India": "IN",
+  "Sri Lanka": "LK",
+  "Nepal": "NP",
+  "Cambodia": "KH",
+  "Laos": "LA",
+  "Myanmar": "MM",
+  "Taiwan": "TW",
+  "Hong Kong": "HK",
+  "Maldives": "MV",
+  "Bhutan": "BT",
+  "Mongolia": "MN",
+  // Americas
+  "Brazil": "BR",
+  "Argentina": "AR",
+  "Peru": "PE",
+  "Chile": "CL",
+  "Colombia": "CO",
+  "Ecuador": "EC",
+  "Bolivia": "BO",
+  "Uruguay": "UY",
+  "Paraguay": "PY",
+  "Venezuela": "VE",
+  "Costa Rica": "CR",
+  "Panama": "PA",
+  "Mexico": "MX",
+  "Guatemala": "GT",
+  "Cuba": "CU",
+  "Dominican Republic": "DO",
+  "Puerto Rico": "PR",
+  "Jamaica": "JM",
+  "Belize": "BZ",
+  "United States": "US",
+  "Canada": "CA",
 }
 
 interface DestinationsDropdownTriggerProps {
@@ -122,25 +215,28 @@ export function DestinationsDropdownPanel({ isOpen, onClose }: DestinationsDropd
             </h3>
 
             <div className="grid grid-cols-5 gap-x-8 gap-y-3">
-              {currentDestinations.map((destination) => (
-                <Link
-                  key={destination}
-                  href={`/destinations/${destination.toLowerCase().replace(/\s+/g, "-")}`}
-                  onClick={onClose}
-                  onMouseEnter={() => setHoveredDestination(destination)}
-                  onMouseLeave={() => setHoveredDestination(null)}
-                  className={`flex items-center gap-1 py-1 text-[15px] transition-colors ${
-                    hoveredDestination === destination
-                      ? "text-[#00A792]"
-                      : "text-[#1C1B1F]"
-                  }`}
-                >
-                  {destination}
-                  {hoveredDestination === destination && (
-                    <ChevronRight className="h-4 w-4 text-[#00A792]" />
-                  )}
-                </Link>
-              ))}
+              {currentDestinations.map((destination) => {
+                const countryCode = COUNTRY_NAME_TO_CODE[destination]
+                return (
+                  <Link
+                    key={destination}
+                    href={countryCode ? `/tours?countries=${countryCode}` : "/tours"}
+                    onClick={onClose}
+                    onMouseEnter={() => setHoveredDestination(destination)}
+                    onMouseLeave={() => setHoveredDestination(null)}
+                    className={`flex items-center gap-1 py-1 text-[15px] transition-colors ${
+                      hoveredDestination === destination
+                        ? "text-[#00A792]"
+                        : "text-[#1C1B1F]"
+                    }`}
+                  >
+                    {destination}
+                    {hoveredDestination === destination && (
+                      <ChevronRight className="h-4 w-4 text-[#00A792]" />
+                    )}
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </div>
