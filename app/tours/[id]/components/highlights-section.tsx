@@ -3,12 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronDown, ChevronUp, MapPin, Map } from "lucide-react";
+import type { ItineraryDay } from "@/types";
 
 interface HighlightsSectionProps {
   highlights: string[];
   mapImage?: string;
   startLocation?: string;
   endLocation?: string;
+  startCoordinates?: [number, number];
+  endCoordinates?: [number, number];
+  itineraryDays?: ItineraryDay[];
 }
 
 export function HighlightsSection({
@@ -16,6 +20,9 @@ export function HighlightsSection({
   mapImage = "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&q=80",
   startLocation = "Lima, Peru",
   endLocation = "Lima, Peru",
+  startCoordinates,
+  endCoordinates,
+  itineraryDays = [],
 }: HighlightsSectionProps) {
   const [showAll, setShowAll] = useState(false);
   const visibleHighlights = showAll ? highlights : highlights.slice(0, 4);
@@ -91,7 +98,9 @@ export function HighlightsSection({
           {/* Line with destination badge */}
           <div className="flex-1 h-0.5 bg-[#00A699] relative mx-0">
             <span className="absolute left-1/2 -translate-x-1/2 -top-4 bg-white rounded-full shadow-md px-3 py-1.5 text-[11px] text-gray-600 whitespace-nowrap">
-              6 more destinations
+              {itineraryDays.length > 0
+                ? `${Math.max(0, itineraryDays.length - 2)} more destinations`
+                : "6 more destinations"}
             </span>
           </div>
 
