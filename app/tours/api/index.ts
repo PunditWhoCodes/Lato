@@ -15,6 +15,16 @@ export type {
   APICountry,
   APIBrand,
   APIErrorResponse,
+  // Enhanced types for full trip detail
+  APITripDetailResponse,
+  APITripday,
+  APIHotel,
+  APIEvent,
+  APITransportation,
+  APIDestination,
+  APIImage,
+  APILocation,
+  APITranslation,
 } from "./trips.types"
 
 // API Service
@@ -27,7 +37,9 @@ export {
   useInfiniteMarketplaceTrips,
   useTripsByCountry,
   usePrefetchTrip,
+  useTopDestinations,
   tripsQueryKeys,
+  type DestinationData,
 } from "./trips.queries"
 
 // Data Mappers
@@ -37,4 +49,9 @@ export {
   mapMarketplaceResponseToTours,
   mapUserTripToTourDetail,
   transformAndFilterTrips,
+  // Enhanced mappers for full trip detail
+  mapTripDetailResponseToTourDetail,
+  extractAllTripImages,
+  extractAllAccommodations,
+  extractAllActivities,
 } from "./trips.mappers"
