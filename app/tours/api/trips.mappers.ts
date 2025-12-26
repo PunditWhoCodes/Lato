@@ -3,8 +3,28 @@
  * Transform API response data to application Tour interface
  */
 
-import type { Tour, TourDetail } from "@/types"
-import type { APIUserTrip, APIMarketplaceResponse } from "./trips.types"
+import type {
+  Tour,
+  TourDetail,
+  ItineraryDay,
+  Accommodation,
+  TourActivity,
+  Transportation,
+  LocationCoordinates
+} from "@/types"
+import type {
+  APIUserTrip,
+  APIMarketplaceResponse,
+  APITripDetailResponse,
+  APITripday,
+  APIHotel,
+  APIEvent,
+  APITransportation,
+  APITranslation,
+  APILocation,
+  APIImage,
+  APILibraryImageRelation
+} from "./trips.types"
 
 /**
  * Helper to generate deterministic rating from UUID
@@ -311,4 +331,401 @@ export function transformAndFilterTrips(
   }
 
   return tours
+}
+
+// ============================================
+// Enhanced Mappers for Full Trip Detail Response
+// ============================================
+
+/**
+ * Get content in preferred language (English first, fallback to first available)
+ */
+function getTranslatedContent(
+  translations: APITranslation[] | undefined,
+  preferredLang: string = 'en'
+): string {
+  if (!translations || translations.length === 0) return ''
+
+  // Try preferred language first
+  const preferred = translations.find(t => t.language_code === preferredLang)
+  if (preferred?.content) return preferred.content
+
+  // Fallback to first available
+  return translations[0]?.content || ''
+}
+
+/**
+ * Map API Location to LocationCoordinates
+ */
+function mapLocation(location: APILocation | undefined | null): LocationCoordinates {
+  if (!location) {
+    return {
+      name: 'Unknown',
+      coordinates: [0, 0]
+    }
+  }
+
+  return {
+    id: location.id,
+    name: location.name,
+    coordinates: location.coordinates || [0, 0],
+    address: location.address
+  }
+}
+
+/**
+ * Extract image URLs from API images or library image relations
+ */
+function extractImageUrls(
+  images: APIImage[] | undefined,
+  libraryRelations: APILibraryImageRelation[] | undefined
+): string[] {
+  const urls: string[] = []
+
+  // Add direct images
+  if (images && images.length > 0) {
+    images.forEach(img => {
+      if (img.url) urls.push(img.url)
+      else if (img.originUrl) urls.push(img.originUrl)
+    })
+  }
+
+  // Add library images
+  if (libraryRelations && libraryRelations.length > 0) {
+    libraryRelations
+      .sort((a, b) => a.ord - b.ord)
+      .forEach(rel => {
+        if (rel.libraryImage?.url) urls.push(rel.libraryImage.url)
+        else if (rel.libraryImage?.originUrl) urls.push(rel.libraryImage.originUrl)
+      })
+  }
+
+  return urls
+}
+
+/**
+ * Map API Hotel to Accommodation
+ */
+function mapHotelToAccommodation(hotel: APIHotel): Accommodation {
+  return {
+    id: hotel.id,
+    name: hotel.name,
+    rating: hotel.rating || 0,
+    type: hotel.accommodationType || 'Hotel',
+    images: extractImageUrls(hotel.images, hotel.libraryImageRelations),
+    nights: hotel.nrOfNights || 1,
+    checkInDay: hotel.checkInDayNumber || 1,
+    location: mapLocation(hotel.location),
+    board: hotel.board || undefined,
+    website: hotel.website || undefined,
+    email: hotel.primaryEmail || undefined,
+    phone: hotel.phoneNumber || undefined,
+    description: getTranslatedContent(hotel.descriptions)
+  }
+}
+
+/**
+ * Map API Event to TourActivity
+ */
+function mapEventToActivity(event: APIEvent, dayNumber?: number): TourActivity {
+  return {
+    id: event.id,
+    title: getTranslatedContent(event.titles) || event.name || 'Activity',
+    description: getTranslatedContent(event.descriptions),
+    time: event.time,
+    endTime: event.endTime,
+    isOptional: event.isOptional,
+    location: mapLocation(event.location),
+    images: extractImageUrls(event.images, event.libraryImageRelations),
+    dayNumber
+  }
+}
+
+/**
+ * Map API Transportation to Transportation
+ */
+function mapTransportation(transport: APITransportation): Transportation {
+  return {
+    id: transport.id,
+    title: getTranslatedContent(transport.titles) || 'Transportation',
+    description: getTranslatedContent(transport.descriptions),
+    type: transport.type || 'transfer',
+    carrier: transport.carrier || undefined,
+    departureTime: transport.departure_time || transport.departureDate || undefined,
+    arrivalTime: transport.arrival_time || transport.arrivalDate || undefined,
+    duration: transport.duration || transport.flightDurationInMinutes || undefined,
+    fromLocation: transport.from_location ? mapLocation(transport.from_location) : undefined,
+    toLocation: transport.to_location ? mapLocation(transport.to_location) : undefined,
+    images: extractImageUrls(transport.images, transport.libraryImageRelations)
+  }
+}
+
+/**
+ * Map API Tripday to ItineraryDay
+ */
+function mapTripdayToItineraryDay(tripday: APITripday): ItineraryDay {
+  // Get day title from tripday titles or destination
+  const title = getTranslatedContent(tripday.titles) ||
+    tripday.destination?.location?.name ||
+    tripday.location?.name ||
+    `Day ${tripday.dayNumber}`
+
+  // Get description from destination
+  const description = tripday.destination
+    ? getTranslatedContent(tripday.destination.descriptions)
+    : ''
+
+  // Get day image - priority: tripday image > destination images > placeholder
+  let image = ''
+  if (tripday.image?.url) {
+    image = tripday.image.url
+  } else if (tripday.destination?.images?.[0]?.url) {
+    image = tripday.destination.images[0].url
+  }
+
+  // Map hotels for this day
+  const accommodation = tripday.hotels?.[0]
+    ? mapHotelToAccommodation(tripday.hotels[0])
+    : undefined
+
+  // Map activities/events for this day
+  const activities = (tripday.events || []).map(event =>
+    mapEventToActivity(event, tripday.dayNumber)
+  )
+
+  // Map transportations for this day
+  const transportations = (tripday.transportations || []).map(mapTransportation)
+
+  return {
+    dayNumber: tripday.dayNumber,
+    tripdayIndex: tripday.tripdayIndex,
+    title,
+    description,
+    location: mapLocation(tripday.location),
+    image,
+    nrOfNights: tripday.nrOfNights || 0,
+    accommodation,
+    activities,
+    transportations
+  }
+}
+
+/**
+ * Extract all images from the full trip detail response
+ */
+export function extractAllTripImages(tripDetail: APITripDetailResponse): string[] {
+  const images: string[] = []
+
+  // Collect images from all tripdays
+  tripDetail.tripdays?.forEach(tripday => {
+    // Tripday background image
+    if (tripday.image?.url) images.push(tripday.image.url)
+
+    // Destination images
+    if (tripday.destination?.images) {
+      tripday.destination.images.forEach(img => {
+        if (img.url) images.push(img.url)
+      })
+    }
+
+    // Hotel images
+    tripday.hotels?.forEach(hotel => {
+      hotel.images?.forEach(img => {
+        if (img.url) images.push(img.url)
+      })
+    })
+
+    // Event images
+    tripday.events?.forEach(event => {
+      extractImageUrls(event.images, event.libraryImageRelations).forEach(url => {
+        images.push(url)
+      })
+    })
+  })
+
+  // Remove duplicates
+  return [...new Set(images)]
+}
+
+/**
+ * Extract all accommodations from the full trip detail response
+ */
+export function extractAllAccommodations(tripDetail: APITripDetailResponse): Accommodation[] {
+  const accommodations: Accommodation[] = []
+  const seenIds = new Set<string>()
+
+  tripDetail.tripdays?.forEach(tripday => {
+    tripday.hotels?.forEach(hotel => {
+      if (!seenIds.has(hotel.id)) {
+        seenIds.add(hotel.id)
+        accommodations.push(mapHotelToAccommodation(hotel))
+      }
+    })
+  })
+
+  return accommodations
+}
+
+/**
+ * Extract all activities from the full trip detail response
+ */
+export function extractAllActivities(tripDetail: APITripDetailResponse): TourActivity[] {
+  const activities: TourActivity[] = []
+
+  tripDetail.tripdays?.forEach(tripday => {
+    tripday.events?.forEach(event => {
+      activities.push(mapEventToActivity(event, tripday.dayNumber))
+    })
+  })
+
+  return activities
+}
+
+/**
+ * Extract unique languages from translations
+ */
+function extractLanguages(tripDetail: APITripDetailResponse): string[] {
+  const languages = new Set<string>()
+
+  // Check titles for available languages
+  tripDetail.titles?.forEach(t => {
+    if (t.language?.name) languages.add(t.language.name)
+  })
+
+  // Check descriptions
+  tripDetail.descriptions?.forEach(t => {
+    if (t.language?.name) languages.add(t.language.name)
+  })
+
+  // Default to English if no languages found
+  if (languages.size === 0) languages.add('English')
+
+  return Array.from(languages)
+}
+
+/**
+ * Map full APITripDetailResponse to TourDetail
+ * This is the main mapper for the tour detail page
+ */
+export function mapTripDetailResponseToTourDetail(
+  response: APITripDetailResponse
+): TourDetail {
+  // Get the first userTrip for pricing and user info
+  const userTrip = response.userTrips?.[0]
+  const user = userTrip?.user
+
+  // Get title and description
+  const title = getTranslatedContent(response.titles) || 'Untitled Tour'
+  const description = getTranslatedContent(response.descriptions) || ''
+
+  // Get included/not included HTML
+  const includedHtml = getTranslatedContent(response.includeds)
+  const notIncludedHtml = getTranslatedContent(response.notIncludeds)
+
+  // Parse HTML lists to arrays (simple parsing)
+  const parseHtmlList = (html: string): string[] => {
+    if (!html) return []
+    // Extract text from <li> tags
+    const matches = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi)
+    if (!matches) return [html.replace(/<[^>]*>/g, '').trim()].filter(Boolean)
+    return matches.map(match =>
+      match.replace(/<[^>]*>/g, '').trim()
+    ).filter(Boolean)
+  }
+
+  // Map all tripdays to itinerary
+  const itineraryDays = (response.tripdays || [])
+    .sort((a, b) => a.dayNumber - b.dayNumber)
+    .map(mapTripdayToItineraryDay)
+
+  // Extract all accommodations
+  const accommodations = extractAllAccommodations(response)
+
+  // Extract all activities
+  const activities = extractAllActivities(response)
+
+  // Extract all images
+  const allImages = extractAllTripImages(response)
+
+  // Get start and end locations
+  const startTripday = response.tripdays?.[0]
+  const endTripday = response.tripdays?.[response.tripdays.length - 1]
+
+  // Determine travel style from title
+  const travelStyle = title.toLowerCase().includes('adventure') ? 'Adventure' :
+    title.toLowerCase().includes('cultural') ? 'Cultural' :
+      title.toLowerCase().includes('luxury') ? 'Luxury' :
+        title.toLowerCase().includes('family') ? 'Family' : 'Exploration'
+
+  // Generate badges
+  const badges: string[] = []
+  if (response.sample) badges.push('Sample')
+  if (user?.verified) badges.push('Verified Operator')
+  if (user?.company?.plan === 'pro') badges.push('Premium Partner')
+  if (userTrip?.travelapp_visits && userTrip.travelapp_visits > 50) badges.push('Popular')
+
+  return {
+    id: parseInt(response.id.split('-')[0], 16),
+    uuid: response.id,
+    title,
+    company: {
+      name: user?.company?.name || user?.name || 'Unknown Company',
+      id: user?.companyId || '',
+      avatar: user?.avatarUrl || '',
+      rating: generateDeterministicRating(response.id),
+      reviews: userTrip?.travelapp_visits || 0,
+      verified: user?.verified || false,
+      responseTime: 'Within 24 hours',
+      country: response.country?.name || 'Unknown',
+      countryFlag: response.country?.flagEmoticon || '🌍',
+      website: user?.company?.site || undefined,
+      email: user?.company?.billingEmail || undefined
+    },
+    companyId: user?.companyId || '',
+    companyCountry: response.country?.name || 'Unknown',
+    companyFlag: response.country?.flagEmoticon || '🌍',
+    price: userTrip?.price || 0,
+    originalPrice: userTrip?.price && userTrip?.fee ? userTrip.price + userTrip.fee : undefined,
+    rating: generateDeterministicRating(response.id),
+    reviewCount: userTrip?.travelapp_visits || 0,
+    duration: `${response.nrOfDays} days`,
+    groupSize: userTrip?.max_travellers
+      ? `Up to ${userTrip.max_travellers} people`
+      : userTrip?.group_booking
+        ? 'Group'
+        : 'Small Group',
+    location: response.country?.name || 'International',
+    destination: response.countryIso || 'INT',
+    travelStyle,
+    image: allImages[0] || getTourImage(response.countryIso || 'US'),
+    images: allImages.length > 0 ? allImages : [
+      getTourImage(response.countryIso || 'US', 0),
+      getTourImage(response.countryIso || 'US', 1),
+      getTourImage(response.countryIso || 'US', 2)
+    ],
+    badges,
+    category: travelStyle,
+    difficulty: 'Moderate',
+    highlights: itineraryDays.slice(0, 4).map(day => day.title),
+    tourType: userTrip?.group_booking ? 'Group Tour' : 'Private Tour',
+    languages: extractLanguages(response),
+    description,
+    included: parseHtmlList(includedHtml),
+    notIncluded: parseHtmlList(notIncludedHtml),
+    itinerary: [], // Legacy format, use itineraryDays instead
+    reviews: [],
+    relatedTours: [],
+    // Enhanced fields
+    includedHtml,
+    notIncludedHtml,
+    tripDescription: description,
+    itineraryDays,
+    accommodations,
+    activities,
+    startLocation: startTripday ? mapLocation(startTripday.location) : undefined,
+    endLocation: endTripday ? mapLocation(endTripday.location) : undefined,
+    nrOfDays: response.nrOfDays,
+    currencySymbol: userTrip?.currency?.symbol || '€',
+    currencyIso: userTrip?.currencyIso || 'EUR'
+  }
 }
