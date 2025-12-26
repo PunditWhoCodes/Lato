@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal, X, Loader2, AlertCircle } from "lucide-react"
 import {
@@ -48,12 +48,43 @@ interface AppliedFilter {
   type: string
 }
 
+// Country code to name mapping
+const COUNTRY_NAMES: Record<string, string> = {
+  US: "United States",
+  IT: "Italy",
+  FR: "France",
+  ES: "Spain",
+  TH: "Thailand",
+  GR: "Greece",
+  JP: "Japan",
+  GB: "United Kingdom",
+  NL: "Netherlands",
+  DE: "Germany",
+  PE: "Peru",
+  NP: "Nepal",
+  AU: "Australia",
+  CA: "Canada",
+  MX: "Mexico",
+  BR: "Brazil",
+  AR: "Argentina",
+  PT: "Portugal",
+  CH: "Switzerland",
+  AT: "Austria",
+}
+
 export function ListingClient() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  // Get destination from URL
-  const destinationParam = searchParams.get("destination") || "Peru"
+  // Get countries filter from URL (e.g., ?countries=US)
+  const countriesParam = searchParams.get("countries") || ""
+
+  // Get destination from URL (legacy param) or derive from countries
+  const destinationParam = searchParams.get("destination") || ""
+
+  // Get initial page from URL (e.g., ?page=2)
+  const pageParam = searchParams.get("page")
+  const initialPage = pageParam ? parseInt(pageParam, 10) : 1
 
   // View mode state
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
@@ -61,11 +92,16 @@ export function ListingClient() {
   // Sort state
   const [sortBy, setSortBy] = useState("popular")
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
+  // Pagination state - initialize from URL param
+  const [currentPage, setCurrentPage] = useState(initialPage)
+
+  // Derive initial destination name from countries param or destination param
+  const initialDestination = countriesParam
+    ? (COUNTRY_NAMES[countriesParam] || countriesParam)
+    : (destinationParam || "All Destinations")
 
   // Filter states
-  const [selectedDestination, setSelectedDestination] = useState(destinationParam)
+  const [selectedDestination, setSelectedDestination] = useState(initialDestination)
   const [priceType, setPriceType] = useState<"person" | "day">("person")
   const [priceRange, setPriceRange] = useState([2000, 12000])
   const [selectedGroup, setSelectedGroup] = useState<string[]>([])
@@ -87,7 +123,18 @@ export function ListingClient() {
   // Mobile filters state
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
-  // Fetch tours from API
+  // Reset page when countries filter changes
+  useEffect(() => {
+    setCurrentPage(1)
+    // Update destination name when countries param changes
+    if (countriesParam) {
+      setSelectedDestination(COUNTRY_NAMES[countriesParam] || countriesParam)
+    } else if (!destinationParam) {
+      setSelectedDestination("All Destinations")
+    }
+  }, [countriesParam, destinationParam])
+
+  // Fetch tours from API with country filter
   const {
     data: apiResponse,
     isLoading,
@@ -98,6 +145,7 @@ export function ListingClient() {
     page: currentPage,
     step: ITEMS_PER_PAGE,
     sample: true,
+    countries: countriesParam || undefined, // Filter by country if specified
   })
 
   // Map API UserTrips to Tour format, then to TourCardData
@@ -113,6 +161,19 @@ export function ListingClient() {
       }
     }).filter((tour): tour is TourCardData => tour !== null)
   }, [apiResponse])
+
+  // Derive display country name from API data or fallback to mapping
+  const displayCountryName = useMemo(() => {
+    if (!countriesParam) return selectedDestination || "All Destinations"
+
+    // Try to get country name from first tour's location
+    if (apiTours.length > 0 && apiTours[0].location) {
+      return apiTours[0].location
+    }
+
+    // Fallback to mapping or the param itself
+    return COUNTRY_NAMES[countriesParam] || countriesParam
+  }, [countriesParam, apiTours, selectedDestination])
 
   const appliedFilters: AppliedFilter[] = useMemo(() => {
     const filters: AppliedFilter[] = []
@@ -234,6 +295,19 @@ export function ListingClient() {
     router.push(`/tours/${routeId}`)
   }
 
+  // Handle page change - maintain country filter in URL
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+
+    // Update URL with page and maintain countries filter
+    const params = new URLSearchParams()
+    if (countriesParam) params.set("countries", countriesParam)
+    if (page > 1) params.set("page", String(page))
+
+    const queryString = params.toString()
+    router.replace(`/tours${queryString ? `?${queryString}` : ""}`, { scroll: false })
+  }
+
   // Sort tours from API
   const sortedTours = useMemo(() => {
     const sorted = [...apiTours]
@@ -274,7 +348,7 @@ export function ListingClient() {
   return (
     <>
       {/* Hero Section */}
-      <ListingHero destination={selectedDestination} />
+      <ListingHero destination={displayCountryName} tourCount={totalCount} />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -546,7 +620,7 @@ export function ListingClient() {
                   <ListingPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    onPageChange={setCurrentPage}
+                    onPageChange={handlePageChange}
                   />
                 )}
               </>
