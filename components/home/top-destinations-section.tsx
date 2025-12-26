@@ -1,26 +1,50 @@
+"use client"
+
 import Link from "next/link"
 import { DestinationCard } from "./destination-card"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Loader2 } from "lucide-react"
+import { useTopDestinations, type DestinationData } from "@/app/tours/api"
 
-interface Destination {
-  name: string
-  image: string
-  href: string
-  tourCount: number
-}
-
-const DESTINATIONS: Destination[] = [
-  { name: "Peru", image: "/destinations/peru.jpg", href: "/tours?destination=peru", tourCount: 450 },
-  { name: "Nepal", image: "/destinations/nepal.png", href: "/tours?destination=nepal", tourCount: 450 },
-  { name: "Italy", image: "/destinations/italy.jpg", href: "/tours?destination=italy", tourCount: 450 },
-  { name: "Thailand", image: "/destinations/thailand.jpg", href: "/tours?destination=thailand", tourCount: 450 },
-  { name: "Milan", image: "/destinations/milan.jpg", href: "/tours?destination=milan", tourCount: 450 },
-  { name: "Greece", image: "/destinations/greece.jpg", href: "/tours?destination=greece", tourCount: 450 },
-  { name: "Spain", image: "/destinations/spain.jpg", href: "/tours?destination=spain", tourCount: 450 },
-  { name: "London", image: "/destinations/london.jpg", href: "/tours?destination=london", tourCount: 450 },
+// Static fallback destinations (used during loading or if API fails)
+const FALLBACK_DESTINATIONS: DestinationData[] = [
+  { name: "United States", countryCode: "US", flag: "🇺🇸", flagImage: "https://flagcdn.com/us.svg", tourCount: 0, image: "/destinations/peru.jpg" },
+  { name: "Italy", countryCode: "IT", flag: "🇮🇹", flagImage: "https://flagcdn.com/it.svg", tourCount: 0, image: "/destinations/italy.jpg" },
+  { name: "France", countryCode: "FR", flag: "🇫🇷", flagImage: "https://flagcdn.com/fr.svg", tourCount: 0, image: "/destinations/spain.jpg" },
+  { name: "Spain", countryCode: "ES", flag: "🇪🇸", flagImage: "https://flagcdn.com/es.svg", tourCount: 0, image: "/destinations/spain.jpg" },
+  { name: "Thailand", countryCode: "TH", flag: "🇹🇭", flagImage: "https://flagcdn.com/th.svg", tourCount: 0, image: "/destinations/thailand.jpg" },
+  { name: "Greece", countryCode: "GR", flag: "🇬🇷", flagImage: "https://flagcdn.com/gr.svg", tourCount: 0, image: "/destinations/greece.jpg" },
+  { name: "Japan", countryCode: "JP", flag: "🇯🇵", flagImage: "https://flagcdn.com/jp.svg", tourCount: 0, image: "/destinations/nepal.png" },
+  { name: "United Kingdom", countryCode: "GB", flag: "🇬🇧", flagImage: "https://flagcdn.com/gb.svg", tourCount: 0, image: "/destinations/london.jpg" },
 ]
 
+// Map country codes to destination images
+const DESTINATION_IMAGES: Record<string, string> = {
+  US: "/destinations/peru.jpg",
+  IT: "/destinations/italy.jpg",
+  FR: "/destinations/spain.jpg",
+  ES: "/destinations/spain.jpg",
+  TH: "/destinations/thailand.jpg",
+  GR: "/destinations/greece.jpg",
+  JP: "/destinations/nepal.png",
+  GB: "/destinations/london.jpg",
+  NL: "/destinations/milan.jpg",
+  DE: "/destinations/greece.jpg",
+  PE: "/destinations/peru.jpg",
+  NP: "/destinations/nepal.png",
+}
+
 export function TopDestinationsSection() {
+  const { data: destinations, isLoading, isError } = useTopDestinations(8)
+
+  // Use API data if available, otherwise fallback
+  const displayDestinations = destinations && destinations.length > 0
+    ? destinations.map(dest => ({
+        ...dest,
+        // Use local image if available, otherwise use flagImage
+        image: DESTINATION_IMAGES[dest.countryCode] || dest.flagImage
+      }))
+    : FALLBACK_DESTINATIONS
+
   return (
     <section className="py-12 md:py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -53,18 +77,29 @@ export function TopDestinationsSection() {
           </Link>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-[#00A699]" />
+            <span className="ml-3 text-gray-500">Loading destinations...</span>
+          </div>
+        )}
+
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
-          {DESTINATIONS.map((destination, index) => (
-            <DestinationCard
-              key={index}
-              name={destination.name}
-              image={destination.image}
-              href={destination.href}
-              tourCount={destination.tourCount}
-            />
-          ))}
-        </div>
+        {!isLoading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+            {displayDestinations.map((destination, index) => (
+              <DestinationCard
+                key={destination.countryCode || index}
+                name={destination.name}
+                image={destination.image}
+                href={`/tours?countries=${destination.countryCode}`}
+                tourCount={destination.tourCount}
+                flag={destination.flag}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
