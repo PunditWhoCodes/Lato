@@ -80,6 +80,8 @@ export interface TourDetail extends Omit<Tour, 'company' | 'reviews'> {
     responseTime: string
     country: string
     countryFlag: string
+    website?: string
+    email?: string
   }
   reviewCount: number
   languages: string[]
@@ -90,6 +92,18 @@ export interface TourDetail extends Omit<Tour, 'company' | 'reviews'> {
   reviews: Review[]
   relatedTours: RelatedTour[]
   images: string[]
+  // Enhanced fields from full API response
+  includedHtml?: string // Raw HTML content from API
+  notIncludedHtml?: string // Raw HTML content from API
+  tripDescription?: string // HTML description from API
+  itineraryDays?: ItineraryDay[] // Full day-by-day itinerary
+  accommodations?: Accommodation[] // All hotels from tripdays
+  activities?: TourActivity[] // All events from tripdays
+  startLocation?: LocationCoordinates
+  endLocation?: LocationCoordinates
+  nrOfDays?: number
+  currencySymbol?: string
+  currencyIso?: string
 }
 
 export interface ItineraryItem {
@@ -213,4 +227,81 @@ export interface QuickCategory {
   icon: any
   label: string
   value: string
+}
+
+// ============================================
+// Enhanced Types for Full API Integration
+// ============================================
+
+// Location with coordinates
+export interface LocationCoordinates {
+  id?: string
+  name: string
+  coordinates: [number, number] // [longitude, latitude]
+  address?: {
+    country_code: string | null
+    state: string | null
+    city: string | null
+    postal_code: string | null
+    street: string | null
+  }
+}
+
+// Full day-by-day itinerary
+export interface ItineraryDay {
+  dayNumber: number
+  tripdayIndex: number
+  title: string
+  description: string
+  location: LocationCoordinates
+  image: string
+  nrOfNights: number
+  accommodation?: Accommodation
+  activities: TourActivity[]
+  transportations: Transportation[]
+}
+
+// Accommodation/Hotel
+export interface Accommodation {
+  id: string
+  name: string
+  rating: number
+  type: string // e.g., "Hotel", "Resort", "Hostel"
+  images: string[]
+  nights: number
+  checkInDay: number
+  location: LocationCoordinates
+  board?: string // e.g., "Breakfast included"
+  website?: string
+  email?: string
+  phone?: string
+  description?: string
+}
+
+// Tour Activity/Event
+export interface TourActivity {
+  id: string
+  title: string
+  description: string
+  time: string | null
+  endTime: string | null
+  isOptional: boolean
+  location: LocationCoordinates
+  images: string[]
+  dayNumber?: number
+}
+
+// Transportation
+export interface Transportation {
+  id: string
+  title: string
+  description: string
+  type: string
+  carrier?: string
+  departureTime?: string
+  arrivalTime?: string
+  duration?: number
+  fromLocation?: LocationCoordinates
+  toLocation?: LocationCoordinates
+  images: string[]
 }
