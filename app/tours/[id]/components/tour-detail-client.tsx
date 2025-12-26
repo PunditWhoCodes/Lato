@@ -14,19 +14,7 @@ import { CompanySection } from "./company-section"
 import { RelatedTours } from "./related-tours"
 import { ReviewsSection } from "./reviews-section"
 import { SectionNavigation } from "./section-navigation"
-import {
-  WhatsIncluded,
-  AccommodationContent,
-  FlightsContent,
-  MealsContent,
-  GuidesContent,
-  TransportContent,
-  AdditionalServicesContent,
-  InsuranceExcludedContent,
-  FlightsExcludedContent,
-  GuidesExcludedContent,
-  TransportExcludedContent,
-} from "./whats-included"
+import { WhatsIncluded } from "./whats-included"
 import { WhereYouWillStay } from "./where-you-will-stay"
 import { CustomerPhotos } from "./customer-photos"
 import { useTourDetail } from "../hooks/useTourDetail"
@@ -35,62 +23,41 @@ interface TourDetailClientProps {
   tourId: string
 }
 
-// Static tour data matching Figma design
-const staticTourData = {
-  title: "Rainbow Mountain - Vinicunca",
+// Static fallback data for when API data is incomplete
+const staticFallbackData = {
+  title: "Tour",
   rating: 4.8,
-  reviewCount: 127,
-  location: "Peru",
-  price: 1877,
-  originalPrice: 2100,
-  duration: "10 days",
+  reviewCount: 0,
+  location: "International",
+  price: 0,
+  originalPrice: 0,
+  duration: "Multiple days",
   tourType: "Private Tour",
-  groupSize: "2 people",
+  groupSize: "Small Group",
   difficulty: "Medium",
-  minAge: "5 - 70 years",
+  minAge: "All ages",
   languages: ["English"],
   images: [
     "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=1200&h=800&fit=crop",
     "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=600",
     "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=600",
-    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600",
-    "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600"
   ],
-  included: [
-    { title: "Accommodation", content: <AccommodationContent /> },
-    { title: "Flights", content: <FlightsContent /> },
-    { title: "Meals", content: <MealsContent /> },
-    { title: "Guides", content: <GuidesContent /> },
-    { title: "Transport", content: <TransportContent /> },
-    { title: "Additional Services", content: <AdditionalServicesContent /> }
-  ],
-  notIncluded: [
-    { title: "Insurance", content: <InsuranceExcludedContent /> },
-    { title: "Flights", content: <FlightsExcludedContent /> },
-    { title: "Guides", content: <GuidesExcludedContent /> },
-    { title: "Transport", content: <TransportExcludedContent /> }
-  ],
-  highlights: [
-    "Explore the entire city of Arequipa and the colorful Santa Catalina Convent",
-    "Venture to the Colca Canyon and catch a glimpse of the condors that glide above its walls",
-    "Tour Lake Titicaca and the floating islands of Uros",
-    "Embark on a guided tour of the ancient empire of Machu Picchu"
-  ],
+  highlights: [],
   company: {
-    name: "Peru Explorer Co.",
-    id: "peru-explorer",
-    avatar: "https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=200&h=200&fit=crop",
+    name: "Tour Operator",
+    id: "",
+    avatar: "",
     rating: 4.8,
-    reviews: 342,
-    verified: true,
+    reviews: 0,
+    verified: false,
     responseTime: "Usually responds within 24 hours",
-    country: "Peru",
-    countryFlag: "🇵🇪"
+    country: "International",
+    countryFlag: "🌍"
   }
 }
 
 export function TourDetailClient({ tourId }: TourDetailClientProps) {
-  const { tour, isLoading, isError, error, refetch } = useTourDetail({ tourId })
+  const { tour, tourDetail, isLoading, isError, error, refetch } = useTourDetail({ tourId })
 
   // Section navigation state
   const [activeSection, setActiveSection] = useState("highlights")
@@ -175,36 +142,55 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
     )
   }
 
-  // Use API data if available, fallback to static data
-  const tourData = tour ? {
-    title: tour.title || staticTourData.title,
-    rating: tour.rating || staticTourData.rating,
-    reviewCount: tour.reviews || staticTourData.reviewCount,
-    location: tour.location || staticTourData.location,
-    price: tour.price || staticTourData.price,
-    originalPrice: tour.originalPrice || staticTourData.originalPrice,
-    duration: tour.duration || staticTourData.duration,
-    tourType: tour.tourType || staticTourData.tourType,
-    groupSize: tour.groupSize || staticTourData.groupSize,
-    difficulty: tour.difficulty || staticTourData.difficulty,
-    minAge: staticTourData.minAge,
-    languages: staticTourData.languages,
-    images: tour.image ? [tour.image, ...staticTourData.images.slice(1)] : staticTourData.images,
-    included: staticTourData.included,
-    notIncluded: staticTourData.notIncluded,
-    highlights: tour.highlights?.length ? tour.highlights : staticTourData.highlights,
-    company: {
-      name: tour.company || staticTourData.company.name,
-      id: tour.companyId || staticTourData.company.id,
-      avatar: staticTourData.company.avatar,
-      rating: tour.rating || staticTourData.company.rating,
-      reviews: tour.reviews || staticTourData.company.reviews,
-      verified: tour.badges?.includes("Verified Operator") || staticTourData.company.verified,
-      responseTime: staticTourData.company.responseTime,
-      country: tour.companyCountry || staticTourData.company.country,
-      countryFlag: tour.companyFlag || staticTourData.company.countryFlag
-    }
-  } : staticTourData
+  // Build tour data from API response with fallbacks
+  const tourData = {
+    title: tourDetail?.title || tour?.title || staticFallbackData.title,
+    rating: tourDetail?.rating || tour?.rating || staticFallbackData.rating,
+    reviewCount: tourDetail?.reviewCount || tour?.reviews || staticFallbackData.reviewCount,
+    location: tourDetail?.location || tour?.location || staticFallbackData.location,
+    price: tourDetail?.price || tour?.price || staticFallbackData.price,
+    originalPrice: tourDetail?.originalPrice || tour?.originalPrice || staticFallbackData.originalPrice,
+    duration: tourDetail?.duration || tour?.duration || staticFallbackData.duration,
+    tourType: tourDetail?.tourType || tour?.tourType || staticFallbackData.tourType,
+    groupSize: tourDetail?.groupSize || tour?.groupSize || staticFallbackData.groupSize,
+    difficulty: tourDetail?.difficulty || tour?.difficulty || staticFallbackData.difficulty,
+    minAge: staticFallbackData.minAge,
+    languages: tourDetail?.languages || staticFallbackData.languages,
+    // Use real images from API if available
+    images: (tourDetail?.images && tourDetail.images.length > 0)
+      ? tourDetail.images
+      : (tour?.image ? [tour.image, ...staticFallbackData.images.slice(1)] : staticFallbackData.images),
+    // Use real highlights from API
+    highlights: (tourDetail?.highlights && tourDetail.highlights.length > 0)
+      ? tourDetail.highlights
+      : (tour?.highlights || staticFallbackData.highlights),
+    // Company info
+    company: tourDetail?.company || {
+      name: tour?.company || staticFallbackData.company.name,
+      id: tour?.companyId || staticFallbackData.company.id,
+      avatar: staticFallbackData.company.avatar,
+      rating: tour?.rating || staticFallbackData.company.rating,
+      reviews: tour?.reviews || staticFallbackData.company.reviews,
+      verified: tour?.badges?.includes("Verified Operator") || staticFallbackData.company.verified,
+      responseTime: staticFallbackData.company.responseTime,
+      country: tour?.companyCountry || staticFallbackData.company.country,
+      countryFlag: tour?.companyFlag || staticFallbackData.company.countryFlag
+    },
+    // Enhanced data from full API response
+    itineraryDays: tourDetail?.itineraryDays || [],
+    accommodations: tourDetail?.accommodations || [],
+    activities: tourDetail?.activities || [],
+    includedHtml: tourDetail?.includedHtml || '',
+    notIncludedHtml: tourDetail?.notIncludedHtml || '',
+    included: tourDetail?.included || [],
+    notIncluded: tourDetail?.notIncluded || [],
+    tripDescription: tourDetail?.tripDescription || tourDetail?.description || '',
+    startLocation: tourDetail?.startLocation,
+    endLocation: tourDetail?.endLocation,
+    nrOfDays: tourDetail?.nrOfDays,
+    currencySymbol: tourDetail?.currencySymbol || '€',
+    currencyIso: tourDetail?.currencyIso || 'EUR'
+  }
 
   // Extract destination from location (e.g., "Cusco, Peru" -> "Peru")
   const destination = tourData.location?.split(",").pop()?.trim() || tourData.location
@@ -213,6 +199,10 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
   const discountPercent = tourData.originalPrice && tourData.originalPrice > tourData.price
     ? Math.round(((tourData.originalPrice - tourData.price) / tourData.originalPrice) * 100)
     : 0
+
+  // Get start/end location names for HighlightsSection
+  const startLocationName = tourData.startLocation?.name || `${destination}`
+  const endLocationName = tourData.endLocation?.name || startLocationName
 
   return (
     <div>
@@ -262,27 +252,39 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
             <div ref={highlightsRef} className="scroll-mt-24">
               <HighlightsSection
                 highlights={tourData.highlights}
-                startLocation="Lima, Peru"
-                endLocation="Lima, Peru"
+                startLocation={startLocationName}
+                endLocation={endLocationName}
+                startCoordinates={tourData.startLocation?.coordinates}
+                endCoordinates={tourData.endLocation?.coordinates}
+                itineraryDays={tourData.itineraryDays}
               />
             </div>
 
             {/* Tour Itinerary - Day by Day */}
             <div ref={itineraryRef} className="scroll-mt-24">
-              <TourItinerary />
+              <TourItinerary
+                itineraryDays={tourData.itineraryDays}
+                nrOfDays={tourData.nrOfDays}
+              />
             </div>
 
             {/* What's Included / Excluded */}
             <WhatsIncluded
+              includedHtml={tourData.includedHtml}
+              notIncludedHtml={tourData.notIncludedHtml}
               included={tourData.included}
               notIncluded={tourData.notIncluded}
             />
 
             {/* Where You Will Stay */}
-            <WhereYouWillStay />
+            <WhereYouWillStay
+              accommodations={tourData.accommodations}
+            />
 
             {/* Customer Photos */}
-            <CustomerPhotos />
+            <CustomerPhotos
+              images={tourData.images.slice(0, 10)}
+            />
           </div>
           {/* Get Trip Exclusive Discount CTA */}
           <JoinExperience />
@@ -310,8 +312,9 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           <BookingSidebar
             price={tourData.price}
             originalPrice={tourData.originalPrice}
-            savings={tourData.originalPrice - tourData.price}
-            creditEarned={Math.round(tourData.price * 0.05)}
+            savings={tourData.originalPrice && tourData.price ? tourData.originalPrice - tourData.price : 0}
+            creditEarned={Math.round((tourData.price || 0) * 0.05)}
+            currency={tourData.currencySymbol}
           />
         </div>
       </div>
