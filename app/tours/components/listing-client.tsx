@@ -20,6 +20,38 @@ import type { Tour } from "@/types"
 import type { APIUserTrip } from "../api"
 
 const ITEMS_PER_PAGE = 12
+// Default slider range - filters only apply when user changes from these defaults
+const DEFAULT_PRICE_RANGE: [number, number] = [2000, 12000]
+
+/**
+ * Parse duration string to number of days
+ * Examples: "5 Days", "7 days", "10 Days / 9 Nights", "Multiple days"
+ */
+function parseDurationDays(duration: string): number | null {
+  if (!duration) return null
+  const match = duration.match(/(\d+)\s*day/i)
+  return match ? parseInt(match[1], 10) : null
+}
+
+/**
+ * Check if tour matches group type filter
+ */
+function matchesGroupType(tour: TourCardData, selectedGroups: string[]): boolean {
+  if (selectedGroups.length === 0) return true
+
+  const groupSize = tour.groupSize?.toLowerCase() || ""
+  const hasFamilyPlan = tour.hasFamilyPlan
+
+  return selectedGroups.some(group => {
+    const g = group.toLowerCase()
+    if (g === "solo") return groupSize.includes("solo") || groupSize.includes("1")
+    if (g === "couple") return groupSize.includes("couple") || groupSize.includes("2")
+    if (g === "family") return hasFamilyPlan || groupSize.includes("family")
+    if (g === "group") return groupSize.includes("group") || groupSize.includes("small")
+    if (g === "private") return groupSize.includes("private")
+    return false
+  })
+}
 
 /**
  * Map Tour from API to TourCardData format for the listing card
@@ -113,9 +145,11 @@ export function ListingClient() {
   const [durationMax, setDurationMax] = useState("")
   const [expandedTravelStyles, setExpandedTravelStyles] = useState<string[]>([])
   const [selectedTravelStyleTypes, setSelectedTravelStyleTypes] = useState<string[]>([])
-  const [selectedMonth, setSelectedMonth] = useState("July")
-  const [selectedYear, setSelectedYear] = useState(2024)
-  const [selectedDays, setSelectedDays] = useState<number[]>([13])
+  // Initialize with current month/year, no pre-selected days
+  const currentDate = new Date()
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.toLocaleString('default', { month: 'long' }))
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear())
+  const [selectedDays, setSelectedDays] = useState<number[]>([])
   const [dateType, setDateType] = useState<"start" | "end">("start")
   const [startDate, setStartDate] = useState<number | null>(null)
   const [endDate, setEndDate] = useState<number | null>(null)
@@ -178,6 +212,29 @@ export function ListingClient() {
   const appliedFilters: AppliedFilter[] = useMemo(() => {
     const filters: AppliedFilter[] = []
 
+    // Price range filter (show if different from default)
+    if (priceRange[0] !== DEFAULT_PRICE_RANGE[0] || priceRange[1] !== DEFAULT_PRICE_RANGE[1]) {
+      filters.push({
+        id: "priceRange",
+        label: `$${priceRange[0].toLocaleString()} - $${priceRange[1].toLocaleString()}`,
+        type: "priceRange",
+      })
+    }
+
+    // Duration filter
+    if (durationMin || durationMax) {
+      const label = durationMin && durationMax
+        ? `${durationMin} - ${durationMax} days`
+        : durationMin
+        ? `Min ${durationMin} days`
+        : `Max ${durationMax} days`
+      filters.push({
+        id: "duration",
+        label,
+        type: "duration",
+      })
+    }
+
     if (startDate !== null) {
       const suffix = startDate === 1 || startDate === 21 || startDate === 31 ? "st"
         : startDate === 2 || startDate === 22 ? "nd"
@@ -203,9 +260,13 @@ export function ListingClient() {
     }
 
     selectedDays.forEach((day) => {
+      const suffix = day === 1 || day === 21 || day === 31 ? "st"
+        : day === 2 || day === 22 ? "nd"
+        : day === 3 || day === 23 ? "rd"
+        : "th"
       filters.push({
         id: day.toString(),
-        label: `Departs in July ${day}th`,
+        label: `Departs ${selectedMonth} ${day}${suffix}`,
         type: "day",
       })
     })
@@ -227,11 +288,18 @@ export function ListingClient() {
     })
 
     return filters
-  }, [startDate, endDate, selectedMonth, selectedYear, selectedDays, selectedGroup, selectedBestFor, selectedTourStyle, selectedTravelStyleTypes])
+  }, [priceRange, durationMin, durationMax, startDate, endDate, selectedMonth, selectedYear, selectedDays, selectedGroup, selectedBestFor, selectedTourStyle, selectedTravelStyleTypes])
 
   // Remove individual filter
   const handleRemoveFilter = (id: string, type: string) => {
     switch (type) {
+      case "priceRange":
+        setPriceRange([...DEFAULT_PRICE_RANGE])
+        break
+      case "duration":
+        setDurationMin("")
+        setDurationMax("")
+        break
       case "startDate":
         setStartDate(null)
         break
@@ -258,6 +326,7 @@ export function ListingClient() {
 
   // Clear all filters
   const handleClearAllFilters = () => {
+    setPriceRange([...DEFAULT_PRICE_RANGE])
     setSelectedGroup([])
     setSelectedBestFor([])
     setSelectedTourStyle([])
@@ -274,7 +343,7 @@ export function ListingClient() {
   // Reset all filters
   const handleResetFilters = () => {
     handleClearAllFilters()
-    setPriceRange([2000, 12000])
+    setPriceRange([...DEFAULT_PRICE_RANGE])
     setPriceType("person")
     setExpandedTravelStyles([])
     setOperatorSearch("")
@@ -308,9 +377,62 @@ export function ListingClient() {
     router.replace(`/tours${queryString ? `?${queryString}` : ""}`, { scroll: false })
   }
 
-  // Sort tours from API
+  // Check if price range has been changed from default
+  const isPriceFilterActive = priceRange[0] !== DEFAULT_PRICE_RANGE[0] || priceRange[1] !== DEFAULT_PRICE_RANGE[1]
+
+  // Filter tours based on all selected filters
+  const filteredTours = useMemo(() => {
+    return apiTours.filter(tour => {
+      // Price filter - only apply if user changed the slider
+      if (isPriceFilterActive) {
+        if (tour.price < priceRange[0] || tour.price > priceRange[1]) {
+          return false
+        }
+      }
+
+      // Duration filter
+      if (durationMin || durationMax) {
+        const tourDays = parseDurationDays(tour.duration)
+        if (tourDays !== null) {
+          if (durationMin && tourDays < parseInt(durationMin, 10)) return false
+          if (durationMax && tourDays > parseInt(durationMax, 10)) return false
+        }
+      }
+
+      // Group type filter
+      if (!matchesGroupType(tour, selectedGroup)) {
+        return false
+      }
+
+      // Tour style filter (Guided Tour, Self-Guided, etc.)
+      if (selectedTourStyle.length > 0) {
+        const tourTitle = tour.title?.toLowerCase() || ""
+        const tourSubtitle = tour.subtitle?.toLowerCase() || ""
+        const hasMatch = selectedTourStyle.some(style => {
+          const s = style.toLowerCase()
+          return tourTitle.includes(s) || tourSubtitle.includes(s)
+        })
+        if (!hasMatch) return false
+      }
+
+      // Travel style types filter (Adventure, Cultural, etc.)
+      if (selectedTravelStyleTypes.length > 0) {
+        const tourTitle = tour.title?.toLowerCase() || ""
+        const tourLocation = tour.location?.toLowerCase() || ""
+        const hasMatch = selectedTravelStyleTypes.some(type => {
+          const t = type.toLowerCase()
+          return tourTitle.includes(t) || tourLocation.includes(t)
+        })
+        if (!hasMatch) return false
+      }
+
+      return true
+    })
+  }, [apiTours, isPriceFilterActive, priceRange, durationMin, durationMax, selectedGroup, selectedTourStyle, selectedTravelStyleTypes])
+
+  // Sort filtered tours
   const sortedTours = useMemo(() => {
-    const sorted = [...apiTours]
+    const sorted = [...filteredTours]
     switch (sortBy) {
       case "price-low":
         return sorted.sort((a, b) => a.price - b.price)
@@ -322,13 +444,20 @@ export function ListingClient() {
       default:
         return sorted.sort((a, b) => b.rating - a.rating)
     }
-  }, [sortBy, apiTours])
+  }, [sortBy, filteredTours])
 
-  // Total count from API response
-  const totalCount = apiResponse?.count || 0
-  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE)
+  // Total count - use filtered count for display, API count for pagination
+  const apiTotalCount = apiResponse?.count || 0
+  const filteredCount = sortedTours.length
+  const hasActiveFilters = appliedFilters.length > 0
 
-  // Tours are already paginated from API
+  // When filters are active, show filtered count; otherwise show API total
+  const displayCount = hasActiveFilters ? filteredCount : apiTotalCount
+  const totalPages = hasActiveFilters
+    ? Math.ceil(filteredCount / ITEMS_PER_PAGE)
+    : Math.ceil(apiTotalCount / ITEMS_PER_PAGE)
+
+  // Tours to display
   const paginatedTours = sortedTours
 
   const getSortLabel = () => {
@@ -348,7 +477,7 @@ export function ListingClient() {
   return (
     <>
       {/* Hero Section */}
-      <ListingHero destination={displayCountryName} tourCount={totalCount} />
+      <ListingHero destination={displayCountryName} tourCount={displayCount} />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -487,7 +616,7 @@ export function ListingClient() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               {/* Results Count */}
               <p className="text-[#1C1B1F] text-[14px] font-medium">
-                {isLoading ? "Loading..." : `${totalCount} Results`}
+                {isLoading ? "Loading..." : `${displayCount} Results`}
               </p>
 
               {/* Sort & View Toggle */}
