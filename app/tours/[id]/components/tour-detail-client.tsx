@@ -214,6 +214,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           reviewCount={tourData.reviewCount}
           location={tourData.location}
           destination={destination}
+          tourId={tourId}
         />
       </div>
 

@@ -3,19 +3,48 @@
 import { useMemo } from "react"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
-import { Star, MapPin, ChevronRight, Trash2, LockOpen } from "lucide-react"
+import { Star, MapPin, ChevronRight, Trash2, Loader2 } from "lucide-react"
 import { ProtectedRoute, useAuth } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
-import { tours } from "@/lib/data"
+import { tours as mockTours } from "@/lib/data"
 import { ShimmerImage } from "@/components/ui/shimmer-image"
+import { useMarketplaceTrips } from "@/app/tours/api"
+import { mapUserTripsToTours } from "@/app/tours/api/trips.mappers"
+import type { Tour } from "@/types"
 
 export default function WishlistPage() {
   const { user } = useAuth()
   const { savedTours } = useSavedTours()
 
+  // Fetch API tours
+  const { data: apiResponse, isLoading: isLoadingApi } = useMarketplaceTrips({
+    step: 100, // Fetch more to ensure we get saved tours
+    page: 1,
+  })
+
+  // Map API tours to Tour format
+  const apiTours = useMemo(() => {
+    if (!apiResponse?.data) return []
+    return mapUserTripsToTours(apiResponse.data)
+  }, [apiResponse])
+
+  // Combine mock tours and API tours, then filter by saved IDs
   const savedTripsData = useMemo(() => {
-    return tours.filter((tour) => savedTours.includes(tour.id))
-  }, [savedTours])
+    // Add uuid to mock tours for consistent identification
+    const mockToursWithUuid: Tour[] = mockTours.map(tour => ({
+      ...tour,
+      uuid: tour.uuid || tour.id.toString()
+    }))
+
+    // Combine all tours
+    const allTours = [...mockToursWithUuid, ...apiTours]
+
+    // Filter by saved tour IDs (using uuid or id.toString())
+    return allTours.filter((tour) => {
+      const tourIdentifier = tour.uuid || tour.id.toString()
+      return savedTours.includes(tourIdentifier)
+    })
+  }, [savedTours, apiTours])
 
   return (
     <ProtectedRoute>
@@ -33,10 +62,15 @@ export default function WishlistPage() {
 
           <h1 className="text-3xl font-bold text-[#1C1B1F] mb-8">Wishlist</h1>
 
-          {savedTripsData.length > 0 ? (
+          {isLoadingApi ? (
+            <div className="flex flex-col items-center justify-center py-16">
+              <Loader2 className="h-10 w-10 animate-spin text-[#00A699] mb-4" />
+              <p className="text-gray-500">Loading your saved tours...</p>
+            </div>
+          ) : savedTripsData.length > 0 ? (
             <div className="space-y-6">
               {savedTripsData.map((tour) => (
-                <WishlistTourCard key={tour.id} tour={tour} />
+                <WishlistTourCard key={tour.uuid || tour.id} tour={tour} />
               ))}
             </div>
           ) : (
@@ -64,8 +98,9 @@ export default function WishlistPage() {
   )
 }
 
-function WishlistTourCard({ tour }: { tour: typeof tours[0] }) {
+function WishlistTourCard({ tour }: { tour: Tour }) {
   const { toggleSaveTour } = useSavedTours()
+  const tourIdentifier = tour.uuid || tour.id.toString()
 
   const description = `Duration: ${tour.duration}. ${tour.highlights?.slice(0, 2).join(", ")}. Overall, the tour was successful! Thank you.`
   const destinations = tour.location.split(",").map(d => d.trim())
@@ -76,7 +111,7 @@ function WishlistTourCard({ tour }: { tour: typeof tours[0] }) {
   const hasDiscount = discountPercent > 0
 
   const handleRemove = () => {
-    toggleSaveTour(tour.id)
+    toggleSaveTour(tourIdentifier)
   }
 
   return (
@@ -141,14 +176,14 @@ function WishlistTourCard({ tour }: { tour: typeof tours[0] }) {
 
         <div className="flex flex-col gap-2.5">
           <Link
-            href={`/tours/${tour.id}`}
+            href={`/tours/${tourIdentifier}`}
             className="group relative overflow-hidden w-full py-2.5 bg-[#00A792] text-white text-center font-medium rounded-full text-[14px] transition"
           >
             <span className="relative z-10">View Tour</span>
             <span className="absolute inset-0 bg-[#1C1B1F] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
           </Link>
           <Link
-            href={`/tours/${tour.id}?enquiry=true`}
+            href={`/tours/${tourIdentifier}?enquiry=true`}
             className="group relative overflow-hidden w-full py-2.5 border border-[#E5E5E5] bg-[#F9FAFB] text-[#1C1B1F] text-center font-medium rounded-full text-[14px] transition"
           >
             <span className="relative z-10 group-hover:text-white transition-colors duration-300">Make an Enquiry</span>

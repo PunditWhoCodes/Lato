@@ -148,7 +148,7 @@ export function HowItWorks() {
         </div>
 
         {/* EXPLORE MORE BUTTON */}
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <div className="group">
             <Button
               size="lg"
@@ -165,7 +165,6 @@ export function HowItWorks() {
               >
                 <span className="relative z-20">Explore More</span>
 
-                {/* Radial expanding hover overlay */}
                 <span
                   className="
                     absolute inset-0
@@ -180,9 +179,7 @@ export function HowItWorks() {
               </Link>
             </Button>
           </div>
-        </div>
-
-
+        </div> */}
 
       </div>
     </section>

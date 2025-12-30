@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { Star, Clock, Users, Heart, CarFrontIcon, Car } from "lucide-react"
+import { Star, Clock, Users, Heart, Car } from "lucide-react"
 import Image from "next/image"
+import { useSavedTours } from "@/lib/saved-tours-context"
 
 export interface TourCardData {
   id: number
@@ -52,7 +52,10 @@ function getDiscountPercent(original: number, discounted: number): number {
 }
 
 export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false)
+  const { toggleSaveTour, isTourSaved } = useSavedTours()
+  const tourIdentifier = tour.uuid || tour.id.toString()
+  const isFavorite = isTourSaved(tourIdentifier)
+
   const hasDiscount = tour.originalPrice && tour.originalPrice > tour.price
   const discountPercent = hasDiscount
     ? getDiscountPercent(tour.originalPrice!, tour.price)
@@ -60,7 +63,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setIsFavorite(!isFavorite)
+    toggleSaveTour(tourIdentifier)
   }
 
   if (viewMode === "list") {

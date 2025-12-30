@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { Star, Heart, MapPin } from "lucide-react"
+import { useSavedTours } from "@/lib/saved-tours-context"
 
 interface TourHeaderProps {
   title: string
@@ -10,6 +10,7 @@ interface TourHeaderProps {
   reviewCount: number
   location?: string
   destination?: string
+  tourId: string
 }
 
 export function TourHeader({
@@ -17,9 +18,11 @@ export function TourHeader({
   rating,
   reviewCount,
   location = "Peru",
-  destination = "Peru"
+  destination = "Peru",
+  tourId
 }: TourHeaderProps) {
-  const [isFavorite, setIsFavorite] = useState(false)
+  const { toggleSaveTour, isTourSaved } = useSavedTours()
+  const isFavorite = isTourSaved(tourId)
 
   return (
     <div className="space-y-3">
@@ -77,10 +80,11 @@ export function TourHeader({
 
         {/* Right Column - Heart Icon (matching tour card style) */}
         <button
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={() => toggleSaveTour(tourId)}
           className={`w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-[#E8E8E8] hover:border-[#00A699] transition-all duration-300 shrink-0 ${
             isFavorite ? "rotate-360" : ""
           }`}
+          aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}
         >
           <Heart
             className={`w-5 h-5 transition-colors ${

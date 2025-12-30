@@ -18,11 +18,12 @@ interface TourGridCardProps {
 
 export function TourGridCard({ tour, onClick }: TourGridCardProps) {
   const { toggleSaveTour, isTourSaved } = useSavedTours()
-  const isSaved = isTourSaved(tour.id)
+  const tourIdentifier = tour.uuid || tour.id.toString()
+  const isSaved = isTourSaved(tourIdentifier)
 
   const handleSaveClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    toggleSaveTour(tour.id)
+    toggleSaveTour(tourIdentifier)
   }
 
   return (

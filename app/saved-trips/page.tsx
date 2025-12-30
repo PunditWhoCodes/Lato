@@ -38,7 +38,10 @@ export default function SavedTripsPage() {
 
   // Get actual saved tours data
   const savedTripsData = useMemo(() => {
-    return tours.filter((tour) => savedTours.includes(tour.id))
+    return tours.filter((tour) => {
+      const tourIdentifier = tour.uuid || tour.id.toString()
+      return savedTours.includes(tourIdentifier)
+    })
   }, [savedTours])
 
   // Get actual saved companies data
@@ -60,7 +63,7 @@ export default function SavedTripsPage() {
       company.description.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const removeSavedTrip = (tripId: number) => {
+  const removeSavedTrip = (tripId: string) => {
     toggleSaveTour(tripId)
   }
 
@@ -130,7 +133,7 @@ export default function SavedTripsPage() {
                             size="sm"
                             variant="secondary"
                             className="bg-white/90 hover:bg-white text-red-500 hover:text-red-600"
-                            onClick={() => removeSavedTrip(trip.id)}
+                            onClick={() => removeSavedTrip(trip.uuid || trip.id.toString())}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -185,12 +188,12 @@ export default function SavedTripsPage() {
                           </div>
                           <div className="flex gap-2">
                             <Button size="sm" variant="outline" asChild>
-                              <Link href={`/messages/conv-${trip.id}`}>
+                              <Link href={`/messages/conv-${trip.uuid || trip.id}`}>
                                 <MessageCircle className="w-4 h-4" />
                               </Link>
                             </Button>
                             <Button size="sm" asChild>
-                              <Link href={`/tours/${trip.id}`}>View Details</Link>
+                              <Link href={`/tours/${trip.uuid || trip.id}`}>View Details</Link>
                             </Button>
                           </div>
                         </div>
