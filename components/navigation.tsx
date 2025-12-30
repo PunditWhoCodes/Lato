@@ -148,7 +148,7 @@ export function Navigation() {
 
                 <Link
                   href="/wishlist"
-                  className={`p-2 rounded-full transition-colors ${
+                  className={`p-2 rounded-full transition-colors relative ${
                     isWishlistPage
                       ? "text-[#00A699]"
                       : "text-gray-700 hover:text-[#00A699]"
@@ -157,6 +157,11 @@ export function Navigation() {
                   <Heart
                     className={`h-5 w-5 ${isWishlistPage ? "fill-[#00A699]" : ""}`}
                   />
+                  {savedToursCount > 0 && (
+                    <Badge className="absolute -top-1 -right-1 bg-[#00A699] text-white text-xs min-w-[18px] h-[18px] flex items-center justify-center p-0 rounded-full">
+                      {savedToursCount}
+                    </Badge>
+                  )}
                 </Link>
 
                 <Link
