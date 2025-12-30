@@ -5,32 +5,68 @@ import { DestinationCard } from "./destination-card"
 import { ArrowUpRight, Loader2 } from "lucide-react"
 import { useTopDestinations, type DestinationData } from "@/app/tours/api"
 
-// Static fallback destinations (used during loading or if API fails)
-const FALLBACK_DESTINATIONS: DestinationData[] = [
-  { name: "United States", countryCode: "US", flag: "🇺🇸", flagImage: "https://flagcdn.com/us.svg", tourCount: 0, image: "/destinations/peru.jpg" },
-  { name: "Italy", countryCode: "IT", flag: "🇮🇹", flagImage: "https://flagcdn.com/it.svg", tourCount: 0, image: "/destinations/italy.jpg" },
-  { name: "France", countryCode: "FR", flag: "🇫🇷", flagImage: "https://flagcdn.com/fr.svg", tourCount: 0, image: "/destinations/spain.jpg" },
-  { name: "Spain", countryCode: "ES", flag: "🇪🇸", flagImage: "https://flagcdn.com/es.svg", tourCount: 0, image: "/destinations/spain.jpg" },
-  { name: "Thailand", countryCode: "TH", flag: "🇹🇭", flagImage: "https://flagcdn.com/th.svg", tourCount: 0, image: "/destinations/thailand.jpg" },
-  { name: "Greece", countryCode: "GR", flag: "🇬🇷", flagImage: "https://flagcdn.com/gr.svg", tourCount: 0, image: "/destinations/greece.jpg" },
-  { name: "Japan", countryCode: "JP", flag: "🇯🇵", flagImage: "https://flagcdn.com/jp.svg", tourCount: 0, image: "/destinations/nepal.png" },
-  { name: "United Kingdom", countryCode: "GB", flag: "🇬🇧", flagImage: "https://flagcdn.com/gb.svg", tourCount: 0, image: "/destinations/london.jpg" },
-]
+// Default fallback image for destinations without specific images
+const DEFAULT_DESTINATION_IMAGE = "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80"
 
-// Map country codes to destination images
+// Map country codes to destination images (local or Unsplash)
 const DESTINATION_IMAGES: Record<string, string> = {
-  US: "/destinations/peru.jpg",
+  // Local images (available in /public/destinations/)
   IT: "/destinations/italy.jpg",
-  FR: "/destinations/spain.jpg",
   ES: "/destinations/spain.jpg",
   TH: "/destinations/thailand.jpg",
   GR: "/destinations/greece.jpg",
-  JP: "/destinations/nepal.png",
   GB: "/destinations/london.jpg",
-  NL: "/destinations/milan.jpg",
-  DE: "/destinations/greece.jpg",
   PE: "/destinations/peru.jpg",
   NP: "/destinations/nepal.png",
+
+  // Unsplash images for countries without local images
+  US: "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=800&q=80", // NYC skyline
+  FR: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80", // Paris Eiffel Tower
+  JP: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80", // Japan temple
+  DE: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80", // Germany
+  NL: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80", // Amsterdam
+  AU: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&q=80", // Sydney
+  CA: "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800&q=80", // Canada
+  MX: "https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=800&q=80", // Mexico
+  BR: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", // Brazil Rio
+  AR: "https://images.unsplash.com/photo-1612294037637-ec328d0e075e?w=800&q=80", // Argentina
+  PT: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800&q=80", // Portugal
+  CH: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=800&q=80", // Switzerland
+  AT: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=800&q=80", // Austria
+  IN: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80", // India Taj Mahal
+  CN: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&q=80", // China Great Wall
+  EG: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=800&q=80", // Egypt pyramids
+  ZA: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80", // South Africa
+  AE: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80", // Dubai
+  TR: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?w=800&q=80", // Turkey
+  ID: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", // Bali Indonesia
+  VN: "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", // Vietnam
+  PH: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&q=80", // Philippines
+  KR: "https://images.unsplash.com/photo-1538485399081-7191377e8241?w=800&q=80", // South Korea
+  NZ: "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800&q=80", // New Zealand
+  IE: "https://images.unsplash.com/photo-1590089415225-401ed6f9db8e?w=800&q=80", // Ireland
+  HR: "https://images.unsplash.com/photo-1555990538-1e7a7210c674?w=800&q=80", // Croatia
+  CZ: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80", // Czech Republic Prague
+  MA: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=800&q=80", // Morocco
+  CO: "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", // Colombia
+  CL: "https://images.unsplash.com/photo-1478827536114-da961b7f86d2?w=800&q=80", // Chile
+}
+
+// Static fallback destinations (used during loading or if API fails)
+const FALLBACK_DESTINATIONS: DestinationData[] = [
+  { name: "Italy", countryCode: "IT", flag: "🇮🇹", flagImage: "https://flagcdn.com/it.svg", tourCount: 0, image: DESTINATION_IMAGES.IT },
+  { name: "Spain", countryCode: "ES", flag: "🇪🇸", flagImage: "https://flagcdn.com/es.svg", tourCount: 0, image: DESTINATION_IMAGES.ES },
+  { name: "Thailand", countryCode: "TH", flag: "🇹🇭", flagImage: "https://flagcdn.com/th.svg", tourCount: 0, image: DESTINATION_IMAGES.TH },
+  { name: "Greece", countryCode: "GR", flag: "🇬🇷", flagImage: "https://flagcdn.com/gr.svg", tourCount: 0, image: DESTINATION_IMAGES.GR },
+  { name: "France", countryCode: "FR", flag: "🇫🇷", flagImage: "https://flagcdn.com/fr.svg", tourCount: 0, image: DESTINATION_IMAGES.FR },
+  { name: "Japan", countryCode: "JP", flag: "🇯🇵", flagImage: "https://flagcdn.com/jp.svg", tourCount: 0, image: DESTINATION_IMAGES.JP },
+  { name: "United Kingdom", countryCode: "GB", flag: "🇬🇧", flagImage: "https://flagcdn.com/gb.svg", tourCount: 0, image: DESTINATION_IMAGES.GB },
+  { name: "United States", countryCode: "US", flag: "🇺🇸", flagImage: "https://flagcdn.com/us.svg", tourCount: 0, image: DESTINATION_IMAGES.US },
+]
+
+// Helper to get destination image with fallback
+function getDestinationImage(countryCode: string, flagImage?: string): string {
+  return DESTINATION_IMAGES[countryCode] || flagImage || DEFAULT_DESTINATION_IMAGE
 }
 
 export function TopDestinationsSection() {
@@ -40,8 +76,8 @@ export function TopDestinationsSection() {
   const displayDestinations = destinations && destinations.length > 0
     ? destinations.map(dest => ({
         ...dest,
-        // Use local image if available, otherwise use flagImage
-        image: DESTINATION_IMAGES[dest.countryCode] || dest.flagImage
+        // Use mapped image with proper fallback chain
+        image: getDestinationImage(dest.countryCode, dest.flagImage)
       }))
     : FALLBACK_DESTINATIONS
 
