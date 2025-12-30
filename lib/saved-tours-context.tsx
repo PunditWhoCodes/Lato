@@ -3,9 +3,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react"
 
 interface SavedToursContextType {
-  savedTours: number[]
-  toggleSaveTour: (tourId: number) => void
-  isTourSaved: (tourId: number) => boolean
+  savedTours: string[]
+  toggleSaveTour: (tourId: string) => void
+  isTourSaved: (tourId: string) => boolean
   savedToursCount: number
 }
 
@@ -13,10 +13,14 @@ const SavedToursContext = createContext<SavedToursContextType | undefined>(undef
 
 const STORAGE_KEY = "lato_saved_tours"
 
-const DEFAULT_SAVED_TOURS = [1, 2, 3, 4, 5]
+// Helper to migrate old numeric IDs to strings
+function migrateToStringIds(data: unknown): string[] {
+  if (!Array.isArray(data)) return []
+  return data.map((id) => String(id))
+}
 
 export function SavedToursProvider({ children }: { children: React.ReactNode }) {
-  const [savedTours, setSavedTours] = useState<number[]>([])
+  const [savedTours, setSavedTours] = useState<string[]>([])
   const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
@@ -24,14 +28,16 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
         const parsed = JSON.parse(stored)
-        setSavedTours(Array.isArray(parsed) ? parsed : DEFAULT_SAVED_TOURS)
-      } else {
-        setSavedTours(DEFAULT_SAVED_TOURS)
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SAVED_TOURS))
+        // Migrate any old numeric IDs to strings
+        const migratedTours = migrateToStringIds(parsed)
+        setSavedTours(migratedTours)
+        // Save back migrated data if it was different
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migratedTours))
       }
+      // If no stored data, keep empty array (user starts fresh)
     } catch (error) {
       console.error("Failed to load saved tours:", error)
-      setSavedTours(DEFAULT_SAVED_TOURS)
+      // On error, keep empty array
     } finally {
       setIsHydrated(true)
     }
@@ -47,7 +53,7 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
     }
   }, [savedTours, isHydrated])
 
-  const toggleSaveTour = useCallback((tourId: number) => {
+  const toggleSaveTour = useCallback((tourId: string) => {
     setSavedTours((prev) => {
       if (prev.includes(tourId)) {
         return prev.filter((id) => id !== tourId)
@@ -57,7 +63,7 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
   }, [])
 
   const isTourSaved = useCallback(
-    (tourId: number) => {
+    (tourId: string) => {
       return savedTours.includes(tourId)
     },
     [savedTours]
