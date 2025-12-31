@@ -53,19 +53,24 @@ export default function AboutPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative h-[250px] md:h-80">
-        <Image
-          src="/destinations/italy.jpg"
-          alt="About Us"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/30" />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="relative h-[300px] md:h-[360px] rounded-[28px] overflow-hidden">
+          <Image
+            src="/destinations/italy.jpg"
+            alt="About Us"
+            fill
+            className="object-cover"
+            priority
+          />
 
-        {/* Title */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <h1 className="text-3xl md:text-5xl font-semibold text-white">About Us</h1>
+          {/* Center Card */}
+          <div className="absolute inset-0 flex items-center justify-center px-4">
+            <div className="bg-[#F4F6F6] rounded-[24px] px-10 md:px-14 py-8 shadow-[0_10px_32px_rgba(0,0,0,0.12)]">
+              <h1 className="font-poppins font-medium text-[32px] md:text-[40px] text-[#111827]">
+                About
+              </h1>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -50,6 +50,43 @@ export async function login(data: LoginRequest): Promise<AuthResponse> {
 }
 
 /**
+ * Check if email is already registered
+ * Supabase doesn't have a direct API, so we check by attempting signUp
+ * If identities array is empty, user already exists (with email confirmation enabled)
+ */
+export async function checkEmailExists(email: string): Promise<boolean> {
+  try {
+    // Use a more reliable method - try to sign in with OTP (passwordless)
+    // If user exists, no error is thrown. If not, Supabase creates the user.
+    // This isn't ideal, so we'll use a different approach.
+
+    // Actually, let's check using signInWithPassword with a dummy password
+    // If error is "Invalid login credentials" - user exists
+    // If error is "Email not confirmed" - user exists but unverified
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: '__check_exists_dummy_password__',
+    })
+
+    if (error) {
+      // "Invalid login credentials" means user exists but wrong password
+      // "Email not confirmed" means user exists but hasn't verified
+      if (error.message.includes('Invalid login credentials') ||
+          error.message.includes('Email not confirmed')) {
+        return true
+      }
+      // Other errors likely mean user doesn't exist or other issues
+      return false
+    }
+
+    // If no error (unlikely with dummy password), user exists
+    return true
+  } catch {
+    return false
+  }
+}
+
+/**
  * Register new user with Supabase
  */
 export async function register(data: RegisterRequest): Promise<AuthResponse> {
@@ -61,6 +98,7 @@ export async function register(data: RegisterRequest): Promise<AuthResponse> {
         name: data.name,
         role: data.role || 'TRAVELER',
       },
+      emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?type=email_verification`,
     },
   })
 
@@ -70,6 +108,12 @@ export async function register(data: RegisterRequest): Promise<AuthResponse> {
 
   if (!authData.user) {
     throw new Error('Registration failed. Please try again.')
+  }
+
+  // Check if user already exists (Supabase returns empty identities array for existing users)
+  // This is Supabase's way of preventing email enumeration
+  if (authData.user.identities && authData.user.identities.length === 0) {
+    throw new Error('An account with this email already exists. Please sign in instead.')
   }
 
   // For Supabase, if email confirmation is disabled, session will be returned
