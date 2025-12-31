@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -33,8 +33,20 @@ export default function SavedTripsPage() {
   const [activeTab, setActiveTab] = useState("trips")
 
   const { user } = useAuth()
-  const { savedTours, toggleSaveTour } = useSavedTours()
+  const { savedTours, toggleSaveTour, cleanupStaleTours } = useSavedTours()
   const { savedCompanies, toggleSaveCompany } = useSavedCompanies()
+
+  // Get all valid tour IDs from mock data
+  const allValidTourIds = useMemo(() => {
+    return tours.map(tour => tour.uuid || tour.id.toString())
+  }, [])
+
+  // Cleanup stale tour IDs on mount
+  useEffect(() => {
+    if (allValidTourIds.length > 0) {
+      cleanupStaleTours(allValidTourIds)
+    }
+  }, [allValidTourIds, cleanupStaleTours])
 
   // Get actual saved tours data
   const savedTripsData = useMemo(() => {
