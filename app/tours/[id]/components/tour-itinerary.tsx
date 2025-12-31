@@ -250,7 +250,10 @@ export function TourItinerary({
                                     )}
                                   </span>
                                   {activity.description && (
-                                    <p className="mt-1">{activity.description}</p>
+                                    <div
+                                      className="mt-1 [&>p]:m-0"
+                                      dangerouslySetInnerHTML={{ __html: activity.description }}
+                                    />
                                   )}
                                 </div>
                               </div>
@@ -274,11 +277,11 @@ export function TourItinerary({
                             ({item.accommodationType})
                           </span>
                         )}
-                        {item.accommodationRating && item.accommodationRating > 0 && (
+                        {/* {item.accommodationRating && item.accommodationRating > 0 && (
                           <span className="text-[12px] text-[#6B7280] ml-2">
                             Rating: {item.accommodationRating}/10
                           </span>
-                        )}
+                        )} */}
                         {item.nrOfNights > 0 && (
                           <span className="text-[12px] text-[#6B7280] ml-2">
                             ({item.nrOfNights} {item.nrOfNights === 1 ? 'night' : 'nights'})
