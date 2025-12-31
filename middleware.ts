@@ -10,6 +10,7 @@ import {
 
 const protectedRoutes = [
   '/saved-trips',
+  '/wishlist',
   '/messages',
   '/chats',
   '/dashboard',
@@ -40,7 +41,9 @@ export function middleware(request: NextRequest) {
   }
 
   const accessToken = request.cookies.get('lato_access_token')?.value
-  const isAuthenticated = !!accessToken
+
+  // Check if token exists and is not a pending token (from unverified registration)
+  const isAuthenticated = !!accessToken && !accessToken.startsWith('pending_')
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
@@ -54,7 +57,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 
-  if (isAuthRoute && isAuthenticated) {
+  // Only redirect away from auth routes if user is truly authenticated
+  // Don't redirect on RSC requests to prevent navigation issues
+  const isRSCRequest = request.headers.get('rsc') === '1' || request.nextUrl.searchParams.has('_rsc')
+
+  if (isAuthRoute && isAuthenticated && !isRSCRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
