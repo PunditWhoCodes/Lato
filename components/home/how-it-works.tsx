@@ -79,7 +79,7 @@ export function HowItWorks() {
 
           {/* DESKTOP VIEW MORE */}
           <Link
-            href="/tours"
+            href="/about"
             className="hidden lg:flex items-center gap-3 group"
           >
             <span className="text-[#495560] text-base group-hover:text-black transition-colors">

@@ -103,7 +103,7 @@ export function Footer() {
             </div>
 
             {/* Row 2: 3 columns */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
               {/* Travel Experiences */}
               <FooterColumn title="Travel Experiences">
                 <FooterLink href="/tours?style=adventure">Adventure Tours</FooterLink>

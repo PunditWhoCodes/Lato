@@ -3,17 +3,48 @@
 import { MapPin, ChevronDown, ChevronLeft, ChevronRight, Calendar, Minus, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useRef, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 
-const destinations = [
-  "Thailand", "Japan", "Indonesia", "Vietnam", "Malaysia",
-  "Singapore", "Philippines", "South Korea", "China", "India",
-  "Italy", "Spain", "Greece", "France", "Portugal",
-  "Germany", "Netherlands", "Switzerland", "Turkey", "Croatia",
-  "Morocco", "Egypt", "Kenya", "South Africa", "Tanzania",
-  "Peru", "Brazil", "Argentina", "Mexico", "Colombia"
+// Destination names with their country codes for URL navigation
+const DESTINATIONS: { name: string; code: string }[] = [
+  { name: "Thailand", code: "TH" },
+  { name: "Japan", code: "JP" },
+  { name: "Indonesia", code: "ID" },
+  { name: "Vietnam", code: "VN" },
+  { name: "Malaysia", code: "MY" },
+  { name: "Singapore", code: "SG" },
+  { name: "Philippines", code: "PH" },
+  { name: "South Korea", code: "KR" },
+  { name: "China", code: "CN" },
+  { name: "India", code: "IN" },
+  { name: "Italy", code: "IT" },
+  { name: "Spain", code: "ES" },
+  { name: "Greece", code: "GR" },
+  { name: "France", code: "FR" },
+  { name: "Portugal", code: "PT" },
+  { name: "Germany", code: "DE" },
+  { name: "Netherlands", code: "NL" },
+  { name: "Switzerland", code: "CH" },
+  { name: "Turkey", code: "TR" },
+  { name: "Croatia", code: "HR" },
+  { name: "Morocco", code: "MA" },
+  { name: "Egypt", code: "EG" },
+  { name: "Kenya", code: "KE" },
+  { name: "South Africa", code: "ZA" },
+  { name: "Tanzania", code: "TZ" },
+  { name: "Peru", code: "PE" },
+  { name: "Brazil", code: "BR" },
+  { name: "Argentina", code: "AR" },
+  { name: "Mexico", code: "MX" },
+  { name: "Colombia", code: "CO" },
 ]
 
+// Legacy array for backward compatibility
+const destinations = DESTINATIONS.map(d => d.name)
+
 export function SearchBar() {
+  const router = useRouter()
+
   // Destination state
   const [destination, setDestination] = useState("")
   const [showDestinationDropdown, setShowDestinationDropdown] = useState(false)
@@ -77,7 +108,34 @@ export function SearchBar() {
   }, [showDestinationDropdown, showCalendar, showPassengerDropdown])
 
   const handleSearch = () => {
-    console.log({ destination, selectedDate, adults, children })
+    // Build query parameters
+    const params = new URLSearchParams()
+
+    // Add country code if destination is selected
+    if (destination) {
+      const destInfo = DESTINATIONS.find(d => d.name === destination)
+      if (destInfo) {
+        params.set("countries", destInfo.code)
+      }
+    }
+
+    // Add date if selected (format: YYYY-MM-DD)
+    if (selectedDate) {
+      const dateStr = selectedDate.toISOString().split("T")[0]
+      params.set("date", dateStr)
+    }
+
+    // Add passengers
+    if (adults > 0) {
+      params.set("adults", String(adults))
+    }
+    if (children > 0) {
+      params.set("children", String(children))
+    }
+
+    // Navigate to tours page with filters
+    const queryString = params.toString()
+    router.push(`/tours${queryString ? `?${queryString}` : ""}`)
   }
 
   // Calendar helpers

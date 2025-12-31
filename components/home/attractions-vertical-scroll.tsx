@@ -161,7 +161,7 @@ export function AttractionsVerticalScroll() {
                         <div className="flex items-start justify-between gap-4">
                           <div>
                             <p className="text-white/90 font-normal text-xs md:text-sm mb-2 md:mb-3 drop-shadow-md">
-                              Find your most adventurous destinations and attractions you
+                              Find your next adventure in destinations that inspire you
                             </p>
                             <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light drop-shadow-lg leading-tight">
                               Attractions You Can&apos;t Miss

@@ -8,10 +8,14 @@ import { Eye, EyeOff, ChevronLeft, ChevronDown, Loader2 } from "lucide-react"
 import { RegisterOTPStep } from "@/components/auth/RegisterOTPStep"
 import { RegisterSelectTypeStep, UserType } from "@/components/auth/RegisterSelectTypeStep"
 import { RegisterVerifiedStep } from "@/components/auth/RegisterVerifiedStep"
+import { RegisterCheckEmailStep } from "@/components/auth/RegisterCheckEmailStep"
 import { useAuth } from "@/lib/hooks/useAuth"
-import { signInWithGoogle, signInWithApple } from "@/lib/api/auth"
+import { signInWithGoogle, signInWithApple, resendVerificationEmail } from "@/lib/api/auth"
 
-type RegistrationStep = "form" | "otp" | "select_type" | "verified"
+type RegistrationStep = "form" | "otp" | "select_type" | "check_email" | "verified"
+
+// Email validation regex
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 const countries = [
   { code: "GR", name: "Greece", dialCode: "+30" },
@@ -52,6 +56,12 @@ export default function RegisterPage() {
     setLocalError(null)
     clearError()
 
+    // Email format validation
+    if (!EMAIL_REGEX.test(email)) {
+      setLocalError("Please enter a valid email address")
+      return
+    }
+
     if (!acceptTerms) {
       setLocalError("Please accept the Terms of Use and Data Policy")
       return
@@ -70,11 +80,21 @@ export default function RegisterPage() {
         name,
         role: userType === "tour_operator" ? "PROVIDER" : "TRAVELER",
       })
-      // Registration successful - go to verified step
-      setCurrentStep("verified")
+      // Registration successful - show check email step
+      setCurrentStep("check_email")
     } catch (err) {
+      // Handle specific error messages
       const errorMessage = err instanceof Error ? err.message : "Registration failed. Please try again."
-      setLocalError(errorMessage)
+
+      // Check for duplicate email error from Supabase
+      if (errorMessage.toLowerCase().includes("already registered") ||
+          errorMessage.toLowerCase().includes("already exists") ||
+          errorMessage.toLowerCase().includes("duplicate") ||
+          errorMessage.toLowerCase().includes("user already")) {
+        setLocalError("An account with this email already exists. Please sign in or use a different email.")
+      } else {
+        setLocalError(errorMessage)
+      }
     } finally {
       setLocalLoading(false)
     }
@@ -89,6 +109,16 @@ export default function RegisterPage() {
   const handleOTPResend = () => {
     // Resend verification email would be handled here
     alert("Verification email has been resent")
+  }
+
+  const handleResendVerificationEmail = async () => {
+    // Use the proper Supabase resend API
+    await resendVerificationEmail(email)
+  }
+
+  const handleChangeEmail = () => {
+    // Go back to form to change email
+    setCurrentStep("form")
   }
 
   const handleSelectType = (type: UserType) => {
@@ -124,6 +154,9 @@ export default function RegisterPage() {
       case "otp":
         setCurrentStep("form")
         break
+      case "check_email":
+        setCurrentStep("form")
+        break
       case "verified":
         break
       default:
@@ -151,6 +184,15 @@ export default function RegisterPage() {
           <RegisterSelectTypeStep
             onSelect={handleSelectType}
             isLoading={showLoading}
+          />
+        )
+
+      case "check_email":
+        return (
+          <RegisterCheckEmailStep
+            email={email}
+            onResend={handleResendVerificationEmail}
+            onChangeEmail={handleChangeEmail}
           />
         )
 

@@ -18,16 +18,17 @@ interface TourCardProps {
 
 export function TourCard({ tour, variant = "default", discountPercent }: TourCardProps) {
   const { toggleSaveTour, isTourSaved } = useSavedTours()
-  const isSaved = isTourSaved(tour.id)
+  const tourIdentifier = tour.uuid || tour.id.toString()
+  const isSaved = isTourSaved(tourIdentifier)
 
   const handleSaveClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toggleSaveTour(tour.id)
+    toggleSaveTour(tourIdentifier)
   }
 
   // Use UUID if available, otherwise fall back to numeric ID
-  const tourLink = tour.uuid || tour.id.toString()
+  const tourLink = tourIdentifier
 
   // Featured variant - matches Figma design exactly
   if (variant === "featured") {
