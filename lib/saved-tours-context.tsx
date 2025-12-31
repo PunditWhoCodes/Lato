@@ -7,6 +7,7 @@ interface SavedToursContextType {
   toggleSaveTour: (tourId: string) => void
   isTourSaved: (tourId: string) => boolean
   savedToursCount: number
+  cleanupStaleTours: (validTourIds: string[]) => void
 }
 
 const SavedToursContext = createContext<SavedToursContextType | undefined>(undefined)
@@ -69,11 +70,25 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
     [savedTours]
   )
 
+  // Cleanup stale tour IDs that no longer exist in the available tours
+  const cleanupStaleTours = useCallback((validTourIds: string[]) => {
+    setSavedTours((prev) => {
+      const validSet = new Set(validTourIds)
+      const cleaned = prev.filter((id) => validSet.has(id))
+      // Only update if something changed
+      if (cleaned.length !== prev.length) {
+        return cleaned
+      }
+      return prev
+    })
+  }, [])
+
   const value = {
     savedTours,
     toggleSaveTour,
     isTourSaved,
     savedToursCount: savedTours.length,
+    cleanupStaleTours,
   }
 
   return <SavedToursContext.Provider value={value}>{children}</SavedToursContext.Provider>
