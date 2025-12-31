@@ -68,6 +68,7 @@ export const setRefreshToken = (token: string): void => {
     expires: 30, // 30 days
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     sameSite: 'lax',
+    path: '/',
   })
 }
 
@@ -88,6 +89,7 @@ export const setAccessTokenCookie = (token: string, expiresInSeconds: number): v
     expires: expiresInSeconds / 86400,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
+    path: '/',
   })
 }
 
