@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useEffect } from "react"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Star, MapPin, ChevronRight, Trash2, Loader2 } from "lucide-react"
@@ -14,7 +14,7 @@ import type { Tour } from "@/types"
 
 export default function WishlistPage() {
   const { user } = useAuth()
-  const { savedTours } = useSavedTours()
+  const { savedTours, cleanupStaleTours } = useSavedTours()
 
   // Fetch API tours
   const { data: apiResponse, isLoading: isLoadingApi } = useMarketplaceTrips({
@@ -27,6 +27,20 @@ export default function WishlistPage() {
     if (!apiResponse?.data) return []
     return mapUserTripsToTours(apiResponse.data)
   }, [apiResponse])
+
+  // Get all valid tour IDs
+  const allValidTourIds = useMemo(() => {
+    const mockIds = mockTours.map(tour => tour.uuid || tour.id.toString())
+    const apiIds = apiTours.map(tour => tour.uuid || tour.id.toString())
+    return [...mockIds, ...apiIds]
+  }, [apiTours])
+
+  // Cleanup stale tour IDs when data loads
+  useEffect(() => {
+    if (!isLoadingApi && allValidTourIds.length > 0) {
+      cleanupStaleTours(allValidTourIds)
+    }
+  }, [isLoadingApi, allValidTourIds, cleanupStaleTours])
 
   // Combine mock tours and API tours, then filter by saved IDs
   const savedTripsData = useMemo(() => {
@@ -183,7 +197,7 @@ function WishlistTourCard({ tour }: { tour: Tour }) {
             <span className="absolute inset-0 bg-[#1C1B1F] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
           </Link>
           <Link
-            href={`/tours/${tourIdentifier}?enquiry=true`}
+            href={`/chats?enquiry=true`}
             className="group relative overflow-hidden w-full py-2.5 border border-[#E5E5E5] bg-[#F9FAFB] text-[#1C1B1F] text-center font-medium rounded-full text-[14px] transition"
           >
             <span className="relative z-10 group-hover:text-white transition-colors duration-300">Make an Enquiry</span>
