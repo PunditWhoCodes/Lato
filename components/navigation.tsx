@@ -191,45 +191,32 @@ export function Navigation() {
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 p-1 bg-white" align="end" forceMount>
-                    <div className="flex flex-col space-y-1 px-3 py-2">
-                      <p className="text-sm font-medium leading-none text-[#1C1B1F]">{user.name}</p>
-                      <p className="text-xs leading-none text-[#495560]">{user.email}</p>
-                    </div>
-                    <DropdownMenuSeparator className="my-1" />
-                    <DropdownMenuItem asChild className="px-3 py-2 rounded-md cursor-pointer text-[#495560] hover:bg-[#F0FDFC] hover:text-[#7BBCB0] focus:bg-[#F0FDFC] focus:text-[#7BBCB0]">
-                      <Link href="/profile" className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
-                        Profile
+                  <DropdownMenuContent className="w-44 p-3 bg-white rounded-xl shadow-lg border-0" align="end" forceMount>
+                    <DropdownMenuItem asChild className="group px-0 py-2 rounded-md cursor-pointer text-[#1C1B1F] hover:bg-transparent hover:text-[#00A699] focus:bg-transparent focus:text-[#00A699]">
+                      <Link href="/profile" className="flex items-center justify-between w-full">
+                        <span>My Profile</span>
+                        <ChevronDown className="h-4 w-4 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="px-3 py-2 rounded-md cursor-pointer text-[#495560] hover:bg-[#F0FDFC] hover:text-[#7BBCB0] focus:bg-[#F0FDFC] focus:text-[#7BBCB0]">
-                      <Link href="/wishlist" className="flex items-center">
-                        <Heart className="mr-2 h-4 w-4" />
-                        Wishlist
+                    <DropdownMenuItem asChild className="group px-0 py-2 rounded-md cursor-pointer text-[#1C1B1F] hover:bg-transparent hover:text-[#00A699] focus:bg-transparent focus:text-[#00A699]">
+                      <Link href="/settings" className="flex items-center justify-between w-full">
+                        <span>Settings</span>
+                        <ChevronDown className="h-4 w-4 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="px-3 py-2 rounded-md cursor-pointer text-[#495560] hover:bg-[#F0FDFC] hover:text-[#7BBCB0] focus:bg-[#F0FDFC] focus:text-[#7BBCB0]">
-                      <Link href="/chats" className="flex items-center">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Messages
+                    <DropdownMenuItem asChild className="group px-0 py-2 rounded-md cursor-pointer text-[#1C1B1F] hover:bg-transparent hover:text-[#00A699] focus:bg-transparent focus:text-[#00A699]">
+                      <Link href="/wishlist" className="flex items-center justify-between w-full">
+                        <span>My Bookings</span>
+                        <ChevronDown className="h-4 w-4 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="px-3 py-2 rounded-md cursor-pointer text-[#495560] hover:bg-[#F0FDFC] hover:text-[#7BBCB0] focus:bg-[#F0FDFC] focus:text-[#7BBCB0]">
-                      <Link href="/settings" className="flex items-center">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="my-1" />
                     <DropdownMenuItem
                       onClick={async () => {
                         await logout()
                       }}
-                      className="px-3 py-2 rounded-md cursor-pointer text-[#F23813] hover:bg-red-50 hover:text-[#E54D2E] focus:bg-red-50 focus:text-[#E54D2E]"
+                      className="px-0 py-2 rounded-md cursor-pointer text-[#F23813] hover:bg-transparent hover:text-[#E54D2E] focus:bg-transparent focus:text-[#E54D2E]"
                     >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Log out
+                      Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
