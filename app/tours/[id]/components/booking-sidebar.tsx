@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Check, Lock, Users } from "lucide-react"
+import { TourAvailabilityModal } from "./tour-availability-modal"
 
 interface BookingSidebarProps {
   price: number
@@ -19,6 +20,7 @@ export function BookingSidebar({
   creditEarned
 }: BookingSidebarProps) {
   const [selectedDate, setSelectedDate] = useState("")
+  const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false)
 
   return (
     <div className="sticky top-24 space-y-6">
@@ -52,12 +54,15 @@ export function BookingSidebar({
         </div>
 
         {/* Buttons */}
-        <button className="group relative overflow-hidden w-full mt-5 bg-[#00A792] text-white text-[15px] font-medium py-3.5 rounded-full transition">
+        <button
+          onClick={() => setIsAvailabilityModalOpen(true)}
+          className="group relative overflow-hidden w-full mt-5 bg-[#00A792] text-white text-[15px] font-medium py-3.5 rounded-full transition"
+        >
           <span className="relative z-10">Check Availability</span>
           <span className="absolute inset-0 bg-[#1C1B1F] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
         </button>
 
-        <button className="group relative overflow-hidden w-full mt-3 border border-[#E5E5E5] text-[#1C1B1F] text-[15px] py-3.5 rounded-full font-medium bg-[#F9FAFB] transition">
+        <button  className="group relative overflow-hidden w-full mt-3 border border-[#E5E5E5] text-[#1C1B1F] text-[15px] py-3.5 rounded-full font-medium bg-[#F9FAFB] transition">
           <span className="relative z-10 group-hover:text-white transition-colors duration-300">Make an Enquiry</span>
           <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
         </button>
@@ -90,6 +95,11 @@ export function BookingSidebar({
 
       </div>
 
+      {/* Tour Availability Modal */}
+      <TourAvailabilityModal
+        isOpen={isAvailabilityModalOpen}
+        onClose={() => setIsAvailabilityModalOpen(false)}
+      />
     </div>
   )
 }
