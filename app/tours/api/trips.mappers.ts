@@ -3,6 +3,20 @@
  * Transform API response data to application Tour interface
  */
 
+// ============================================
+// Reviewable Location Types and Extraction
+// ============================================
+
+/**
+ * Represents a location that can be reviewed via Google Places API
+ */
+export interface ReviewableLocation {
+  name: string
+  lat: number
+  lng: number
+  type: 'destination' | 'accommodation' | 'activity'
+}
+
 import type {
   Tour,
   TourDetail,
@@ -728,4 +742,111 @@ export function mapTripDetailResponseToTourDetail(
     currencySymbol: userTrip?.currency?.symbol || '€',
     currencyIso: userTrip?.currencyIso || 'EUR'
   }
+}
+
+// ============================================
+// Reviewable Location Extraction
+// ============================================
+
+/**
+ * Extract all reviewable locations from a trip detail response
+ * These locations can be used to fetch reviews from Google Places API
+ *
+ * Extracts from:
+ * - Destinations/cities from tripdays
+ * - Hotels/accommodations with coordinates
+ * - Activities/events with coordinates
+ *
+ * Deduplicates by coordinates to avoid fetching reviews for same location twice
+ */
+export function extractReviewableLocations(
+  tripDetail: APITripDetailResponse
+): ReviewableLocation[] {
+  const locations: ReviewableLocation[] = []
+  const seen = new Set<string>()
+
+  if (!tripDetail.tripdays || tripDetail.tripdays.length === 0) {
+    return locations
+  }
+
+  tripDetail.tripdays.forEach(tripday => {
+    // 1. Extract destination locations
+    if (tripday.destination?.location) {
+      const loc = tripday.destination.location
+      // coordinates are [longitude, latitude] in API
+      if (loc.coordinates && loc.coordinates[0] !== 0 && loc.coordinates[1] !== 0) {
+        const key = `${loc.coordinates[1].toFixed(4)},${loc.coordinates[0].toFixed(4)}`
+        if (!seen.has(key)) {
+          seen.add(key)
+          locations.push({
+            name: loc.name || tripday.destination.titles?.[0]?.content || 'Unknown Destination',
+            lat: loc.coordinates[1], // latitude is second element
+            lng: loc.coordinates[0], // longitude is first element
+            type: 'destination'
+          })
+        }
+      }
+    }
+
+    // Also check tripday.location if destination is not present
+    if (!tripday.destination && tripday.location) {
+      const loc = tripday.location
+      if (loc.coordinates && loc.coordinates[0] !== 0 && loc.coordinates[1] !== 0) {
+        const key = `${loc.coordinates[1].toFixed(4)},${loc.coordinates[0].toFixed(4)}`
+        if (!seen.has(key)) {
+          seen.add(key)
+          locations.push({
+            name: loc.name || `Day ${tripday.dayNumber} Location`,
+            lat: loc.coordinates[1],
+            lng: loc.coordinates[0],
+            type: 'destination'
+          })
+        }
+      }
+    }
+
+    // 2. Extract hotel/accommodation locations
+    if (tripday.hotels && tripday.hotels.length > 0) {
+      tripday.hotels.forEach(hotel => {
+        if (hotel.location?.coordinates) {
+          const loc = hotel.location
+          if (loc.coordinates[0] !== 0 && loc.coordinates[1] !== 0) {
+            const key = `${loc.coordinates[1].toFixed(4)},${loc.coordinates[0].toFixed(4)}`
+            if (!seen.has(key)) {
+              seen.add(key)
+              locations.push({
+                name: hotel.name || hotel.titles?.[0]?.content || 'Hotel',
+                lat: loc.coordinates[1],
+                lng: loc.coordinates[0],
+                type: 'accommodation'
+              })
+            }
+          }
+        }
+      })
+    }
+
+    // 3. Extract event/activity locations
+    if (tripday.events && tripday.events.length > 0) {
+      tripday.events.forEach(event => {
+        if (event.location?.coordinates) {
+          const loc = event.location
+          if (loc.coordinates[0] !== 0 && loc.coordinates[1] !== 0) {
+            const key = `${loc.coordinates[1].toFixed(4)},${loc.coordinates[0].toFixed(4)}`
+            if (!seen.has(key)) {
+              seen.add(key)
+              locations.push({
+                name: event.name || event.titles?.[0]?.content || loc.name || 'Activity',
+                lat: loc.coordinates[1],
+                lng: loc.coordinates[0],
+                type: 'activity'
+              })
+            }
+          }
+        }
+      })
+    }
+  })
+
+  return locations
 }
