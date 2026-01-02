@@ -13,6 +13,8 @@ interface UseTourDetailOptions {
 interface UseTourDetailReturn {
   tour: Tour | undefined
   tourDetail: TourDetail | undefined
+  /** Raw API response data - useful for extracting additional info like locations for reviews */
+  rawTripData: APITripDetailResponse | undefined
   isLoading: boolean
   isError: boolean
   error: Error | null
@@ -108,9 +110,26 @@ export function useTourDetail(options: UseTourDetailOptions): UseTourDetailRetur
     }
   }, [data, tour])
 
+  // Extract raw trip data for use by other hooks (e.g., reviews)
+  const rawTripData = useMemo(() => {
+    if (!data) return undefined
+
+    try {
+      const tripData = (data as any)?.data || data
+      // Return the raw data if it has tripdays (full trip detail response)
+      if (tripData.tripdays && Array.isArray(tripData.tripdays)) {
+        return tripData as APITripDetailResponse
+      }
+      return undefined
+    } catch {
+      return undefined
+    }
+  }, [data])
+
   return {
     tour,
     tourDetail,
+    rawTripData,
     isLoading: isValidTourId ? isLoading : false,
     isError: !isValidTourId ? true : isError,
     error: !isValidTourId
