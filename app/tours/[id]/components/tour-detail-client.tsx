@@ -18,6 +18,7 @@ import { WhatsIncluded } from "./whats-included"
 import { WhereYouWillStay } from "./where-you-will-stay"
 import { CustomerPhotos } from "./customer-photos"
 import { useTourDetail } from "../hooks/useTourDetail"
+import { useTourReviewsAggregated } from "../hooks/useTourReviewsAggregated"
 
 interface TourDetailClientProps {
   tourId: string
@@ -57,7 +58,20 @@ const staticFallbackData = {
 }
 
 export function TourDetailClient({ tourId }: TourDetailClientProps) {
-  const { tour, tourDetail, isLoading, isError, error, refetch } = useTourDetail({ tourId })
+  const { tour, tourDetail, rawTripData, isLoading, isError, error, refetch } = useTourDetail({ tourId })
+
+  // Fetch Google Places reviews for tour locations
+  const {
+    reviews: aggregatedReviews,
+    averageRating: reviewsRating,
+    totalReviews: reviewsTotalCount,
+    ratingDistribution,
+    googleReviewCount,
+    isLoading: reviewsLoading,
+  } = useTourReviewsAggregated({
+    rawTripData,
+    enabled: Boolean(rawTripData),
+  })
 
   // Section navigation state
   const [activeSection, setActiveSection] = useState("highlights")
@@ -301,9 +315,13 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           {/* Customer Reviews */}
           <div ref={reviewsRef} className="scroll-mt-24">
             <ReviewsSection
-              rating={tourData.rating}
-              totalReviews={tourData.reviewCount}
+              reviews={aggregatedReviews.length > 0 ? aggregatedReviews : undefined}
+              rating={reviewsRating > 0 ? reviewsRating : tourData.rating}
+              totalReviews={reviewsTotalCount > 0 ? reviewsTotalCount : tourData.reviewCount}
               tourName={tourData.title}
+              ratingDistribution={ratingDistribution}
+              googleReviewCount={googleReviewCount}
+              isLoading={reviewsLoading}
             />
           </div>
         </div>
