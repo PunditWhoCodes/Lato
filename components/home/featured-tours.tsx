@@ -122,31 +122,30 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
     <section className="py-12 md:py-16 lg:py-24 px-4 md:px-10 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
-          {/* Left Side - Title */}
-          <div className="flex flex-col gap-4 lg:gap-[43.35px]">
-            <p className="font-poppins font-light text-base lg:text-[18.85px] text-black">
+        <div className="flex flex-col gap-4 lg:gap-[43.35px] mb-8 md:mb-12 lg:mb-16">
+          {/* Top Row: Tour Packages label + View More (mobile) */}
+          <div className="flex items-center justify-between">
+            <p className="font-poppins font-light text-[10px] md:text-base lg:text-[18.85px] text-black">
               Tour Packages
             </p>
-            <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-[56.54px] lg:leading-[85px] text-black max-w-[592px]">
-              Explore Our Exclusive Tour Packages
-            </h2>
+            {/* View More - Mobile */}
+            <Link
+              href="/tours"
+              className="md:hidden flex items-center gap-1 group"
+            >
+              <span className="font-mulish font-semibold text-[10px] text-[#495560] group-hover:text-black transition-colors">
+                View More
+              </span>
+              <div className="relative flex items-center justify-center bg-black rounded-full overflow-hidden w-4 h-4 p-0.5">
+                <ArrowUpRight className="relative z-10 text-white w-2.5 h-2.5 transition-transform duration-300 group-hover:rotate-45" />
+                <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+              </div>
+            </Link>
           </div>
-
-          {/* Right Side - View More Button */}
-          {/* <Link
-            href="/tours"
-            className="hidden lg:flex items-center gap-[7.54px] group"
-          >
-            <span className="text-[#495560] text-base group-hover:text-black transition-colors">
-              View More
-            </span>
-            <div className="relative flex items-center justify-center bg-black rounded-full overflow-hidden" style={{ width: '42.4px', height: '42.4px', padding: '9.42px' }}>
-              <ArrowUpRight className="relative z-10 text-white transition-transform duration-300 group-hover:rotate-45" style={{ width: '22.62px', height: '22.62px' }} />
-
-              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-            </div>
-          </Link> */}
+          {/* Heading */}
+          <h2 className="font-poppins font-light text-[22px] md:text-4xl lg:text-[56.54px] leading-[150%] lg:leading-[85px] text-black max-w-[232px] md:max-w-[592px]">
+            Explore Our Exclusive Tour Packages
+          </h2>
         </div>
 
         {/* Tour Cards */}
@@ -160,30 +159,24 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-[19.22px]">
-            {displayTours.map((tour) => (
-              <TourCard key={tour.id} tour={tour} variant="featured" />
-            ))}
-          </div>
+          <>
+            {/* Mobile: Horizontal Scroll */}
+            <div className="md:hidden flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
+              {displayTours.map((tour) => (
+                <div key={tour.id} className="flex-shrink-0 w-[calc(50%-8px)] snap-start">
+                  <TourCard tour={tour} variant="featured" />
+                </div>
+              ))}
+            </div>
+            {/* Desktop: Grid Layout */}
+            <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-[19.22px]">
+              {displayTours.map((tour) => (
+                <TourCard key={tour.id} tour={tour} variant="featured" />
+              ))}
+            </div>
+          </>
         )}
 
-        {/* Mobile View More Button */}
-        <div className="lg:hidden text-center mt-8">
-          <Link
-            href="/tours"
-            className="inline-flex items-center gap-2 group"
-          >
-            <span className="font-mulish font-semibold text-base text-[#495560]">
-              View More
-            </span>
-            <div className="relative flex items-center justify-center w-10 h-10 bg-black rounded-full overflow-hidden p-2">
-              <ArrowUpRight className="relative z-10 w-5 h-5 text-white transition-transform duration-300 group-hover:rotate-45" />
-
-              {/* Radial expanding hover overlay */}
-              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-            </div>
-          </Link>
-        </div>
       </div>
     </section>
   )

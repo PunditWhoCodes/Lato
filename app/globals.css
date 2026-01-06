@@ -47,6 +47,11 @@
 }
 
 @layer base {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
   body {
     background-color: #F7F7F7;
     color: #000000;
@@ -71,5 +76,14 @@
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(27px);
     -webkit-backdrop-filter: blur(27px);
+  }
+
+  /* Hide scrollbar for horizontal scroll sections */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

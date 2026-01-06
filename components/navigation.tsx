@@ -256,11 +256,57 @@ export function Navigation() {
       />
 
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t bg-background max-h-[calc(100vh-4rem)] overflow-y-auto transition-colors">
-          <div className="px-4 py-4 space-y-2">
+        <div className="lg:hidden bg-[#F7F7F7] min-h-[375px] overflow-y-auto">
+          {/* Login/Sign Up Row - Centered */}
+          <div className="flex justify-center pt-[27px] pb-[52px]">
+            {!isHydrated ? (
+              <div className="flex items-center justify-center">
+                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+              </div>
+            ) : user ? (
+              <div className="flex items-center gap-[5px]">
+                <Link
+                  href="/profile"
+                  className="flex items-center justify-center w-[110px] h-[38px] rounded-full font-poppins font-light text-[14px] text-black"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {user.name}
+                </Link>
+                <button
+                  onClick={async () => {
+                    await logout()
+                    setMobileMenuOpen(false)
+                  }}
+                  className="flex items-center justify-center w-[129px] h-[38px] bg-black rounded-full font-poppins font-light text-[13px] text-white"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-[5px]">
+                <Link
+                  href="/login"
+                  className="flex items-center justify-center w-[110px] h-[38px] rounded-full font-poppins font-light text-[14px] text-black"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="flex items-center justify-center w-[129px] h-[38px] bg-black rounded-full font-poppins font-light text-[13px] text-white"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Menu Items - Left aligned */}
+          <div className="flex flex-col items-start gap-[19px] pl-[35px]">
             <Link
               href="/about"
-              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
               About Us
@@ -268,7 +314,7 @@ export function Navigation() {
 
             <Link
               href="/tours"
-              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
               Explore Places
@@ -276,134 +322,82 @@ export function Navigation() {
 
             <Link
               href="/destinations"
-              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-[11px] font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Destinations
+              Destination
+              <ChevronDown className="w-5 h-5" />
             </Link>
 
             <Link
               href="/travel-styles"
-              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-[8px] font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Travel Styles
+              Travel Style
+              <ChevronDown className="w-5 h-5" />
             </Link>
 
             <Link
               href="/contact"
-              className="block py-3 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
               Contact Us
             </Link>
-
-            {!isHydrated ? (
-              <div className="border-t pt-3 flex items-center justify-center py-4">
-                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-              </div>
-            ) : user ? (
-              <>
-                <div className="border-t pt-3 space-y-3">
-                  <div className="py-2">
-                    <p className="text-xs text-muted-foreground mb-2">Currency</p>
-                    <div className="flex flex-wrap gap-2">
-                      {currencies.map((currency) => (
-                        <button
-                          key={currency.code}
-                          onClick={() => setSelectedCurrency(currency)}
-                          className={`px-3 py-1.5 rounded-full text-sm ${
-                            selectedCurrency.code === currency.code
-                              ? "bg-[#00A699] text-white"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
-                        >
-                          {currency.code}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <Link
-                    href="/wishlist"
-                    className={`flex items-center py-2 text-base font-medium transition-colors ${
-                      isWishlistPage ? "text-[#00A699]" : "text-muted-foreground hover:text-primary"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Heart className={`h-5 w-5 mr-2 ${isWishlistPage ? "fill-[#00A699]" : ""}`} />
-                    Wishlist
-                    {savedToursCount > 0 && (
-                      <Badge className="ml-2 bg-[#00A699] text-white text-xs">
-                        {savedToursCount}
-                      </Badge>
-                    )}
-                  </Link>
-                  <Link
-                    href="/chats"
-                    className={`flex items-center py-2 text-base font-medium transition-colors ${
-                      isChatsPage ? "text-[#00A699]" : "text-muted-foreground hover:text-primary"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Messages
-                    {totalUnreadMessages > 0 && (
-                      <Badge className="ml-2 bg-[#00A699] text-white text-xs">
-                        {totalUnreadMessages}
-                      </Badge>
-                    )}
-                  </Link>
-                  <Link
-                    href="/profile"
-                    className="flex items-center py-2 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <User className="h-5 w-5 mr-2" />
-                    Profile
-                  </Link>
-                  <Link
-                    href="/settings"
-                    className="flex items-center py-2 text-base font-medium text-muted-foreground hover:text-primary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Settings className="h-5 w-5 mr-2" />
-                    Settings
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      await logout()
-                      setMobileMenuOpen(false)
-                    }}
-                    className="flex items-center py-2 text-base font-medium text-destructive w-full"
-                  >
-                    <LogOut className="h-5 w-5 mr-2" />
-                    Log out
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="border-t pt-3 mt-3 space-y-3">
-                <Link
-                  href="/login"
-                  className="block w-full"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Button variant="ghost" className="w-full justify-start">
-                    Log in
-                  </Button>
-                </Link>
-                <Link
-                  href="/register"
-                  className="block w-full"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Button variant="default" className="w-full">
-                    Sign up
-                  </Button>
-                </Link>
-              </div>
-            )}
           </div>
+
+          {/* Logged in user options */}
+          {user && (
+            <div className="border-t border-gray-200 mt-6 pt-4 pl-[35px] space-y-[19px]">
+              <Link
+                href="/wishlist"
+                className={`flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] ${
+                  isWishlistPage ? "text-[#00A699]" : "text-[#1C1B1F]"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Heart className={`h-5 w-5 ${isWishlistPage ? "fill-[#00A699]" : ""}`} />
+                Wishlist
+                {savedToursCount > 0 && (
+                  <Badge className="bg-[#00A699] text-white text-xs">
+                    {savedToursCount}
+                  </Badge>
+                )}
+              </Link>
+              <Link
+                href="/chats"
+                className={`flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] ${
+                  isChatsPage ? "text-[#00A699]" : "text-[#1C1B1F]"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <MessageCircle className="h-5 w-5" />
+                Messages
+                {totalUnreadMessages > 0 && (
+                  <Badge className="bg-[#00A699] text-white text-xs">
+                    {totalUnreadMessages}
+                  </Badge>
+                )}
+              </Link>
+              <Link
+                href="/profile"
+                className="flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <User className="h-5 w-5" />
+                Profile
+              </Link>
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Settings className="h-5 w-5" />
+                Settings
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </nav>

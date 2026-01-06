@@ -30,11 +30,85 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
   // Use UUID if available, otherwise fall back to numeric ID
   const tourLink = tourIdentifier
 
-  // Featured variant - matches Figma design exactly
+  // Featured variant - responsive design (mobile + desktop)
   if (variant === "featured") {
     return (
       <Link href={`/tours/${tourLink}`}>
-        <Card className="group max-w-[522px] lg:h-[533px] hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden border border-black/9" style={{ borderRadius: '26.8px', padding: '17.08px' }}>
+        {/* Mobile Card */}
+        <Card className="md:hidden group hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden border border-black/9 rounded-[11px] p-[7px]">
+          {/* Image */}
+          <div className="relative overflow-hidden mb-2 rounded-[7px]">
+            <ShimmerImage
+              src={tour.image || "/placeholder.svg"}
+              alt={tour.title}
+              className="w-full h-[121px] object-cover group-hover:scale-105 transition-transform duration-500 rounded-[7px]"
+            />
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col gap-1.5 px-0.5">
+            {/* Title and Rating Row */}
+            <div className="flex items-start justify-between gap-1">
+              <h3 className="font-poppins font-medium text-[#1C2B38] leading-tight flex-1 text-[7.5px] line-clamp-2">
+                {tour.title}
+              </h3>
+              <div className="flex items-center gap-0.5 shrink-0">
+                <Star className="w-[10px] h-[10px] fill-[#FFA432] text-[#FFA432]" />
+                <span className="font-mulish font-semibold text-[#778088] text-[6.7px]">
+                  {tour.rating}
+                </span>
+              </div>
+            </div>
+
+            {/* Price */}
+            <div className="flex flex-col">
+              <div className="font-volkhov font-bold text-[#7BBCB0] text-[7.5px]">
+                ${tour.price}
+              </div>
+              <div className="font-poppins text-[#778088] text-[6px]">
+                per person
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="flex flex-col gap-0.5">
+              <div className="flex items-center gap-1">
+                <Clock className="w-[6px] h-[6px] text-[#495560]" />
+                <span className="font-poppins text-[#495560] text-[6px]">
+                  {tour.duration} days
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Bus className="w-[7px] h-[5px] text-[#495560]" />
+                <span className="font-mulish text-[#495560] text-[6px]">
+                  Transport
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="w-[7px] h-[5px] text-[#495560]" />
+                <span className="font-mulish text-[#495560] text-[6px]">
+                  Family Plan
+                </span>
+              </div>
+            </div>
+
+            {/* Book Now Button */}
+            <div className="group mt-1">
+              <Button
+                className="relative overflow-hidden bg-black text-white flex items-center justify-center gap-1 h-[19px] w-[73px] rounded-[11px] px-2"
+              >
+                <span className="relative z-10 font-poppins font-light text-[6.7px]">
+                  Book Now
+                </span>
+                <ArrowUpRight className="relative z-10 w-[9px] h-[9px] transition-transform duration-300 group-hover:rotate-45" />
+                <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+              </Button>
+            </div>
+          </div>
+        </Card>
+
+        {/* Desktop Card */}
+        <Card className="hidden md:block group max-w-[522px] lg:h-[533px] hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden border border-black/9" style={{ borderRadius: '26.8px', padding: '17.08px' }}>
           {/* Image */}
           <div className="relative overflow-hidden mb-[17.94px]" style={{ borderRadius: '17.08px' }}>
             <ShimmerImage

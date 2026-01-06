@@ -25,17 +25,17 @@ export function TrendingAdventuresSection() {
   }
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section className="py-12 md:py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
 
         {/* Top text */}
-        <p className="font-poppins text-lg font-light mb-3">
+        <p className="font-poppins text-sm md:text-lg font-light mb-2 md:mb-3">
           Find your next adventure in destinations that inspire you
         </p>
 
         {/* Heading + Action */}
-        <div className="flex justify-between items-center mb-14">
-          <h2 className="font-poppins font-light text-[56px] leading-normal text-black">
+        <div className="flex justify-between items-start md:items-center mb-8 md:mb-14">
+          <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-[56px] leading-tight lg:leading-normal text-black">
             Trending Adventures
           </h2>
 
@@ -55,8 +55,17 @@ export function TrendingAdventuresSection() {
           </Link>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Mobile: Horizontal Scroll */}
+        <div className="md:hidden flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
+          {trendingTours.map((tour) => (
+            <div key={tour.id} className="flex-shrink-0 w-[calc(50%-8px)] snap-start">
+              <TrendingTourCard tour={tour} />
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: Cards Grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
           {trendingTours.map((tour) => (
             <TrendingTourCard key={tour.id} tour={tour} />
           ))}

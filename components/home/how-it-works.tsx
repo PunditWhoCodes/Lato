@@ -147,15 +147,15 @@ export function HowItWorks() {
           ))}
         </div>
 
-        {/* EXPLORE MORE BUTTON */}
-        {/* <div className="flex justify-center">
+        {/* EXPLORE MORE BUTTON - Mobile Only */}
+        <div className="flex justify-center md:hidden">
           <div className="group">
             <Button
               size="lg"
               className="
                 relative overflow-hidden
-                rounded-full px-12 py-6 text-base md:text-lg font-medium shadow-lg
-                bg-[#00A792]
+                rounded-full px-12 py-6 text-base font-medium shadow-lg
+                bg-[#00A792] w-full max-w-sm
               "
               asChild
             >
@@ -179,7 +179,7 @@ export function HowItWorks() {
               </Link>
             </Button>
           </div>
-        </div> */}
+        </div>
 
       </div>
     </section>

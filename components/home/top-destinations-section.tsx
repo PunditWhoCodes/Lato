@@ -121,9 +121,9 @@ export function TopDestinationsSection() {
           </div>
         )}
 
-        {/* Grid */}
+        {/* Grid - 2x2 on mobile, 4 columns on desktop */}
         {!isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-10">
             {displayDestinations.map((destination, index) => (
               <DestinationCard
                 key={destination.countryCode || index}
