@@ -47,12 +47,14 @@
 }
 
 @layer base {
-  html, body {
-    overflow-x: hidden;
+  html {
+    overflow-x: clip;
     width: 100%;
   }
 
   body {
+    overflow-x: clip;
+    width: 100%;
     background-color: #F7F7F7;
     color: #000000;
     font-family: var(--font-poppins), sans-serif;

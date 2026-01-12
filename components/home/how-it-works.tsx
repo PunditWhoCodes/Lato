@@ -148,7 +148,7 @@ export function HowItWorks() {
         </div>
 
         {/* EXPLORE MORE BUTTON - Mobile Only */}
-        <div className="flex justify-center md:hidden">
+        {/* <div className="flex justify-center md:hidden">
           <div className="group">
             <Button
               size="lg"
@@ -179,7 +179,7 @@ export function HowItWorks() {
               </Link>
             </Button>
           </div>
-        </div>
+        </div> */}
 
       </div>
     </section>

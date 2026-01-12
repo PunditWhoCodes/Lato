@@ -2,16 +2,20 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Images, LayoutGrid, X } from "lucide-react"
+import { Images, LayoutGrid, X, Heart } from "lucide-react"
+import { useSavedTours } from "@/lib/saved-tours-context"
 
 interface ImageGalleryProps {
   images: string[]
   title: string
   discountPercent?: number
+  tourId?: string
 }
 
-export function ImageGallery({ images, title, discountPercent }: ImageGalleryProps) {
+export function ImageGallery({ images, title, discountPercent, tourId }: ImageGalleryProps) {
   const [showAllPhotos, setShowAllPhotos] = useState(false)
+  const { toggleSaveTour, isTourSaved } = useSavedTours()
+  const isFavorite = tourId ? isTourSaved(tourId) : false
 
   // Ensure we have at least 4 images for the grid
   const displayImages = images.length >= 4 ? images : [...images, ...images, ...images, ...images].slice(0, 4)
@@ -76,8 +80,9 @@ export function ImageGallery({ images, title, discountPercent }: ImageGalleryPro
       </div>
 
       {/* Mobile Gallery */}
-      <div className="md:hidden relative">
-        <div className="relative h-[280px] rounded-2xl overflow-hidden">
+      <div className="md:hidden">
+        {/* Main Image with Heart Icon */}
+        <div className="relative h-[240px] rounded-2xl overflow-hidden">
           <Image
             src={displayImages[0]}
             alt={title}
@@ -91,13 +96,49 @@ export function ImageGallery({ images, title, discountPercent }: ImageGalleryPro
               -{discountPercent}% OFF
             </div>
           )}
-          {/* View All Photos Button */}
+          {/* Heart/Wishlist Icon - Top Right */}
+          {tourId && (
+            <button
+              onClick={() => toggleSaveTour(tourId)}
+              className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-110"
+              aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}
+            >
+              <Heart
+                className={`w-5 h-5 transition-colors ${
+                  isFavorite ? "fill-[#F23813] text-[#F23813]" : "text-[#6B7280]"
+                }`}
+              />
+            </button>
+          )}
+        </div>
+
+        {/* Thumbnail Row + View All Photos */}
+        <div className="flex items-center gap-2 mt-2">
+          {/* Thumbnail 1 */}
+          <div className="relative w-[72px] h-[56px] rounded-lg overflow-hidden flex-shrink-0">
+            <Image
+              src={displayImages[1]}
+              alt={`${title} - Image 2`}
+              fill
+              className="object-cover"
+            />
+          </div>
+          {/* Thumbnail 2 */}
+          <div className="relative w-[72px] h-[56px] rounded-lg overflow-hidden flex-shrink-0">
+            <Image
+              src={displayImages[2]}
+              alt={`${title} - Image 3`}
+              fill
+              className="object-cover"
+            />
+          </div>
+          {/* View All Photos Link */}
           <button
             onClick={() => setShowAllPhotos(true)}
-            className="absolute bottom-3 right-3 bg-white px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-[#1C1B1F]"
+            className="flex items-center gap-1.5 ml-auto text-[#6B7280] hover:text-[#00A699] transition-colors"
           >
-            <Images className="w-3.5 h-3.5" />
-            View all
+            <Images className="w-4 h-4" />
+            <span className="text-xs font-medium">View all photos</span>
           </button>
         </div>
       </div>

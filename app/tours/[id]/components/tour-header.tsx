@@ -78,10 +78,10 @@ export function TourHeader({
           </div>
         </div>
 
-        {/* Right Column - Heart Icon (matching tour card style) */}
+        {/* Right Column - Heart Icon (hidden on mobile, shown on image instead) */}
         <button
           onClick={() => toggleSaveTour(tourId)}
-          className={`w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-[#E8E8E8] hover:border-[#00A699] transition-all duration-300 shrink-0 ${
+          className={`hidden md:flex w-10 h-10 bg-white rounded-full items-center justify-center shadow-sm border border-[#E8E8E8] hover:border-[#00A699] transition-all duration-300 shrink-0 ${
             isFavorite ? "rotate-360" : ""
           }`}
           aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}

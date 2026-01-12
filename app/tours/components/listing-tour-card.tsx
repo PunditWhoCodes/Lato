@@ -71,10 +71,10 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
       <article
         data-tour-card
         onClick={onClick}
-        className="bg-white rounded-[10px] overflow-hidden cursor-pointer group flex border border-[#E8E8E8] hover:shadow-md transition-shadow"
+        className="bg-white rounded-[10px] overflow-hidden cursor-pointer group flex flex-col sm:flex-row border border-[#E8E8E8] hover:shadow-md transition-shadow"
       >
-        {/* Image - Left Side (50% width) */}
-        <div className="relative w-[50%] min-h-[180px] rounded-lg overflow-hidden shrink-0 m-2">
+        {/* Image - Top on mobile, Left side on desktop */}
+        <div className="relative w-full h-[200px] sm:w-[50%] sm:h-auto sm:min-h-[180px] rounded-lg overflow-hidden shrink-0 m-2">
           <Image
             src={tour.image}
             alt={tour.title}
@@ -104,82 +104,118 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
           )}
         </div>
 
-        {/* Content - Middle */}
-        <div className="flex-1 p-4 flex flex-col">
-          {/* Title */}
-          <h3 className="text-[#1C1B1F] font-poppins font-semibold text-[15px] leading-tight mb-0.5 group-hover:text-[#00A792] transition-colors">
-            {tour.title}
-          </h3>
+        {/* Mobile: Content wrapper with rating inline */}
+        <div className="flex-1 flex flex-col sm:flex-row">
+          {/* Content - Middle */}
+          <div className="flex-1 p-4 pt-2 sm:pt-4 flex flex-col">
+            {/* Mobile: Title + Rating row */}
+            <div className="flex justify-between items-start gap-2 sm:block">
+              <div className="flex-1">
+                {/* Title */}
+                <h3 className="text-[#1C1B1F] font-poppins font-semibold text-[13px] sm:text-[15px] leading-tight mb-0.5 group-hover:text-[#00A792] transition-colors">
+                  {tour.title}
+                </h3>
 
-          {/* Subtitle (Peru) */}
-          <p className="text-[#818181] text-[12px] mb-0.5">{tour.subtitle}</p>
+                {/* Subtitle (Peru) */}
+                <p className="text-[#818181] text-[10px] sm:text-[12px] mb-0.5">{tour.subtitle}</p>
 
-          {/* Location (Ecuador Packages) */}
-          <p className="text-[#818181] text-[12px] mb-3">{tour.location}</p>
+                {/* Location (Ecuador Packages) */}
+                <p className="text-[#818181] text-[10px] sm:text-[12px] mb-2 sm:mb-3">{tour.location}</p>
+              </div>
 
-          {/* Price Row */}
-          <div className="flex items-baseline gap-1.5 mb-3">
-            {tour.originalPrice && (
-              <span className="text-[#7BBCB0] text-[12px] line-through">
-                ${tour.originalPrice.toFixed(2)}
-              </span>
-            )}
-            <span className="text-[#F23813] font-semibold text-[16px]">
-              ${tour.price.toFixed(2)}
-            </span>
-          </div>
-
-          {/* Duration */}
-          <div className="flex items-center gap-1.5 text-[11px] text-[#495560] mb-1.5">
-            <Clock className="w-3.5 h-3.5" />
-            <span>Duration: {tour.duration}</span>
-          </div>
-
-          {/* Transport Facility */}
-          {tour.hasTransport && (
-            <div className="flex items-center gap-1.5 text-[11px] text-[#495560] mb-1.5">
-              <Car className="w-3.5 h-3.5" />
-              <span>Transport Facility</span>
-            </div>
-          )}
-
-          {/* Family Plan */}
-          {tour.hasFamilyPlan && (
-            <div className="flex items-center gap-1.5 text-[11px] text-[#495560]">
-              <Users className="w-3.5 h-3.5" />
-              <span>Family Plan</span>
-            </div>
-          )}
-        </div>
-
-        {/* Right Column - Rating, Group, View Now */}
-        <div className="flex flex-col items-end justify-between p-4">
-          <div className="flex flex-col items-end gap-2">
-            {/* Rating Badge */}
-            <div className="flex items-center gap-1">
-              <Star className="w-3 h-3 fill-[#FFA432] text-[#FFA432]" />
-              <span className="text-[11px] text-[#495560] font-medium mt-0.5">{tour.rating}</span>
+              {/* Mobile: Rating & Group inline */}
+              <div className="flex flex-col items-end gap-1 sm:hidden shrink-0">
+                <div className="flex items-center gap-1">
+                  <Star className="w-2.5 h-2.5 fill-[#FFA432] text-[#FFA432]" />
+                  <span className="text-[10px] text-[#495560] font-medium">{tour.rating}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-2.5 h-2.5 text-[#495560]" />
+                  <span className="text-[9px] text-[#495560] font-medium whitespace-nowrap">
+                    {tour.groupSize}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Group Size Badge */}
-            <div className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-[#495560]" />
-              <span className="text-[10px] text-[#495560] font-medium whitespace-nowrap">
-                {tour.groupSize}
+            {/* Price Row */}
+            <div className="flex items-baseline gap-1.5 mb-2 sm:mb-3">
+              {tour.originalPrice && (
+                <span className="text-[#7BBCB0] text-[10px] sm:text-[12px] line-through">
+                  ${tour.originalPrice.toFixed(2)}
+                </span>
+              )}
+              <span className="text-[#F23813] font-semibold text-[14px] sm:text-[16px]">
+                ${tour.price.toFixed(2)}
               </span>
             </div>
+
+            {/* Features Row - horizontal on mobile, vertical on desktop */}
+            <div className="flex flex-wrap gap-x-3 gap-y-1 sm:flex-col sm:gap-1.5">
+              {/* Duration */}
+              <div className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] text-[#495560]">
+                <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <span>Duration: {tour.duration}</span>
+              </div>
+
+              {/* Transport Facility */}
+              {tour.hasTransport && (
+                <div className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] text-[#495560]">
+                  <Car className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span>Transport</span>
+                </div>
+              )}
+
+              {/* Family Plan */}
+              {tour.hasFamilyPlan && (
+                <div className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] text-[#495560]">
+                  <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span>Family Plan</span>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile: View Now Button at bottom */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onClick()
+              }}
+              className="sm:hidden mt-3 w-full border text-white bg-black py-2 rounded-full text-[11px] font-medium hover:bg-[#00A792] transition-colors"
+            >
+              View Now
+            </button>
           </div>
 
-          {/* View Now Button - Outline Style */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onClick()
-            }}
-            className="border text-white bg-black px-5 py-2 rounded-full text-[12px] font-medium hover:bg-[#00A792] transition-colors whitespace-nowrap"
-          >
-            View Now
-          </button>
+          {/* Desktop: Right Column - Rating, Group, View Now */}
+          <div className="hidden sm:flex flex-col items-end justify-between p-4">
+            <div className="flex flex-col items-end gap-2">
+              {/* Rating Badge */}
+              <div className="flex items-center gap-1">
+                <Star className="w-3 h-3 fill-[#FFA432] text-[#FFA432]" />
+                <span className="text-[11px] text-[#495560] font-medium mt-0.5">{tour.rating}</span>
+              </div>
+
+              {/* Group Size Badge */}
+              <div className="flex items-center gap-1">
+                <Users className="w-3 h-3 text-[#495560]" />
+                <span className="text-[10px] text-[#495560] font-medium whitespace-nowrap">
+                  {tour.groupSize}
+                </span>
+              </div>
+            </div>
+
+            {/* View Now Button - Outline Style */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onClick()
+              }}
+              className="border text-white bg-black px-5 py-2 rounded-full text-[12px] font-medium hover:bg-[#00A792] transition-colors whitespace-nowrap"
+            >
+              View Now
+            </button>
+          </div>
         </div>
       </article>
     )

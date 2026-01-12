@@ -76,73 +76,15 @@ export function AttractionsVerticalScroll() {
   }
 
   return (
-    <>
-      {/* Mobile Layout - Simple vertical stack */}
-      <section className="md:hidden bg-[#FBFBFB] py-8">
-        <div className="px-4">
-          {/* Header Card */}
-          <div className="relative bg-[#00A792] rounded-2xl overflow-hidden mb-4 h-[160px]">
-            <Image
-              src="/top-attractions/attraction-1.png"
-              alt="Attractions header"
-              fill
-              className="object-contain"
-            />
-            <div className="absolute inset-0 p-6 flex flex-col justify-end">
-              <p className="text-white/90 font-normal text-xs mb-2">
-                Find your next adventure in destinations that inspire you
-              </p>
-              <h2 className="text-xl font-light text-white">
-                Attractions You Can&apos;t Miss
-              </h2>
-            </div>
-          </div>
-
-          {/* Attraction Cards */}
-          <div className="space-y-4">
-            {attractions.slice(1).map((attraction) => (
-              <div
-                key={attraction.id}
-                className="relative h-[200px] rounded-2xl overflow-hidden"
-              >
-                <Image
-                  src={attraction.image}
-                  alt={attraction.name}
-                  fill
-                  className="object-cover"
-                />
-                {/* Centered overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <h3 className="text-2xl font-bold text-white drop-shadow-lg text-center">
-                    {attraction.name}
-                  </h3>
-                  <p className="text-white/95 text-sm flex items-center gap-2 mt-2">
-                    <span className="inline-block w-1.5 h-1.5 bg-white rounded-full"></span>
-                    {attraction.activities} activities
-                  </p>
-                </div>
-                {/* Arrow button */}
-                <div className="absolute top-4 right-4 z-20">
-                  <div className="size-8 rounded-full bg-white flex items-center justify-center">
-                    <ArrowUpRight className="text-black size-4" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Desktop Layout - Scroll animation */}
-      <section
-        ref={sectionRef}
-        className="hidden md:block relative bg-[#FBFBFB] py-12 md:py-16 lg:py-20"
-        style={{
-          height: `${attractions.length * 100}vh`,
-        }}
-      >
+    <section
+      ref={sectionRef}
+      className="relative bg-[#FBFBFB] py-12 md:py-16 lg:py-20"
+      style={{
+        height: `${attractions.length * 100}vh`,
+      }}
+    >
       {/* Sticky Header Container */}
-      <div className="sticky top-20 md:top-36 bottom-20 h-screen flex items-center justify-center overflow-hidden">
+      <div className="sticky top-20 md:top-36 h-screen flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10 w-full max-w-7xl">
           <div
             className="relative h-[600px] md:h-[700px]"
@@ -266,6 +208,5 @@ export function AttractionsVerticalScroll() {
         </div>
       </div>
     </section>
-    </>
   )
 }

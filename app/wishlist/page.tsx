@@ -65,16 +65,16 @@ export default function WishlistPage() {
       <div className="min-h-screen bg-white">
         <Navigation />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <nav className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-sm text-gray-500 mb-4 sm:mb-6">
             <Link href="/" className="hover:text-[#00A699] transition-colors">
               Home
             </Link>
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="text-[#00A699]">Wishlist</span>
           </nav>
 
-          <h1 className="text-3xl font-bold text-[#1C1B1F] mb-8">Wishlist</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#1C1B1F] mb-5 sm:mb-8">Wishlist</h1>
 
           {isLoadingApi ? (
             <div className="flex flex-col items-center justify-center py-16">
@@ -82,7 +82,7 @@ export default function WishlistPage() {
               <p className="text-gray-500">Loading your saved tours...</p>
             </div>
           ) : savedTripsData.length > 0 ? (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {savedTripsData.map((tour) => (
                 <WishlistTourCard key={tour.uuid || tour.id} tour={tour} />
               ))}
@@ -129,40 +129,98 @@ function WishlistTourCard({ tour }: { tour: Tour }) {
   }
 
   return (
-    <div className="group/card relative flex flex-col md:flex-row rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-shadow overflow-hidden">
-      <div className="w-full md:w-64 lg:w-72 shrink-0 p-3">
-        <div className="relative h-44 md:h-full rounded-xl overflow-hidden">
+    <div className="group/card relative flex flex-col sm:flex-row rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-shadow overflow-hidden">
+      {/* Image Section */}
+      <div className="w-full sm:w-48 md:w-64 lg:w-72 shrink-0 p-2 sm:p-3">
+        <div className="relative h-48 sm:h-full rounded-xl overflow-hidden">
           <ShimmerImage
             src={tour.image || "/placeholder.svg"}
             alt={tour.title}
             className="w-full h-full object-cover"
           />
+          {/* Mobile: Delete button on image */}
+          <button
+            onClick={handleRemove}
+            className="sm:hidden absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md text-[#F23813] hover:bg-[#F23813] hover:text-white transition-colors"
+            aria-label="Remove from wishlist"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+          {/* Mobile: Discount badge on image */}
+          {hasDiscount && (
+            <span className="sm:hidden absolute top-2 left-2 bg-[#FF5630] text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
+              {discountPercent}% OFF
+            </span>
+          )}
         </div>
       </div>
 
-      <div className="flex-1 py-4 px-4 md:px-5 flex flex-col min-w-0">
-        <h3 className="text-[17px] font-semibold text-[#1C1B1F] mb-1">
-          {tour.title}
-        </h3>
+      {/* Content Section */}
+      <div className="flex-1 py-3 px-3 sm:py-4 sm:px-4 md:px-5 flex flex-col min-w-0">
+        {/* Mobile: Title + Rating row */}
+        <div className="flex justify-between items-start gap-2 sm:block">
+          <h3 className="text-[15px] sm:text-[17px] font-semibold text-[#1C1B1F] mb-1 flex-1">
+            {tour.title}
+          </h3>
+          {/* Mobile: Rating inline */}
+          <div className="flex items-center gap-1 sm:hidden shrink-0">
+            <Star className="w-3.5 h-3.5 fill-[#FFC107] text-[#FFC107]" />
+            <span className="text-[12px] font-medium text-[#495560]">{tour.rating}</span>
+          </div>
+        </div>
 
-        <div className="flex items-center gap-1 mb-4">
+        {/* Desktop: Rating */}
+        <div className="hidden sm:flex items-center gap-1 mb-4">
           <Star className="w-4 h-4 fill-[#FFC107] text-[#FFC107]" />
           <span className="text-sm font-medium text-[#495560]">{tour.rating}</span>
           <span className="text-sm text-[#495560]">({tour.reviews} reviews)</span>
         </div>
 
-        <p className="text-[13px] text-[#495560] mb-4 line-clamp-2 leading-relaxed">
+        {/* Description - hidden on mobile */}
+        <p className="hidden sm:block text-[13px] text-[#495560] mb-4 line-clamp-2 leading-relaxed">
           {description}
         </p>
 
-        <div className="flex items-center gap-2 text-[13px]">
-          <MapPin className="w-4 h-4 text-[#495560] shrink-0" />
+        {/* Destinations */}
+        <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-[13px]">
+          <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#495560] shrink-0" />
           <span className="font-medium text-[#495560]">Destinations</span>
           <span className="text-[#6B7280] truncate">{destinations.join(", ")}</span>
         </div>
+
+        {/* Mobile: Price + Buttons row */}
+        <div className="sm:hidden mt-3 pt-3 border-t border-gray-100">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              {hasDiscount && (
+                <p className="text-[10px] text-[#6B7280]">
+                  From <span className="line-through text-[#9CA3AF]">USD {tour.originalPrice?.toLocaleString()}</span>
+                </p>
+              )}
+              <p className="font-Volkhov text-[16px] font-bold text-[#7BBCB0]">
+                USD {tour.price.toLocaleString()}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Link
+                href={`/tours/${tourIdentifier}`}
+                className="px-4 py-2 bg-[#00A792] text-white text-center font-medium rounded-full text-[12px] hover:bg-[#008F84] transition-colors"
+              >
+                View
+              </Link>
+              <Link
+                href={`/chats?enquiry=true`}
+                className="px-3 py-2 border border-[#E5E5E5] bg-[#F9FAFB] text-[#1C1B1F] text-center font-medium rounded-full text-[12px] hover:bg-gray-100 transition-colors"
+              >
+                Enquiry
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="w-full md:w-48 lg:w-56 shrink-0 p-4 flex flex-col">
+      {/* Desktop: Price & Actions Section */}
+      <div className="hidden sm:flex w-48 lg:w-56 shrink-0 p-4 flex-col">
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
             {hasDiscount && (
@@ -206,7 +264,8 @@ function WishlistTourCard({ tour }: { tour: Tour }) {
         </div>
       </div>
 
-      <div className="w-0 group-hover/card:w-12 overflow-hidden bg-[#F23813] flex items-center justify-center transition-all duration-300 ease-out rounded-r-2xl shrink-0">
+      {/* Desktop: Hover-reveal delete button */}
+      <div className="hidden sm:flex w-0 group-hover/card:w-12 overflow-hidden bg-[#F23813] items-center justify-center transition-all duration-300 ease-out rounded-r-2xl shrink-0">
         <button
           onClick={handleRemove}
           className="w-full h-full flex items-center justify-center text-white hover:bg-[#E54D2E] transition-colors"

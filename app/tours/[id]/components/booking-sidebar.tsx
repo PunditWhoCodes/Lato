@@ -23,7 +23,7 @@ export function BookingSidebar({
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false)
 
   return (
-    <div className="sticky top-24 space-y-6">
+    <div className="lg:sticky lg:top-24 space-y-6">
       
       {/* ------- TOP CARD ------- */}
       <div className="bg-white border border-[#E5E5E5] rounded-[28px] shadow-[0_4px_40px_rgba(0,0,0,0.08)] p-6">

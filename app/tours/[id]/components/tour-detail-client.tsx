@@ -237,6 +237,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
         images={tourData.images}
         title={tourData.title}
         discountPercent={discountPercent}
+        tourId={tourId}
       />
 
       {/* Main Content Grid - Two Columns */}
@@ -253,6 +254,17 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
               difficulty={tourData.difficulty}
               minAge={tourData.minAge}
               languages={tourData.languages}
+            />
+          </div>
+
+          {/* Mobile Only - Booking Section above tabs */}
+          <div className="lg:hidden">
+            <BookingSidebar
+              price={tourData.price}
+              originalPrice={tourData.originalPrice}
+              savings={tourData.originalPrice && tourData.price ? tourData.originalPrice - tourData.price : 0}
+              creditEarned={Math.round((tourData.price || 0) * 0.05)}
+              currency={tourData.currencySymbol}
             />
           </div>
 
@@ -326,8 +338,8 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           </div>
         </div>
 
-        {/* Sidebar - Right Side (1/3) */}
-        <div className="lg:col-span-1 mt-6">
+        {/* Sidebar - Right Side (1/3) - Hidden on mobile, shown above tabs instead */}
+        <div className="hidden lg:block lg:col-span-1 mt-6">
           <BookingSidebar
             price={tourData.price}
             originalPrice={tourData.originalPrice}

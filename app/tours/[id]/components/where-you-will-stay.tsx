@@ -65,8 +65,8 @@ export function WhereYouWillStay({ accommodations }: WhereYouWillStayProps) {
         </Button>
       </div>
 
-      {/* Accommodation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Accommodation Cards - Horizontal scroll on mobile, grid on desktop */}
+      <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-x-visible pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
         {displayAccommodations.map((accommodation, index) => {
           const isAPI = isAPIAccommodation(accommodation)
 
@@ -92,7 +92,7 @@ export function WhereYouWillStay({ accommodations }: WhereYouWillStayProps) {
           const accommodationType = isAPI ? accommodation.type : undefined
 
           return (
-            <div key={isAPI ? accommodation.id : index} className="group cursor-pointer">
+            <div key={isAPI ? accommodation.id : index} className="group cursor-pointer flex-shrink-0 w-[260px] md:w-auto">
               {/* Image */}
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-[#00A792] transition-colors">
                 <Image
