@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Star, Heart, MapPin } from "lucide-react"
 import { useSavedTours } from "@/lib/saved-tours-context"
+import type { Tour } from "@/types"
 
 interface TourHeaderProps {
   title: string
@@ -11,6 +12,7 @@ interface TourHeaderProps {
   location?: string
   destination?: string
   tourId: string
+  tourData?: Partial<Tour>
 }
 
 export function TourHeader({
@@ -19,10 +21,42 @@ export function TourHeader({
   reviewCount,
   location = "Peru",
   destination = "Peru",
-  tourId
+  tourId,
+  tourData
 }: TourHeaderProps) {
   const { toggleSaveTour, isTourSaved } = useSavedTours()
   const isFavorite = isTourSaved(tourId)
+
+  const handleToggleSave = () => {
+    if (tourData) {
+      toggleSaveTour(tourId, {
+        id: tourData.id || 0,
+        uuid: tourData.uuid || tourId,
+        title: tourData.title || title,
+        company: tourData.company || "",
+        companyId: tourData.companyId || "",
+        companyCountry: tourData.companyCountry || "",
+        companyFlag: tourData.companyFlag || "",
+        price: tourData.price || 0,
+        originalPrice: tourData.originalPrice,
+        rating: tourData.rating || rating,
+        reviews: tourData.reviews || reviewCount,
+        duration: tourData.duration || "",
+        groupSize: tourData.groupSize || "",
+        location: tourData.location || location,
+        destination: tourData.destination || destination,
+        travelStyle: tourData.travelStyle || "",
+        image: tourData.image || "",
+        badges: tourData.badges || [],
+        category: tourData.category || "",
+        difficulty: tourData.difficulty || "",
+        highlights: tourData.highlights || [],
+        tourType: tourData.tourType || "",
+      })
+    } else {
+      toggleSaveTour(tourId)
+    }
+  }
 
   return (
     <div className="space-y-3">
@@ -80,7 +114,7 @@ export function TourHeader({
 
         {/* Right Column - Heart Icon (hidden on mobile, shown on image instead) */}
         <button
-          onClick={() => toggleSaveTour(tourId)}
+          onClick={handleToggleSave}
           className={`hidden md:flex w-10 h-10 bg-white rounded-full items-center justify-center shadow-sm border border-[#E8E8E8] hover:border-[#00A699] transition-all duration-300 shrink-0 ${
             isFavorite ? "rotate-360" : ""
           }`}

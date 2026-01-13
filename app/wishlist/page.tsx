@@ -1,64 +1,14 @@
 "use client"
 
-import { useMemo, useEffect } from "react"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
-import { Star, MapPin, ChevronRight, Trash2, Loader2 } from "lucide-react"
-import { ProtectedRoute, useAuth } from "@/lib/auth"
+import { Star, MapPin, ChevronRight, Trash2 } from "lucide-react"
+import { ProtectedRoute } from "@/lib/auth"
 import { useSavedTours } from "@/lib/saved-tours-context"
-import { tours as mockTours } from "@/lib/data"
 import { ShimmerImage } from "@/components/ui/shimmer-image"
-import { useMarketplaceTrips } from "@/app/tours/api"
-import { mapUserTripsToTours } from "@/app/tours/api/trips.mappers"
-import type { Tour } from "@/types"
 
 export default function WishlistPage() {
-  const { user } = useAuth()
-  const { savedTours, cleanupStaleTours } = useSavedTours()
-
-  // Fetch API tours
-  const { data: apiResponse, isLoading: isLoadingApi } = useMarketplaceTrips({
-    step: 100, // Fetch more to ensure we get saved tours
-    page: 1,
-  })
-
-  // Map API tours to Tour format
-  const apiTours = useMemo(() => {
-    if (!apiResponse?.data) return []
-    return mapUserTripsToTours(apiResponse.data)
-  }, [apiResponse])
-
-  // Get all valid tour IDs
-  const allValidTourIds = useMemo(() => {
-    const mockIds = mockTours.map(tour => tour.uuid || tour.id.toString())
-    const apiIds = apiTours.map(tour => tour.uuid || tour.id.toString())
-    return [...mockIds, ...apiIds]
-  }, [apiTours])
-
-  // Cleanup stale tour IDs when data loads
-  useEffect(() => {
-    if (!isLoadingApi && allValidTourIds.length > 0) {
-      cleanupStaleTours(allValidTourIds)
-    }
-  }, [isLoadingApi, allValidTourIds, cleanupStaleTours])
-
-  // Combine mock tours and API tours, then filter by saved IDs
-  const savedTripsData = useMemo(() => {
-    // Add uuid to mock tours for consistent identification
-    const mockToursWithUuid: Tour[] = mockTours.map(tour => ({
-      ...tour,
-      uuid: tour.uuid || tour.id.toString()
-    }))
-
-    // Combine all tours
-    const allTours = [...mockToursWithUuid, ...apiTours]
-
-    // Filter by saved tour IDs (using uuid or id.toString())
-    return allTours.filter((tour) => {
-      const tourIdentifier = tour.uuid || tour.id.toString()
-      return savedTours.includes(tourIdentifier)
-    })
-  }, [savedTours, apiTours])
+  const { savedToursData, savedToursCount } = useSavedTours()
 
   return (
     <ProtectedRoute>
@@ -74,16 +24,13 @@ export default function WishlistPage() {
             <span className="text-[#00A699]">Wishlist</span>
           </nav>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1C1B1F] mb-5 sm:mb-8">Wishlist</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#1C1B1F] mb-5 sm:mb-8">
+            Wishlist {savedToursCount > 0 && <span className="text-gray-400 font-normal text-lg">({savedToursCount})</span>}
+          </h1>
 
-          {isLoadingApi ? (
-            <div className="flex flex-col items-center justify-center py-16">
-              <Loader2 className="h-10 w-10 animate-spin text-[#00A699] mb-4" />
-              <p className="text-gray-500">Loading your saved tours...</p>
-            </div>
-          ) : savedTripsData.length > 0 ? (
+          {savedToursData.length > 0 ? (
             <div className="space-y-4 sm:space-y-6">
-              {savedTripsData.map((tour) => (
+              {savedToursData.map((tour) => (
                 <WishlistTourCard key={tour.uuid || tour.id} tour={tour} />
               ))}
             </div>
@@ -112,7 +59,32 @@ export default function WishlistPage() {
   )
 }
 
-function WishlistTourCard({ tour }: { tour: Tour }) {
+interface SavedTourData {
+  id: number
+  uuid?: string
+  title: string
+  company: string
+  companyId: string
+  companyCountry: string
+  companyFlag: string
+  price: number
+  originalPrice?: number
+  rating: number
+  reviews: number
+  duration: string
+  groupSize: string
+  location: string
+  destination: string
+  travelStyle: string
+  image: string
+  badges: string[]
+  category: string
+  difficulty: string
+  highlights: string[]
+  tourType: string
+}
+
+function WishlistTourCard({ tour }: { tour: SavedTourData }) {
   const { toggleSaveTour } = useSavedTours()
   const tourIdentifier = tour.uuid || tour.id.toString()
 

@@ -39,13 +39,18 @@ export function HeroSection() {
           </div>
 
           {/* Hero Image */}
-          <div className="relative w-full rounded-[20px] overflow-hidden h-[400px]">
+          <div className="relative w-full rounded-[20px] overflow-hidden h-[400px] mb-4">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{
                 backgroundImage: "url('/hero-image.jpg')",
               }}
             />
+          </div>
+
+          {/* Search Bar - Mobile */}
+          <div className="w-full">
+            <SearchBar />
           </div>
         </div>
 

@@ -229,6 +229,11 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           location={tourData.location}
           destination={destination}
           tourId={tourId}
+          tourData={tour ? {
+            ...tour,
+            uuid: tour.uuid || tourId,
+            image: tourData.images[0] || tour.image,
+          } : undefined}
         />
       </div>
 
@@ -238,6 +243,11 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
         title={tourData.title}
         discountPercent={discountPercent}
         tourId={tourId}
+        tourData={tour ? {
+          ...tour,
+          uuid: tour.uuid || tourId,
+          image: tourData.images[0] || tour.image,
+        } : undefined}
       />
 
       {/* Main Content Grid - Two Columns */}

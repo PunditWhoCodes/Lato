@@ -23,7 +23,7 @@ export function TourListCard({ tour, onClick }: TourListCardProps) {
 
   const handleSaveClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    toggleSaveTour(tourIdentifier)
+    toggleSaveTour(tourIdentifier, tour)
   }
 
   return (

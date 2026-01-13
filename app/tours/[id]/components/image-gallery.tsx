@@ -4,18 +4,52 @@ import { useState } from "react"
 import Image from "next/image"
 import { Images, LayoutGrid, X, Heart } from "lucide-react"
 import { useSavedTours } from "@/lib/saved-tours-context"
+import type { Tour } from "@/types"
 
 interface ImageGalleryProps {
   images: string[]
   title: string
   discountPercent?: number
   tourId?: string
+  tourData?: Partial<Tour>
 }
 
-export function ImageGallery({ images, title, discountPercent, tourId }: ImageGalleryProps) {
+export function ImageGallery({ images, title, discountPercent, tourId, tourData }: ImageGalleryProps) {
   const [showAllPhotos, setShowAllPhotos] = useState(false)
   const { toggleSaveTour, isTourSaved } = useSavedTours()
   const isFavorite = tourId ? isTourSaved(tourId) : false
+
+  const handleToggleSave = () => {
+    if (!tourId) return
+    if (tourData) {
+      toggleSaveTour(tourId, {
+        id: tourData.id || 0,
+        uuid: tourData.uuid || tourId,
+        title: tourData.title || title,
+        company: tourData.company || "",
+        companyId: tourData.companyId || "",
+        companyCountry: tourData.companyCountry || "",
+        companyFlag: tourData.companyFlag || "",
+        price: tourData.price || 0,
+        originalPrice: tourData.originalPrice,
+        rating: tourData.rating || 0,
+        reviews: tourData.reviews || 0,
+        duration: tourData.duration || "",
+        groupSize: tourData.groupSize || "",
+        location: tourData.location || "",
+        destination: tourData.destination || "",
+        travelStyle: tourData.travelStyle || "",
+        image: tourData.image || images[0] || "",
+        badges: tourData.badges || [],
+        category: tourData.category || "",
+        difficulty: tourData.difficulty || "",
+        highlights: tourData.highlights || [],
+        tourType: tourData.tourType || "",
+      })
+    } else {
+      toggleSaveTour(tourId)
+    }
+  }
 
   // Ensure we have at least 4 images for the grid
   const displayImages = images.length >= 4 ? images : [...images, ...images, ...images, ...images].slice(0, 4)
@@ -99,7 +133,7 @@ export function ImageGallery({ images, title, discountPercent, tourId }: ImageGa
           {/* Heart/Wishlist Icon - Top Right */}
           {tourId && (
             <button
-              onClick={() => toggleSaveTour(tourId)}
+              onClick={handleToggleSave}
               className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-110"
               aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}
             >

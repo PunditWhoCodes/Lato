@@ -289,7 +289,7 @@ export function SearchBar() {
   const { daysInMonth, startingDay } = getDaysInMonth(currentMonth)
 
   return (
-    <div className="mx-auto w-full max-w-[1462px] p-4 md:p-8 lg:py-[46px] lg:px-8 bg-white/8 backdrop-blur-[55.55px] rounded-[19.69px]">
+    <div className="mx-auto w-full max-w-[1462px] p-0 md:p-8 lg:py-[46px] lg:px-8 bg-transparent md:bg-white/8 md:backdrop-blur-[55.55px] rounded-[19.69px]">
       {/* Desktop Layout */}
       <div className="hidden md:flex flex-row justify-between items-center bg-white mx-auto w-full max-w-[1380px] h-[69px] rounded-[30px]">
         {/* Three Input Fields Container */}
@@ -564,7 +564,7 @@ export function SearchBar() {
       </div>
 
       {/* Mobile Layout */}
-      <div className="md:hidden bg-white rounded-[20px] p-4 space-y-3">
+      <div className="md:hidden bg-white rounded-[20px] p-4 space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
         {/* First Field - Destination Dropdown */}
         <div ref={destinationMobileRef} className="relative">
           <button

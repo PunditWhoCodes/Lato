@@ -158,13 +158,13 @@ export function Footer() {
             <div className="flex items-center gap-5 lg:gap-8">
               <Link
                 href="/privacy"
-                className="font-poppins font-medium text-[14px] text-[#3A3A3A] hover:text-black transition-colors"
+                className="font-poppins font-medium text-[14px] text-[#3A3A3A] hover:text-black transition-colors whitespace-nowrap"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="font-poppins font-medium text-[14px] text-[#3A3A3A] hover:text-black transition-colors"
+                className="font-poppins font-medium text-[14px] text-[#3A3A3A] hover:text-black transition-colors whitespace-nowrap"
               >
                 Terms of Use
               </Link>
@@ -176,7 +176,7 @@ export function Footer() {
               </Link>
               <Link
                 href="/sitemap"
-                className="font-poppins font-medium text-[14px] text-[#3A3A3A] hover:text-black transition-colors"
+                className="font-poppins font-medium text-[14px] text-[#3A3A3A] hover:text-black transition-colors whitespace-nowrap"
               >
                 Site Map
               </Link>

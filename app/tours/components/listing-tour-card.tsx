@@ -63,7 +63,31 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    toggleSaveTour(tourIdentifier)
+    // Pass tour data for saving to localStorage
+    toggleSaveTour(tourIdentifier, {
+      id: tour.id,
+      uuid: tour.uuid,
+      title: tour.title,
+      company: tour.subtitle || "",
+      companyId: "",
+      companyCountry: "",
+      companyFlag: "",
+      price: tour.price,
+      originalPrice: tour.originalPrice,
+      rating: tour.rating,
+      reviews: 0,
+      duration: tour.duration,
+      groupSize: tour.groupSize,
+      location: tour.location,
+      destination: tour.location,
+      travelStyle: "",
+      image: tour.image,
+      badges: [],
+      category: "",
+      difficulty: "",
+      highlights: [],
+      tourType: "",
+    })
   }
 
   if (viewMode === "list") {
