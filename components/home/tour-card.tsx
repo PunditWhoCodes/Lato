@@ -24,7 +24,7 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
   const handleSaveClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toggleSaveTour(tourIdentifier)
+    toggleSaveTour(tourIdentifier, tour)
   }
 
   // Use UUID if available, otherwise fall back to numeric ID
