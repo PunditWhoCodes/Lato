@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import * as profileApi from '@/lib/api/profile'
 import type { UpdateProfileRequest, BookingStatus } from '@/lib/types/profile'
 import { toast } from 'sonner'
+import { useStore } from '@/lib/store'
 
 // Query keys for profile-related queries
 export const profileQueryKeys = {
@@ -16,12 +17,16 @@ export const profileQueryKeys = {
   credits: () => [...profileQueryKeys.all, 'credits'] as const,
 }
 
-// Fetch user profile
+// Fetch user profile - only when authenticated
 export function useProfile() {
+  const user = useStore((state) => state.user)
+  const isHydrated = useStore((state) => state.isHydrated)
+
   return useQuery({
     queryKey: profileQueryKeys.data(),
     queryFn: profileApi.getProfile,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: isHydrated && !!user, // Only fetch when store is hydrated and user exists
   })
 }
 
