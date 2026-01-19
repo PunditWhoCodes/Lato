@@ -78,7 +78,7 @@ export function AttractionsVerticalScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-[#FBFBFB] py-12 md:py-16 lg:py-20"
+      className="relative bg-[#FBFBFB] md:py-16 lg:py-20"
       style={{
         height: `${attractions.length * 100}vh`,
       }}
@@ -189,7 +189,7 @@ export function AttractionsVerticalScroll() {
 
                         <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
                           <div className="backdrop-blur-md bg-black/30 rounded-2xl px-8 py-6 flex flex-col items-center">
-                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg text-center">
+                            <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg text-center">
                               {attraction.name}
                             </h3>
                             <p className="text-white/95 text-lg md:text-xl flex items-center gap-2 mt-3">

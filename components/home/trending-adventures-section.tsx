@@ -16,8 +16,8 @@ export function TrendingAdventuresSection() {
 
   if (isLoading) {
     return (
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-7xl mx-auto flex justify-center py-20">
+      <section className="py-4 md:py-12 lg:py-20 px-4 bg-white">
+        <div className="max-w-7xl mx-auto flex justify-center py-10 md:py-20">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
         </div>
       </section>
@@ -25,16 +25,16 @@ export function TrendingAdventuresSection() {
   }
 
   return (
-    <section className="py-12 md:py-20 px-4 bg-white">
+    <section className="py-1 md:py-12 lg:py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
 
         {/* Top text */}
-        <p className="font-poppins text-sm md:text-lg font-light mb-2 md:mb-3">
+        <p className="font-poppins text-sm md:text-lg font-light mb-1 md:mb-3">
           Find your next adventure in destinations that inspire you
         </p>
 
         {/* Heading + Action */}
-        <div className="flex justify-between items-start md:items-center mb-8 md:mb-14">
+        <div className="flex justify-between items-start md:items-center mb-6 md:mb-10 lg:mb-14">
           <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-[56px] leading-tight lg:leading-normal text-black">
             Trending Adventures
           </h2>

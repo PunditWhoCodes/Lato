@@ -21,7 +21,7 @@ export function EmailSubscriptionSection() {
   }
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-10 bg-white">
+    <section className="py-4 md:py-12 lg:py-20 px-4 md:px-10 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Mobile Layout */}
         <div className="md:hidden bg-[#00A792] rounded-[20px] px-6 py-10 flex flex-col items-center justify-center">

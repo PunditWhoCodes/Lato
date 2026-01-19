@@ -62,10 +62,10 @@ export function AttractionsCarousel() {
   ]
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section className="py-2 md:py-16 lg:py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
 
-        <h2 className="font-poppins text-4xl md:text-5xl font-bold text-text-primary mb-16">
+        <h2 className="font-poppins text-4xl md:text-5xl font-bold text-text-primary mb-6 md:mb-12 lg:mb-16">
           Top Destinations
         </h2>
 

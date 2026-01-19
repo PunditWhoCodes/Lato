@@ -328,7 +328,7 @@ export function SearchBar() {
             )}
           </div>
 
-          {/* Swap Icon */}
+          {/* Map Icon - Only on large screens */}
           <button
             className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px]"
           >
@@ -574,11 +574,12 @@ export function SearchBar() {
               setShowCalendar(false)
               setShowPassengerDropdown(false)
             }}
-            className="w-full flex items-center h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
+            className="w-full flex items-center justify-between h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
           >
             <span className={`font-montserrat text-sm ${destination ? "text-[#112211]" : "text-[#112211]/50"}`}>
               {destination || "Destination"}
             </span>
+            <MapPin className="size-4 text-[#00A792]" />
           </button>
 
           {/* Destination Dropdown - Mobile */}
@@ -613,7 +614,7 @@ export function SearchBar() {
             <span className={`font-montserrat text-sm ${startDate || endDate ? "text-[#112211]" : "text-[#112211]/50"}`}>
               {getDateRangeDisplay()}
             </span>
-            <Calendar className="w-5 h-5 text-[#112211]/50" />
+            <Calendar className="w-5 h-5 text-[#00A792]" />
           </button>
 
           {/* Calendar Dropdown - Mobile */}
@@ -736,7 +737,7 @@ export function SearchBar() {
             <span className={`font-montserrat text-sm ${adults > 0 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}`}>
               {getPassengerSummary()}
             </span>
-            <ChevronDown className={`w-5 h-5 text-[#112211]/50 transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
+            <ChevronDown className={`w-5 h-5 text-[#00A792] transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
           </button>
 
           {/* Passenger Dropdown - Mobile */}
