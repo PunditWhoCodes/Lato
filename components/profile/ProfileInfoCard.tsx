@@ -25,25 +25,24 @@ export function ProfileInfoCard({
   className,
 }: ProfileInfoCardProps) {
   return (
-    <Card className={cn('bg-[#FAFBFC] border border-[#CCCCCC] rounded-[20px]', className)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle className="text-lg font-semibold text-gray-900">
+    <Card className={cn('bg-white border border-[rgba(0,0,0,0.1)] rounded-[5px] px-6 py-6', className)}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 pb-4">
+        <CardTitle className="font-poppins text-[18px] font-semibold text-black capitalize">
           {title}
         </CardTitle>
         {onEdit && (
           <Button
             variant="outline"
-            size="sm"
             onClick={onEdit}
-            className="border-[#00A792] text-[#00A792] hover:bg-[#00A792] hover:text-white rounded-full px-6"
+            className="border-[#00a792] text-[#00a792] hover:bg-[#00a792] hover:text-white rounded-[30px] h-9 px-6 font-poppins font-normal text-[14px]"
           >
             {editLabel}
           </Button>
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         {isEmpty ? (
-          <p className="text-gray-500 text-sm">{emptyMessage}</p>
+          <p className="font-poppins font-light text-[14px] text-[#6b7280]">{emptyMessage}</p>
         ) : (
           children
         )}
@@ -67,11 +66,11 @@ export function InfoField({
   className,
 }: InfoFieldProps) {
   return (
-    <div className={cn('', className)}>
-      <p className="text-sm font-medium text-gray-900 mb-1">{label}</p>
+    <div className={cn('flex flex-col gap-1', className)}>
+      <p className="font-poppins font-medium text-[13px] text-[#6b7280] capitalize">{label}</p>
       <p className={cn(
-        'text-sm',
-        value ? 'text-gray-600' : 'text-gray-400'
+        'font-poppins font-normal text-[14px] capitalize',
+        value ? 'text-black' : 'text-[#6b7280]'
       )}>
         {value || placeholder}
       </p>
@@ -98,7 +97,7 @@ export function InfoGrid({
   }
 
   return (
-    <div className={cn('grid gap-6', gridCols[columns], className)}>
+    <div className={cn('grid gap-x-16 gap-y-5', gridCols[columns], className)}>
       {children}
     </div>
   )

@@ -36,12 +36,12 @@ export default function MyProfilePage() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen bg-[#F7F7F7]">
+      <main className="min-h-screen bg-[#fafbfc]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Page Header */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="font-poppins text-[28px] font-medium text-black leading-[1.498]">My Profile</h1>
+            <p className="font-poppins font-light text-[16px] text-[rgba(0,0,0,0.7)] mt-2 leading-[1.498]">
               Manage your personal information and account settings
             </p>
           </div>
@@ -52,7 +52,7 @@ export default function MyProfilePage() {
             <div className="lg:col-span-1">
               <ProfileSidebar
                 travelCredits={profile?.travelCredits ?? 0}
-                currency={profile?.currency ?? 'INR'}
+                currency={profile?.currency ?? 'USD'}
               />
             </div>
 
@@ -66,15 +66,15 @@ export default function MyProfilePage() {
                 {isLoading ? (
                   <ProfileInfoSkeleton />
                 ) : (
-                  <div className="space-y-6">
+                  <div className="flex flex-col gap-5">
                     {/* Avatar and basic info */}
-                    <div className="flex items-start gap-4">
-                      <Avatar className="h-16 w-16">
+                    <div className="flex items-start">
+                      <Avatar className="h-[65px] w-[65px]">
                         <AvatarImage
                           src={profile?.avatar || user?.avatar}
                           alt={profile?.firstName || user?.name || 'Profile'}
                         />
-                        <AvatarFallback className="bg-[#00A792] text-white text-lg">
+                        <AvatarFallback className="bg-[#00a792] text-white text-xl">
                           {getInitials()}
                         </AvatarFallback>
                       </Avatar>
@@ -118,31 +118,29 @@ export default function MyProfilePage() {
               {/* Passport Information Card */}
               <ProfileInfoCard
                 title="Passport Information"
-                isEmpty={!profile?.passport?.number}
-                emptyMessage="No passport information provided"
               >
                 {isLoading ? (
                   <ProfileInfoSkeleton rows={2} />
-                ) : profile?.passport ? (
+                ) : (
                   <InfoGrid columns={2}>
                     <InfoField
                       label="Passport Number"
-                      value={profile.passport.number}
+                      value={profile?.passport?.number}
                     />
                     <InfoField
                       label="Issue Date"
-                      value={profile.passport.issueDate ? formatDate(profile.passport.issueDate) : null}
+                      value={profile?.passport?.issueDate ? formatDate(profile.passport.issueDate) : null}
                     />
                     <InfoField
                       label="Expired Date"
-                      value={profile.passport.expiryDate ? formatDate(profile.passport.expiryDate) : null}
+                      value={profile?.passport?.expiryDate ? formatDate(profile.passport.expiryDate) : null}
                     />
                     <InfoField
                       label="Issue Country"
-                      value={profile.passport.issueCountry}
+                      value={profile?.passport?.issueCountry}
                     />
                   </InfoGrid>
-                ) : null}
+                )}
               </ProfileInfoCard>
 
               {/* Emergency Contact Card */}
