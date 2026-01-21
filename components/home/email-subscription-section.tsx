@@ -21,56 +21,56 @@ export function EmailSubscriptionSection() {
   }
 
   return (
-    <section className="py-4 md:py-12 lg:py-20 px-4 md:px-10 bg-white">
+    <section className="py-6 md:py-12 lg:py-20 px-4 md:px-10 bg-white">
       <div className="max-w-7xl mx-auto">
-        {/* Mobile Layout */}
-        <div className="md:hidden bg-[#00A792] rounded-[20px] px-6 py-10 flex flex-col items-center justify-center">
-          <div className="flex flex-col items-center text-left max-w-[236px]">
-            {/* Title */}
-            <h2 className="font-poppins font-light text-[23px] leading-[35px] text-white mb-2">
+        {/* Mobile Layout - Figma: 350x366, rounded-20px, centered content */}
+        <div className="md:hidden bg-[#00A792] rounded-[20px] px-[57px] py-[84px] flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center w-[236px]">
+            {/* Title - Figma: 23.294px, leading ~35px, Poppins Light */}
+            <h2 className="font-poppins font-light text-[23px] leading-[35px] text-white mb-[6px]">
               Subscribe to our Newsletter
             </h2>
 
-            {/* Description */}
-            <p className="font-poppins font-normal text-[8.7px] leading-[150%] text-[#ECECEC] mb-6">
+            {/* Description - Figma: 8.735px, Poppins Regular, #ECECEC */}
+            <p className="font-poppins font-normal text-[9px] leading-[150%] text-[#ECECEC] mb-0">
               Subscribe for Updates: Stay informed about the latest investor updates, financial results, and announcements by subscribing to our newsletter.
             </p>
 
             {isSubscribed ? (
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-left w-full">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-left w-full mt-5">
                 <p className="text-white font-poppins font-semibold text-[10px]">
                   Thank you for subscribing!
                 </p>
               </div>
             ) : (
-              <div className="w-full">
-                {/* Stay up to date */}
-                <p className="font-poppins font-normal text-[6.6px] leading-[150%] text-[#ECECEC] mb-1.5 text-left">
+              <div className="w-[204px] mt-0">
+                {/* Stay up to date - Figma: 6.582px, Poppins Regular, #ECECEC */}
+                <p className="font-poppins font-normal text-[7px] leading-[150%] text-[#ECECEC] mb-[17px] text-left">
                   Stay up to date
                 </p>
 
                 <form onSubmit={handleSubmit}>
-                  {/* Input Row */}
-                  <div className="flex items-stretch mb-1.5 h-[22px]">
+                  {/* Input Row - Figma: 21.721px height, rounded-[10px] */}
+                  <div className="flex items-stretch mb-[7px] h-[22px]">
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
                       required
-                      className="flex-1 px-2.5 py-2 bg-white/10 text-white placeholder:text-white text-[6px] font-inter rounded-l-[10px] border-0 outline-none focus:ring-1 focus:ring-white/30"
+                      className="flex-1 px-[10px] py-2 bg-white/10 text-white placeholder:text-white/70 text-[6px] font-inter rounded-l-[10px] border-0 outline-none focus:ring-1 focus:ring-white/30"
                     />
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-white text-[#00A792] font-inter font-bold text-[5.3px] px-2.5 rounded-r-[10px] hover:bg-white/95 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                      className="bg-white text-[#00A792] font-inter font-bold text-[5px] px-[10px] rounded-r-[10px] hover:bg-white/95 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                     >
                       {isSubmitting ? "..." : "Subscribe"}
                     </button>
                   </div>
 
-                  {/* Privacy text */}
-                  <p className="font-poppins font-normal text-[6.6px] leading-[150%] text-[#ECECEC] text-left">
+                  {/* Privacy text - Figma: 6.582px, Poppins Regular, #ECECEC */}
+                  <p className="font-poppins font-normal text-[7px] leading-[150%] text-[#ECECEC] text-left">
                     by subscribing you agree to our{" "}
                     <Link
                       href="/privacy-policy"

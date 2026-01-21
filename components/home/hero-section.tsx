@@ -7,50 +7,44 @@ import Link from "next/link"
 
 export function HeroSection() {
   return (
-    <section className="relative bg-[#F7F7F7] px-4 pt-8 md:pt-12 pb-8 md:pb-20">
+    <section className="relative bg-[#F7F7F7] px-[14px] pt-[21px] md:pt-12 pb-0 md:pb-20">
       <div className="max-w-7xl mx-auto">
-        {/* Mobile Layout */}
-        <div className="md:hidden flex flex-col items-center">
-          {/* Top Section - Heading, Subtitle, Button */}
-          <div className="flex flex-col w-full mb-5">
-            {/* Heading - Left aligned */}
-            <h1 className="font-poppins font-medium text-[27px] leading-[100%] text-black mb-2">
-              Your Next Adventure Awaits
+        {/* Mobile Layout - Figma pixel-perfect */}
+        <div className="md:hidden flex flex-col items-center gap-[20px]">
+          {/* Top Section - Heading and Subtitle */}
+          <div className="flex flex-col items-end w-[345px]">
+            {/* Heading - Full width, left aligned */}
+            <h1 className="font-poppins font-medium text-[27px] leading-[100%] text-black w-full">
+              Your Next Adventure<br />Awaits
             </h1>
 
-            {/* Subtitle and Button Container - Pushed to right, content left-aligned */}
-            <div className="flex flex-col items-start self-end max-w-[159px]">
-              <p className="font-poppins font-light text-[8.2px] leading-[150%] text-black mb-2 text-left">
+            {/* Subtitle and Button - Right aligned container */}
+            <div className="flex flex-col items-start gap-[9px] w-[159px]">
+              <p className="font-poppins font-light text-[8.2px] leading-[150%] text-black">
                 Explore stunning destinations, unique experience, and unforgettable journey with Lato.
               </p>
+              {/* Book Now Button */}
               <div className="group">
-                <Button
-                  asChild
-                  className="relative overflow-hidden bg-black text-white rounded-[12px] h-[21px] px-[6px] py-[3.7px] font-poppins font-light flex items-center gap-[14px]"
+                <Link
+                  href="/tours"
+                  className="relative overflow-hidden bg-black text-white rounded-[30px] h-[21px] w-[81px] px-[6px] py-[3.7px] font-poppins font-light flex items-center justify-between"
                 >
-                  <Link href="/tours">
-                    <span className="relative z-10 text-[7.4px] leading-[150%]">Book Now</span>
-                    <ArrowUpRight className="relative z-10 w-[10px] h-[10px] transition-transform duration-300 group-hover:rotate-45" />
-                    <span className="absolute inset-0 bg-[#00A792] rounded-[12px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-                  </Link>
-                </Button>
+                  <span className="relative z-10 text-[7.4px] leading-[150%]">Book Now</span>
+                  <ArrowUpRight className="relative z-10 w-[10px] h-[10px] transition-transform duration-300 group-hover:rotate-45" />
+                  <span className="absolute inset-0 bg-[#00A792] rounded-[30px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                </Link>
               </div>
             </div>
           </div>
 
-          {/* Hero Image */}
-          <div className="relative w-full rounded-[20px] overflow-hidden h-[400px] mb-4">
+          {/* Hero Image - Figma: 375px wide, 647px tall, rounded-[20px] */}
+          <div className="relative w-full rounded-[20px] overflow-hidden h-[647px]">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{
                 backgroundImage: "url('/hero-image.jpg')",
               }}
             />
-          </div>
-
-          {/* Search Bar - Mobile */}
-          <div className="w-full">
-            <SearchBar />
           </div>
         </div>
 

@@ -72,15 +72,15 @@ export function FeaturedActivities() {
   }
 
   return (
-    <section className="py-20 bg-white md:py-16 lg:py-20 px-4 md:px-10">
-      <div className="max-w-[1920px] mx-auto px-4">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-8 md:mb-12">
-          <div>
-            <p className="font-poppins font-light text-sm md:text-base mb-2">
+    <section className="py-[35px] md:py-16 lg:py-20 px-[17px] md:px-10 bg-white">
+      <div className="max-w-[1920px] mx-auto">
+        {/* Header - Figma pixel-perfect */}
+        <div className="flex justify-between items-start mb-[63px] md:mb-12">
+          <div className="flex flex-col gap-[15px]">
+            <p className="font-poppins font-light text-[8.5px] md:text-base leading-[150%]">
               Discover the world your way
             </p>
-            <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-[42px] lg:leading-[56px] text-black">
+            <h2 className="font-poppins font-light text-[22px] md:text-4xl lg:text-[42px] leading-[150%] lg:leading-[56px] text-black">
               Featured Tour Activities
             </h2>
           </div>
@@ -110,11 +110,11 @@ export function FeaturedActivities() {
           </div>
         </div>
 
-        {/* Activity Cards Carousel */}
+        {/* Activity Cards Carousel - Figma: 148.376px x 163.299px cards, 10.659px gap */}
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+          className="flex gap-[11px] md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 -mx-[17px] px-[17px]"
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
@@ -123,7 +123,7 @@ export function FeaturedActivities() {
           {activities.map((activity) => (
             <div
               key={activity.id}
-              className="relative flex-shrink-0 w-[280px] md:w-[340px] lg:w-[380px] h-[280px] md:h-[320px] lg:h-[380px] rounded-3xl overflow-hidden group cursor-pointer"
+              className="relative flex-shrink-0 w-[148px] md:w-[340px] lg:w-[380px] h-[163px] md:h-[320px] lg:h-[380px] rounded-[9px] md:rounded-3xl overflow-hidden group cursor-pointer"
             >
               {/* Background Image */}
               <div
@@ -136,12 +136,12 @@ export function FeaturedActivities() {
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                <h3 className="font-poppins font-medium text-2xl md:text-3xl text-white mb-2">
+              {/* Content - Figma: title 12.791px, subtitle 6.822px, gap 8.954px */}
+              <div className="absolute bottom-0 left-0 right-0 p-3 md:p-8">
+                <h3 className="font-poppins font-medium text-[13px] md:text-3xl text-white mb-[9px] md:mb-2">
                   {activity.title}
                 </h3>
-                <p className="font-mulish font-light text-sm md:text-base text-white/90">
+                <p className="font-poppins font-light text-[7px] md:text-base text-white/90 leading-[150%]">
                   {activity.tourCount}
                 </p>
               </div>
@@ -149,8 +149,8 @@ export function FeaturedActivities() {
           ))}
         </div>
 
-        {/* Mobile Navigation Dots */}
-        <div className="flex md:hidden justify-center gap-2 mt-6">
+        {/* Mobile Navigation Dots - Hidden */}
+        <div className="hidden">
           {activities.map((_, index) => (
             <div
               key={index}
