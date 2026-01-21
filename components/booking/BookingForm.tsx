@@ -20,17 +20,19 @@ interface BookingFormProps {
 }
 
 interface TravelerInfo {
-  fullName: string
   title: string
+  firstName: string
+  lastName: string
   email: string
+  confirmEmail: string
+  contactCountry: string
   contactNumber: string
-  countryCode: string
-  country: string
   dateOfBirth: {
     day: string
     month: string
     year: string
   }
+  nationality: string
   passport: string
   passportIssueCountry: string
   passportIssueDate: {
@@ -46,13 +48,15 @@ interface TravelerInfo {
 }
 
 const defaultTraveler: TravelerInfo = {
-  fullName: '',
   title: '',
+  firstName: '',
+  lastName: '',
   email: '',
+  confirmEmail: '',
+  contactCountry: '',
   contactNumber: '',
-  countryCode: '+1',
-  country: '',
   dateOfBirth: { day: '', month: '', year: '' },
+  nationality: '',
   passport: '',
   passportIssueCountry: '',
   passportIssueDate: { day: '', month: '', year: '' },
@@ -75,7 +79,6 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
   const [activeTraveler, setActiveTraveler] = useState(1)
   const [travelers, setTravelers] = useState<TravelerInfo[]>([{ ...defaultTraveler }])
   const [promoCode, setPromoCode] = useState('')
-  const [showCountryCodeDropdown, setShowCountryCodeDropdown] = useState(false)
 
   const handleTravelerCountChange = (delta: number) => {
     const newCount = Math.max(1, Math.min(10, numberOfTravelers + delta))
@@ -128,8 +131,6 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
       description: 'Per person surcharge',
     },
   ]
-
-  const selectedCountry = countryCodes.find(c => c.dialCode === travelers[activeTraveler - 1]?.countryCode)
 
   return (
     <div className="space-y-6">
@@ -243,132 +244,107 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
 
         {/* Form Fields */}
         <div className="space-y-4">
-          {/* Full Name */}
+          {/* Full Name (Required) - Title + First Name + Last Name in one row */}
           <div>
             <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-              Full Name
+              Full Name <span className="text-gray-400">(Required)</span>
             </Label>
-            <Input
-              placeholder=""
-              value={travelers[activeTraveler - 1]?.fullName || ''}
-              onChange={(e) => updateTraveler(activeTraveler - 1, 'fullName', e.target.value)}
-              className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
-            />
-          </div>
-
-          {/* Title */}
-          <div>
-            <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-              Title
-            </Label>
-            <div className="relative">
-              <select
-                value={travelers[activeTraveler - 1]?.title || ''}
-                onChange={(e) => updateTraveler(activeTraveler - 1, 'title', e.target.value)}
-                className="w-full h-[40px] px-4 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
-              >
-                <option value="">Select title</option>
-                <option value="Mr">Mr</option>
-                <option value="Mrs">Mrs</option>
-                <option value="Ms">Ms</option>
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <div className="grid grid-cols-[80px_1fr_1fr] gap-3">
+              <div className="relative">
+                <select
+                  value={travelers[activeTraveler - 1]?.title || ''}
+                  onChange={(e) => updateTraveler(activeTraveler - 1, 'title', e.target.value)}
+                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
+                >
+                  <option value="">Title</option>
+                  <option value="Mr">Mr</option>
+                  <option value="Mrs">Mrs</option>
+                  <option value="Ms">Ms</option>
+                </select>
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+              <Input
+                placeholder=""
+                value={travelers[activeTraveler - 1]?.firstName || ''}
+                onChange={(e) => updateTraveler(activeTraveler - 1, 'firstName', e.target.value)}
+                className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
+              />
+              <Input
+                placeholder=""
+                value={travelers[activeTraveler - 1]?.lastName || ''}
+                onChange={(e) => updateTraveler(activeTraveler - 1, 'lastName', e.target.value)}
+                className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
+              />
             </div>
           </div>
 
-          {/* Email Address */}
+          {/* Email Address (Required) - Two fields side by side */}
           <div>
             <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-              Email Address <span className="text-red-500">*</span>
+              Email Address <span className="text-gray-400">(Required)</span>
             </Label>
-            <Input
-              type="email"
-              placeholder=""
-              value={travelers[activeTraveler - 1]?.email || ''}
-              onChange={(e) => updateTraveler(activeTraveler - 1, 'email', e.target.value)}
-              className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
-            />
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                type="email"
+                placeholder=""
+                value={travelers[activeTraveler - 1]?.email || ''}
+                onChange={(e) => updateTraveler(activeTraveler - 1, 'email', e.target.value)}
+                className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
+              />
+              <Input
+                type="email"
+                placeholder=""
+                value={travelers[activeTraveler - 1]?.confirmEmail || ''}
+                onChange={(e) => updateTraveler(activeTraveler - 1, 'confirmEmail', e.target.value)}
+                className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
+              />
+            </div>
           </div>
 
-          {/* Contact No/Tel */}
+          {/* Contact Number (Required) - Country dropdown + phone */}
           <div>
             <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-              Contact No/Tel <span className="text-gray-400">(Required)</span>
+              Contact Number <span className="text-gray-400">(Required)</span>
             </Label>
-            <div className="flex gap-2">
-              <div className="relative w-[140px]">
-                <button
-                  type="button"
-                  onClick={() => setShowCountryCodeDropdown(!showCountryCodeDropdown)}
-                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] text-left flex items-center justify-between"
+            <div className="grid grid-cols-[140px_1fr] gap-3">
+              <div className="relative">
+                <select
+                  value={travelers[activeTraveler - 1]?.contactCountry || ''}
+                  onChange={(e) => updateTraveler(activeTraveler - 1, 'contactCountry', e.target.value)}
+                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
                 >
-                  <span>{selectedCountry ? `${selectedCountry.dialCode}` : '+1'}</span>
-                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showCountryCodeDropdown ? 'rotate-180' : ''}`} />
-                </button>
-                {showCountryCodeDropdown && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#e5e7eb] rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                    {countryCodes.map((c) => (
-                      <button
-                        key={c.code}
-                        type="button"
-                        onClick={() => {
-                          updateTraveler(activeTraveler - 1, 'countryCode', c.dialCode)
-                          setShowCountryCodeDropdown(false)
-                        }}
-                        className="w-full px-4 py-2 text-left text-sm font-poppins hover:bg-[#f9fafb] transition-colors"
-                      >
-                        {c.dialCode} ({c.name})
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  <option value="">Country</option>
+                  {countryCodes.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
               <Input
                 placeholder=""
                 value={travelers[activeTraveler - 1]?.contactNumber || ''}
                 onChange={(e) => updateTraveler(activeTraveler - 1, 'contactNumber', e.target.value)}
-                className="flex-1 h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
+                className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
               />
             </div>
-          </div>
-
-          {/* Country */}
-          <div>
-            <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-              Country
-            </Label>
-            <div className="relative">
-              <select
-                value={travelers[activeTraveler - 1]?.country || ''}
-                onChange={(e) => updateTraveler(activeTraveler - 1, 'country', e.target.value)}
-                className="w-full h-[40px] px-4 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
-              >
-                <option value="">Select country</option>
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <option value="AU">Australia</option>
-                <option value="PK">Pakistan</option>
-                <option value="IN">India</option>
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-            </div>
             <p className="font-poppins text-[10px] text-[#6b7280] mt-1">
-              Since We Can Get In Touch With You If We Need To Touch Base On Your Destination.
+              This is how we will get in touch with you, if we need to reach you at your destination
             </p>
           </div>
 
-          {/* Date of Birth */}
+          {/* Date of Birth and Nationality (Required) - DD/MM/YYYY + Select nationality in same row */}
           <div>
             <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-              Date Of Birth (As On Id/Nationality Document)
+              Date of Birth and Nationality <span className="text-gray-400">(Required)</span>
             </Label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-[70px_70px_90px_1fr] gap-3">
               <div className="relative">
                 <select
                   value={travelers[activeTraveler - 1]?.dateOfBirth?.day || ''}
                   onChange={(e) => updateTraveler(activeTraveler - 1, 'dateOfBirth.day', e.target.value)}
-                  className="w-full h-[40px] px-4 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
+                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
                 >
                   <option value="">DD</option>
                   {Array.from({ length: 31 }, (_, i) => (
@@ -377,13 +353,13 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" />
               </div>
               <div className="relative">
                 <select
                   value={travelers[activeTraveler - 1]?.dateOfBirth?.month || ''}
                   onChange={(e) => updateTraveler(activeTraveler - 1, 'dateOfBirth.month', e.target.value)}
-                  className="w-full h-[40px] px-4 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
+                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
                 >
                   <option value="">MM</option>
                   {Array.from({ length: 12 }, (_, i) => (
@@ -392,13 +368,13 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" />
               </div>
               <div className="relative">
                 <select
                   value={travelers[activeTraveler - 1]?.dateOfBirth?.year || ''}
                   onChange={(e) => updateTraveler(activeTraveler - 1, 'dateOfBirth.year', e.target.value)}
-                  className="w-full h-[40px] px-4 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
+                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
                 >
                   <option value="">YYYY</option>
                   {Array.from({ length: 100 }, (_, i) => (
@@ -407,51 +383,62 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" />
+              </div>
+              <div className="relative">
+                <select
+                  value={travelers[activeTraveler - 1]?.nationality || ''}
+                  onChange={(e) => updateTraveler(activeTraveler - 1, 'nationality', e.target.value)}
+                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
+                >
+                  <option value="">Select nationality</option>
+                  <option value="US">United States</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="CA">Canada</option>
+                  <option value="AU">Australia</option>
+                  <option value="PK">Pakistan</option>
+                  <option value="IN">India</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
             </div>
             <p className="font-poppins text-[10px] text-[#6b7280] mt-1">
-              The lead traveler should be at least 18 years or above.
+              The lead traveler should be 18 years or above.
             </p>
           </div>
 
-          {/* Passport */}
+          {/* Passport (Required) - Passport number + Issue Country in same row */}
           <div>
             <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
               Passport <span className="text-gray-400">(Required)</span>
             </Label>
-            <Input
-              placeholder=""
-              value={travelers[activeTraveler - 1]?.passport || ''}
-              onChange={(e) => updateTraveler(activeTraveler - 1, 'passport', e.target.value)}
-              className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
-            />
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                placeholder=""
+                value={travelers[activeTraveler - 1]?.passport || ''}
+                onChange={(e) => updateTraveler(activeTraveler - 1, 'passport', e.target.value)}
+                className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px]"
+              />
+              <div className="relative">
+                <select
+                  value={travelers[activeTraveler - 1]?.passportIssueCountry || ''}
+                  onChange={(e) => updateTraveler(activeTraveler - 1, 'passportIssueCountry', e.target.value)}
+                  className="w-full h-[40px] px-3 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
+                >
+                  <option value="">Passport Issue Country</option>
+                  <option value="US">United States</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="CA">Canada</option>
+                  <option value="AU">Australia</option>
+                  <option value="PK">Pakistan</option>
+                  <option value="IN">India</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
             <p className="font-poppins text-[10px] text-[#6b7280] mt-1">
               Passport details are required for all travelers.
             </p>
-          </div>
-
-          {/* Passport Issue Country */}
-          <div>
-            <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-              Passport Issue Country
-            </Label>
-            <div className="relative">
-              <select
-                value={travelers[activeTraveler - 1]?.passportIssueCountry || ''}
-                onChange={(e) => updateTraveler(activeTraveler - 1, 'passportIssueCountry', e.target.value)}
-                className="w-full h-[40px] px-4 rounded-[8px] border border-[#e5e7eb] bg-white font-poppins text-[13px] appearance-none cursor-pointer"
-              >
-                <option value="">Select nationality</option>
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <option value="AU">Australia</option>
-                <option value="PK">Pakistan</option>
-                <option value="IN">India</option>
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-            </div>
           </div>
 
           {/* Passport Issued Date & Expiry Date */}
@@ -577,16 +564,16 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
       {/* Latos Savings Section */}
       <div>
         <h2 className="font-poppins text-[16px] font-semibold text-[#111928] mb-3">Latos Savings</h2>
-        <div className="flex gap-3">
+        <div className="relative">
           <Input
             placeholder="Add Promo Code"
             value={promoCode}
             onChange={(e) => setPromoCode(e.target.value)}
-            className="h-[40px] rounded-[8px] border-[#e5e7eb] flex-1 font-poppins text-[13px]"
+            className="h-[48px] rounded-[8px] border-[#e5e7eb] pr-[130px] font-poppins text-[13px]"
           />
           <Button
             variant="outline"
-            className="h-[40px] px-6 rounded-[8px] border-[#00a792] bg-[#00a792] text-white hover:bg-[#008577] font-poppins font-medium text-[13px]"
+            className="absolute right-[6px] top-1/2 -translate-y-1/2 h-[36px] px-5 rounded-[8px] border-[#00a792] bg-[#00a792] text-white hover:bg-[#008577] font-poppins font-medium text-[13px]"
           >
             Promo Code
           </Button>
@@ -596,7 +583,7 @@ export function BookingForm({ tourData, onContinue }: BookingFormProps) {
       {/* Continue Button */}
       <Button
         onClick={onContinue}
-        className="w-full h-[48px] rounded-full bg-[#00a792] hover:bg-[#008577] text-white font-poppins font-medium text-[14px]"
+        className="w-full h-[48px] rounded-[8px] bg-[#00a792] hover:bg-[#008577] text-white font-poppins font-medium text-[14px]"
       >
         Continue to Secure Payment
       </Button>

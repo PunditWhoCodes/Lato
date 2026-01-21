@@ -10,7 +10,7 @@ import { PaymentForm } from '@/components/booking/PaymentForm'
 const mockTourData = {
   id: '1',
   title: 'Iceland Northern Lights & Golden Circle',
-  image: '/tours/iceland.jpg',
+  image: '/destinations/spain.jpg',
   duration: '7 days',
   rating: 4.9,
   reviewCount: 245,
@@ -42,32 +42,32 @@ export default function BookingPage() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen bg-[#f7f7f7]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="min-h-screen bg-[#F7F7F7]">
+        <div className="max-w-[1594px] mx-auto px-4 md:px-8 lg:px-16 xl:px-[163px] py-8">
           {/* Page Title */}
-          <h1 className="font-poppins text-[24px] font-semibold text-black mb-6">
+          <h1 className="font-poppins text-[24px] font-semibold text-black leading-[36px] mb-6">
             {mockTourData.title}
           </h1>
 
           {/* Two-column layout */}
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex flex-col lg:flex-row gap-5">
             {/* Left Column - Booking Form */}
-            <div className="flex-1 lg:max-w-[740px]">
+            <div className="flex-1 lg:w-[922px] lg:max-w-[922px]">
               {/* White Card Container */}
-              <div className="bg-white rounded-[8px] p-6">
+              <div className="bg-white rounded-lg p-6">
                 {/* Stepper Tabs */}
-                <div className="flex gap-[8px] mb-6">
+                <div className="flex gap-2 mb-6 max-w-[456px]">
                   {/* Your Details Tab */}
-                  <div className="flex-1 flex flex-col gap-[4px] items-center">
+                  <div className="flex-1 flex flex-col gap-1 items-center">
                     <div
-                      className={`h-[4px] rounded-[8px] w-full transition-colors ${
-                        activeTab === 'details' ? 'bg-[#00a792]' : 'bg-[#e5e7eb]'
+                      className={`h-[5px] rounded-lg w-full transition-colors ${
+                        activeTab === 'details' ? 'bg-[#00A792]' : 'bg-[#E5E7EB]'
                       }`}
                     />
                     <button
                       onClick={() => setActiveTab('details')}
-                      className={`font-poppins text-[13px] font-semibold transition-colors ${
-                        activeTab === 'details' ? 'text-[#00a792]' : 'text-[#6b7280]'
+                      className={`font-poppins text-[14px] font-semibold leading-6 transition-colors ${
+                        activeTab === 'details' ? 'text-[#00A792]' : 'text-[#6B7280]'
                       }`}
                     >
                       Your Details
@@ -75,16 +75,16 @@ export default function BookingPage() {
                   </div>
 
                   {/* Payment Tab */}
-                  <div className="flex-1 flex flex-col gap-[4px] items-center">
+                  <div className="flex-1 flex flex-col gap-1 items-center">
                     <div
-                      className={`h-[4px] rounded-[8px] w-full transition-colors ${
-                        activeTab === 'payment' ? 'bg-[#00a792]' : 'bg-[#e5e7eb]'
+                      className={`h-[5px] rounded-lg w-full transition-colors ${
+                        activeTab === 'payment' ? 'bg-[#00A792]' : 'bg-[#E5E7EB]'
                       }`}
                     />
                     <button
                       onClick={() => setActiveTab('payment')}
-                      className={`font-poppins text-[13px] font-semibold transition-colors ${
-                        activeTab === 'payment' ? 'text-[#00a792]' : 'text-[#6b7280]'
+                      className={`font-poppins text-[14px] font-semibold leading-6 transition-colors ${
+                        activeTab === 'payment' ? 'text-[#00A792]' : 'text-[#6B7280]'
                       }`}
                     >
                       Payment
@@ -110,7 +110,7 @@ export default function BookingPage() {
             </div>
 
             {/* Right Column - Booking Summary */}
-            <div className="lg:w-[380px]">
+            <div className="lg:w-[628px] lg:flex-shrink-0">
               <div className="lg:sticky lg:top-8">
                 <BookingSummary tourData={mockTourData} />
               </div>

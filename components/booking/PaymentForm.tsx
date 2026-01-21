@@ -125,30 +125,30 @@ export function PaymentForm({ tourData, onBack }: PaymentFormProps) {
                 />
               </div>
 
-              {/* Expiry Date and CVV */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-                    Expiry Date *
-                  </Label>
-                  <Input
-                    placeholder="MM / YY"
-                    value={expiryDate}
-                    onChange={(e) => setExpiryDate(e.target.value)}
-                    className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px] placeholder:text-[#9ca3af]"
-                  />
-                </div>
-                <div>
-                  <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
-                    CVV *
-                  </Label>
-                  <Input
-                    placeholder="123"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value)}
-                    className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px] placeholder:text-[#9ca3af]"
-                  />
-                </div>
+              {/* Expiry Date */}
+              <div>
+                <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
+                  Expiry Date *
+                </Label>
+                <Input
+                  placeholder="MM / YY"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                  className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px] placeholder:text-[#9ca3af]"
+                />
+              </div>
+
+              {/* CVV */}
+              <div>
+                <Label className="font-poppins text-[12px] font-normal text-black mb-1 block">
+                  CVV *
+                </Label>
+                <Input
+                  placeholder="123"
+                  value={cvv}
+                  onChange={(e) => setCvv(e.target.value)}
+                  className="h-[40px] rounded-[8px] border-[#e5e7eb] font-poppins text-[13px] placeholder:text-[#9ca3af]"
+                />
               </div>
 
               {/* Country & Zip Code */}
@@ -209,10 +209,7 @@ export function PaymentForm({ tourData, onBack }: PaymentFormProps) {
                 Pay with PayPal
               </span>
             </div>
-            <div className="flex items-center">
-              <span className="font-bold text-[16px] text-[#003087]">Pay</span>
-              <span className="font-bold text-[16px] text-[#009cde]">Pal</span>
-            </div>
+            <Image src="/paypal.svg" alt="PayPal" width={50} height={30} className="h-[30px] w-auto" />
           </div>
         </div>
 
@@ -242,10 +239,7 @@ export function PaymentForm({ tourData, onBack }: PaymentFormProps) {
                 Pay with Google Pay
               </span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="font-medium text-[14px] text-[#5f6368]">G</span>
-              <span className="font-medium text-[14px] text-[#5f6368]">Pay</span>
-            </div>
+            <Image src="/gpay.svg" alt="Google Pay" width={50} height={30} className="h-[30px] w-auto" />
           </div>
         </div>
       </div>
@@ -272,10 +266,7 @@ export function PaymentForm({ tourData, onBack }: PaymentFormProps) {
           >
             {payLater && <div className="w-2 h-2 rounded-full bg-white" />}
           </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-[14px] text-[#003087]">Pay</span>
-            <span className="font-bold text-[14px] text-[#009cde]">Pal</span>
-          </div>
+          <Image src="/paypal.svg" alt="PayPal" width={50} height={30} className="h-[30px] w-auto" />
         </label>
       </div>
 
@@ -300,7 +291,7 @@ export function PaymentForm({ tourData, onBack }: PaymentFormProps) {
       {/* Confirm Payment Button */}
       <Button
         disabled={!acceptTerms}
-        className="w-full h-[48px] rounded-full bg-[#00a792] hover:bg-[#008577] disabled:bg-[#9ca3af] text-white font-poppins font-medium text-[14px]"
+        className="w-full h-[48px] rounded-[8px] bg-[#00a792] hover:bg-[#008577] disabled:bg-[#9ca3af] text-white font-poppins font-medium text-[14px]"
       >
         <Lock className="w-4 h-4 mr-2" />
         Confirm Payment
