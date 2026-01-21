@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { useProfile, useUpdateProfile } from '@/lib/hooks/useProfile'
 import { editProfileSchema, type EditProfileFormData } from '@/lib/validations/profile'
+import Link from 'next/link'
 import { ProfileSidebar } from '@/components/profile/ProfileSidebar'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -13,7 +14,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Navigation } from '@/components/navigation'
-import { Plus, Trash2, ChevronDown } from 'lucide-react'
+import { Plus, Trash2, ChevronDown, ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 // Country codes for phone numbers
@@ -149,9 +150,23 @@ export default function EditProfilePage() {
     <>
       <Navigation />
       <main className="min-h-screen bg-[#fafbfc]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Page Header */}
-          <div className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+          {/* Mobile Back Header */}
+          <div className="lg:hidden mb-6">
+            <Link
+              href="/profile/account"
+              className="inline-flex items-center gap-1 text-black hover:text-[#00a792] transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              <span className="font-poppins text-[18px] font-semibold">Edit Profile</span>
+            </Link>
+            <p className="font-poppins text-[13px] text-[rgba(0,0,0,0.7)] mt-1 ml-6 leading-relaxed">
+              We only display your profile picture, name and bio to other users. All other details are private and will make it easier for you to make tour bookings on Lato.
+            </p>
+          </div>
+
+          {/* Desktop Page Header */}
+          <div className="hidden lg:block mb-8">
             <h1 className="font-poppins text-[28px] font-medium text-black leading-[1.498]">Edit Profile</h1>
             <p className="font-poppins font-light text-[14px] text-[rgba(0,0,0,0.7)] mt-2 leading-[1.498]">
               We only display your profile picture, name and bio to other users. All other details are private and will make it easier for you to make tour bookings on Lato.
@@ -160,8 +175,8 @@ export default function EditProfilePage() {
 
           {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-12">
-            {/* Left Sidebar */}
-            <div className="lg:col-span-1">
+            {/* Left Sidebar - Hidden on mobile */}
+            <div className="hidden lg:block lg:col-span-1">
               <ProfileSidebar
                 travelCredits={profile?.travelCredits ?? 0}
                 currency={profile?.currency ?? 'USD'}
@@ -237,11 +252,11 @@ export default function EditProfilePage() {
                           )}
                         </div>
                         <div>
-                          <Label htmlFor="lastName" className="font-poppins text-[13px] font-medium text-[#6b7280]">last Name</Label>
+                          <Label htmlFor="lastName" className="font-poppins text-[13px] font-medium text-[#6b7280]">Last name</Label>
                           <Input
                             id="lastName"
                             {...form.register('lastName')}
-                            placeholder="Enter your current password"
+                            placeholder="Enter your last name"
                             className="mt-1.5 bg-white border border-[#d9d9d9] rounded-[5px] h-[34px] font-poppins text-[14px] placeholder:text-[#d9d9d9]"
                           />
                           {form.formState.errors.lastName && (
@@ -344,11 +359,11 @@ export default function EditProfilePage() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="height" className="font-poppins text-[13px] font-medium text-[#6b7280]">Weight in cm</Label>
+                          <Label htmlFor="height" className="font-poppins text-[13px] font-medium text-[#6b7280]">Height in cm</Label>
                           <Input
                             id="height"
                             {...form.register('height')}
-                            placeholder="Enter your current password"
+                            placeholder="Enter your height"
                             className="mt-1.5 bg-white border border-[#d9d9d9] rounded-[5px] h-[34px] font-poppins text-[14px] placeholder:text-[#d9d9d9]"
                           />
                         </div>
@@ -429,10 +444,10 @@ export default function EditProfilePage() {
                               />
                             </div>
                             <div>
-                              <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">last Name</Label>
+                              <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">Last name</Label>
                               <Input
                                 {...form.register(`emergencyContacts.${index}.lastName`)}
-                                placeholder="Enter your current password"
+                                placeholder="Enter last name"
                                 className="mt-1.5 bg-white border border-[#d9d9d9] rounded-[5px] h-[34px] font-poppins text-[14px] placeholder:text-[#d9d9d9]"
                               />
                             </div>
@@ -481,10 +496,10 @@ export default function EditProfilePage() {
                           />
                         </div>
                         <div>
-                          <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">last Name</Label>
+                          <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">Last name</Label>
                           <Input
                             {...form.register('travelPreference.lastName')}
-                            placeholder="Enter your current password"
+                            placeholder="Enter last name"
                             className="mt-1.5 bg-white border border-[#d9d9d9] rounded-[5px] h-[34px] font-poppins text-[14px] placeholder:text-[#d9d9d9]"
                           />
                         </div>
@@ -511,10 +526,10 @@ export default function EditProfilePage() {
                           />
                         </div>
                         <div>
-                          <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">last Name</Label>
+                          <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">Last name</Label>
                           <Input
                             {...form.register('travelInsurance.lastName')}
-                            placeholder="Enter your current password"
+                            placeholder="Enter last name"
                             className="mt-1.5 bg-white border border-[#d9d9d9] rounded-[5px] h-[34px] font-poppins text-[14px] placeholder:text-[#d9d9d9]"
                           />
                         </div>
@@ -528,9 +543,9 @@ export default function EditProfilePage() {
                           />
                         </div>
                         <div>
-                          <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">last Name</Label>
+                          <Label className="font-poppins text-[13px] font-medium text-[#6b7280]">Last name</Label>
                           <Input
-                            placeholder="Enter your current password"
+                            placeholder="Enter last name"
                             className="mt-1.5 bg-white border border-[#d9d9d9] rounded-[5px] h-[34px] font-poppins text-[14px] placeholder:text-[#d9d9d9]"
                           />
                         </div>

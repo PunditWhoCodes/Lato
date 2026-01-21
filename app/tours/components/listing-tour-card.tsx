@@ -250,11 +250,11 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
     <article
       data-tour-card
       onClick={onClick}
-      className="bg-white rounded-[10px] overflow-hidden cursor-pointer group border border-[#E8E8E8] hover:shadow-md transition-shadow"
+      className="bg-white rounded-[12px] overflow-hidden cursor-pointer group border border-[#E8E8E8] hover:shadow-md transition-shadow"
     >
       {/* Image Container - with inner padding and rounded corners */}
       <div className="p-2 pb-0">
-        <div className="relative h-[140px] rounded-lg overflow-hidden">
+        <div className="relative h-[160px] rounded-[10px] overflow-hidden">
           <Image
             src={tour.image}
             alt={tour.title}
@@ -265,7 +265,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
           {/* Heart/Favorite Icon - Top Right */}
           <button
             onClick={handleFavoriteClick}
-            className={`absolute top-2 right-2 size-7 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${
+            className={`absolute top-2.5 right-2.5 size-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${
               isFavorite ? "rotate-360" : ""
             }`}
           >
@@ -278,7 +278,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
 
           {/* OFF Badge - Bottom Left */}
           {hasDiscount && (
-            <div className="absolute bottom-2 left-2 bg-[#F23813] text-white px-4 py-1.5 rounded-full text-xs font-semibold">
+            <div className="absolute bottom-2.5 left-2.5 bg-[#F23813] text-white px-3 py-1 rounded-full text-[10px] font-semibold">
              -{discountPercent}% OFF
             </div>
           )}
@@ -286,12 +286,12 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
       </div>
 
       {/* Content */}
-      <div className="p-3 pt-2.5">
+      <div className="p-3 pt-3">
         {/* Top Row: Title + Rating/Group on right */}
-        <div className="flex justify-between items-start gap-2 mb-1">
+        <div className="flex justify-between items-start gap-2 mb-1.5">
           <div className="flex-1 min-w-0">
             {/* Title */}
-            <h3 className="text-[#1C1B1F] font-poppins font-semibold text-[13px] leading-tight mb-0.5 group-hover:text-[#00A792] transition-colors">
+            <h3 className="text-[#1C1B1F] font-poppins font-semibold text-[14px] leading-tight mb-1 group-hover:text-[#00A792] transition-colors line-clamp-2">
               {tour.title}
             </h3>
 
@@ -303,17 +303,17 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
           </div>
 
           {/* Right side - Rating & Group badges */}
-          <div className="flex flex-col items-end gap-1 shrink-0">
+          <div className="flex flex-col items-end gap-1.5 shrink-0">
             {/* Rating Badge */}
             <div className="flex items-center gap-1">
-              <Star className="w-2.5 h-2.5 fill-[#FFA432] text-[#FFA432]" />
-              <span className="text-[10px] text-[#1C1B1F] font-medium">{tour.rating}</span>
+              <Star className="w-3 h-3 fill-[#FFA432] text-[#FFA432]" />
+              <span className="text-[11px] text-[#1C1B1F] font-medium">{tour.rating}</span>
             </div>
 
             {/* Group Size Badge */}
             <div className="flex items-center gap-1">
-              <Users className="w-2.5 h-2.5 text-[#495560]" />
-              <span className="text-[9px] text-[#495560] font-medium whitespace-nowrap">
+              <Users className="w-3 h-3 text-[#495560]" />
+              <span className="text-[10px] text-[#495560] font-medium whitespace-nowrap">
                 {tour.groupSize}
               </span>
             </div>
@@ -321,14 +321,14 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
         </div>
 
         {/* Price Row */}
-        <div className="flex items-baseline gap-1 mb-2 mt-2">
-          <span className="text-[#818181] text-[10px]">From</span>
+        <div className="flex items-baseline gap-1.5 mb-2.5 mt-2">
+          <span className="text-[#818181] text-[11px]">From</span>
           {tour.originalPrice && (
-            <span className="text-[#7BBCB0] text-[10px] line-through">
+            <span className="text-[#7BBCB0] text-[11px] line-through">
               ${tour.originalPrice.toFixed(2)}
             </span>
           )}
-          <span className="text-[#F23813] font-semibold text-[13px]">
+          <span className="text-[#F23813] font-semibold text-[14px]">
             ${tour.price.toFixed(2)}
           </span>
         </div>
@@ -336,25 +336,25 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
         {/* Features Section - Two columns layout */}
         <div className="flex justify-between items-end">
           {/* Left Column - Duration, Transport, Family */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1.5">
             {/* Duration */}
-            <div className="flex items-center gap-1.5 text-[10px] text-[#495560]">
-              <Clock className="w-3 h-3" />
+            <div className="flex items-center gap-1.5 text-[11px] text-[#495560]">
+              <Clock className="w-3.5 h-3.5" />
               <span>Duration: {tour.duration}</span>
             </div>
 
             {/* Transport Facility */}
             {tour.hasTransport && (
-              <div className="flex items-center gap-1.5 text-[10px] text-[#495560]">
-                <Car className="w-3 h-3" />
+              <div className="flex items-center gap-1.5 text-[11px] text-[#495560]">
+                <Car className="w-3.5 h-3.5" />
                 <span>Transport Facility</span>
               </div>
             )}
 
             {/* Family Plan */}
             {tour.hasFamilyPlan && (
-              <div className="flex items-center gap-1.5 text-[10px] text-[#495560]">
-                <Users className="w-3 h-3" />
+              <div className="flex items-center gap-1.5 text-[11px] text-[#495560]">
+                <Users className="w-3.5 h-3.5" />
                 <span>Family Plan</span>
               </div>
             )}
@@ -366,7 +366,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
               e.stopPropagation()
               onClick()
             }}
-            className="border text-white bg-black px-4 py-1.5 rounded-full text-[10px] font-medium hover:bg-[#00A792] hover:text-white transition-colors"
+            className="bg-black text-white px-4 py-2 rounded-full text-[11px] font-medium hover:bg-[#00A792] transition-colors"
           >
             View Now
           </button>

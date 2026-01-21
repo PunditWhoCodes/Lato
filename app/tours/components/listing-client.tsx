@@ -480,8 +480,8 @@ export function ListingClient() {
       <ListingHero destination={displayCountryName} tourCount={displayCount} />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 lg:py-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Left Column - Applied Filters + Filter Sidebar */}
           <div className="w-full lg:w-[280px] shrink-0">
             {/* Applied Filters */}
@@ -495,7 +495,7 @@ export function ListingClient() {
             <div className="lg:hidden mb-4">
               <button
                 onClick={() => setShowMobileFilters(true)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 bg-white border border-[#E5E5E5] rounded-[6px] text-[13px] font-medium text-[#495560]"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-[#E5E5E5] rounded-[10px] text-[13px] font-medium text-[#495560]"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 Filters
@@ -613,46 +613,46 @@ export function ListingClient() {
           {/* Right Column - Tours Grid/List */}
           <div className="flex-1 min-w-0">
             {/* Results Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div className="flex items-center justify-between gap-3 mb-4 lg:mb-6">
               {/* Results Count */}
-              <p className="text-[#1C1B1F] text-[14px] font-medium">
+              <p className="text-[#1C1B1F] text-[13px] lg:text-[14px] font-medium whitespace-nowrap">
                 {isLoading ? "Loading..." : `${displayCount} Results`}
               </p>
 
               {/* Sort & View Toggle */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 lg:gap-3">
                 {/* Sort Dropdown */}
-                <div className="flex items-center gap-2">
-                  <span className="text-[13px] text-[#495560]">Popularity:</span>
+                <div className="flex items-center gap-1.5 lg:gap-2">
+                  <span className="hidden sm:inline text-[12px] lg:text-[13px] text-[#495560]">Popularity:</span>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="flex items-center justify-between gap-2 w-[180px] px-3 py-2 bg-white border border-[#E5E5E5] rounded-[6px] text-[13px] text-[#1C1B1F] hover:bg-[#F7F7F7] transition-colors">
-                        <span>{getSortLabel()}</span>
-                        <ChevronDown className="w-4 h-4 text-[#495560]" />
+                      <button className="flex items-center justify-between gap-1.5 lg:gap-2 w-[140px] lg:w-[180px] px-2.5 lg:px-3 py-2 bg-white border border-[#E5E5E5] rounded-[8px] text-[12px] lg:text-[13px] text-[#1C1B1F] hover:bg-[#F7F7F7] transition-colors">
+                        <span className="truncate">{getSortLabel()}</span>
+                        <ChevronDown className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-[#495560] shrink-0" />
                       </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-[180px] bg-white border border-[#E5E5E5] rounded-[6px] shadow-lg p-0">
+                    <DropdownMenuContent align="end" className="w-[160px] lg:w-[180px] bg-white border border-[#E5E5E5] rounded-[8px] shadow-lg p-0">
                       <DropdownMenuItem
                         onClick={() => setSortBy("popular")}
-                        className="text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2 rounded-none"
+                        className="text-[12px] lg:text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2.5 rounded-none"
                       >
                         Most Popular First
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => setSortBy("rating")}
-                        className="text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2 rounded-none"
+                        className="text-[12px] lg:text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2.5 rounded-none"
                       >
                         Highest Rated
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => setSortBy("price-low")}
-                        className="text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2 rounded-none"
+                        className="text-[12px] lg:text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2.5 rounded-none"
                       >
                         Price: Low to High
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => setSortBy("price-high")}
-                        className="text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2 rounded-none"
+                        className="text-[12px] lg:text-[13px] cursor-pointer hover:bg-[#F7F7F7] focus:bg-[#F7F7F7] px-3 py-2.5 rounded-none"
                       >
                         Price: High to Low
                       </DropdownMenuItem>
@@ -661,10 +661,10 @@ export function ListingClient() {
                 </div>
 
                 {/* View Toggle */}
-                <div className="flex items-center gap-1 border border-[#E5E5E5] rounded-[6px] p-1">
+                <div className="flex items-center gap-0.5 border border-[#E5E5E5] rounded-[8px] p-1">
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-1.5 rounded-[4px] transition-colors ${
+                    className={`p-1.5 rounded-[6px] transition-colors ${
                       viewMode === "grid"
                         ? "bg-[#00A792] text-white"
                         : "text-[#495560] hover:bg-[#F7F7F7]"
@@ -675,7 +675,7 @@ export function ListingClient() {
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-1.5 rounded-[4px] transition-colors ${
+                    className={`p-1.5 rounded-[6px] transition-colors ${
                       viewMode === "list"
                         ? "bg-[#00A792] text-white"
                         : "text-[#495560] hover:bg-[#F7F7F7]"
@@ -721,7 +721,7 @@ export function ListingClient() {
             {!isLoading && !isError && paginatedTours.length > 0 && (
               <>
                 {viewMode === "grid" ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5">
                     {paginatedTours.map((tour) => (
                       <ListingTourCard
                         key={tour.uuid || tour.id}
@@ -732,7 +732,7 @@ export function ListingClient() {
                     ))}
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-3 lg:gap-4">
                     {paginatedTours.map((tour) => (
                       <ListingTourCard
                         key={tour.uuid || tour.id}

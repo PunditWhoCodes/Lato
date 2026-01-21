@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card } from '@/components/ui/card'
 import { Navigation } from '@/components/navigation'
+import { ChevronLeft } from 'lucide-react'
 import type { Booking } from '@/lib/types/profile'
 
 type BookingTab = 'all' | 'upcoming' | 'completed' | 'cancelled'
@@ -61,9 +62,23 @@ export default function MyBookingsPage() {
     <>
       <Navigation />
       <main className="min-h-screen bg-[#fafbfc]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Page Header */}
-          <div className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+          {/* Mobile Back Header */}
+          <div className="lg:hidden mb-6">
+            <Link
+              href="/profile/account"
+              className="inline-flex items-center gap-1 text-black hover:text-[#00a792] transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              <span className="font-poppins text-[18px] font-semibold">My Bookings</span>
+            </Link>
+            <p className="font-poppins text-[13px] text-[rgba(0,0,0,0.7)] mt-1 ml-6">
+              View and manage all your travel bookings and hold my seat requests
+            </p>
+          </div>
+
+          {/* Desktop Page Header */}
+          <div className="hidden lg:block mb-8">
             <h1 className="font-poppins text-[28px] font-medium text-black">
               My Bookings
             </h1>
@@ -74,8 +89,8 @@ export default function MyBookingsPage() {
 
           {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-12">
-            {/* Left Sidebar */}
-            <div className="lg:col-span-1">
+            {/* Left Sidebar - Hidden on mobile */}
+            <div className="hidden lg:block lg:col-span-1">
               <ProfileSidebar
                 travelCredits={profile?.travelCredits ?? 0}
                 currency="USD"
@@ -145,7 +160,7 @@ function EmptyBookingsState() {
       </p>
       <Button
         asChild
-        className="bg-[#00a792] hover:bg-[#008577] text-white rounded-[10px] h-[44px] px-8 font-poppins text-[14px]"
+        className="bg-[#00a792] hover:bg-[#008577] text-white rounded-full h-[44px] px-10 font-poppins text-[14px] font-medium"
       >
         <Link href="/tours">Browse Tours</Link>
       </Button>

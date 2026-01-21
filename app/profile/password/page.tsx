@@ -10,6 +10,7 @@ import { useProfile } from '@/lib/hooks/useProfile'
 import { changePassword } from '@/lib/api/auth'
 import { getAccessToken } from '@/lib/utils/token'
 import { simpleChangePasswordSchema, type SimpleChangePasswordFormData } from '@/lib/validations/profile'
+import Link from 'next/link'
 import { ProfileSidebar } from '@/components/profile/ProfileSidebar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -17,7 +18,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Navigation } from '@/components/navigation'
 import { toast } from 'sonner'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, ChevronLeft } from 'lucide-react'
 
 export default function ChangePasswordPage() {
   const router = useRouter()
@@ -72,9 +73,23 @@ export default function ChangePasswordPage() {
     <>
       <Navigation />
       <main className="min-h-screen bg-[#fafbfc]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Page Header */}
-          <div className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+          {/* Mobile Back Header */}
+          <div className="lg:hidden mb-6">
+            <Link
+              href="/profile/account"
+              className="inline-flex items-center gap-1 text-black hover:text-[#00a792] transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              <span className="font-poppins text-[18px] font-semibold">Change Password</span>
+            </Link>
+            <p className="font-poppins text-[13px] text-[rgba(0,0,0,0.7)] mt-1 ml-6">
+              Update your account password to keep your account secure
+            </p>
+          </div>
+
+          {/* Desktop Page Header */}
+          <div className="hidden lg:block mb-8">
             <h1 className="font-poppins text-[28px] font-medium text-black leading-[1.498]">
               Change Password
             </h1>
@@ -85,8 +100,8 @@ export default function ChangePasswordPage() {
 
           {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-12">
-            {/* Left Sidebar */}
-            <div className="lg:col-span-1">
+            {/* Left Sidebar - Hidden on mobile */}
+            <div className="hidden lg:block lg:col-span-1">
               <ProfileSidebar
                 travelCredits={profile?.travelCredits ?? 0}
                 currency="USD"
@@ -99,12 +114,12 @@ export default function ChangePasswordPage() {
                 <CardContent className="p-0">
                   <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     {/* Card Title */}
-                    <h2 className="font-poppins text-[13px] font-semibold text-black capitalize">
+                    <h2 className="font-poppins text-[18px] font-semibold text-black">
                       Personal Information
                     </h2>
 
                     {/* Form Fields Container */}
-                    <div className="flex flex-col items-end gap-[50px]">
+                    <div className="flex flex-col gap-6">
                       {/* Fields Section */}
                       <div className="w-full flex flex-col gap-3">
                         {/* Current Password */}
@@ -177,11 +192,11 @@ export default function ChangePasswordPage() {
                         </p>
                       </div>
 
-                      {/* Submit Button - Aligned Right */}
+                      {/* Submit Button */}
                       <Button
                         type="submit"
                         disabled={isPending}
-                        className="bg-[#00a792] hover:bg-[#008577] text-white rounded-full h-[27px] px-[97px] font-poppins text-[12px] font-semibold"
+                        className="w-full max-w-[280px] mx-auto bg-[#00a792] hover:bg-[#008577] text-white rounded-full h-[44px] font-poppins text-[14px] font-semibold"
                       >
                         {isPending ? 'Changing...' : 'Change Password'}
                       </Button>

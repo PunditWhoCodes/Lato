@@ -221,7 +221,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
   return (
     <div>
       {/* Tour Header - Breadcrumb, Title, Rating, Heart */}
-      <div className="mb-6">
+      <div className="mb-4 lg:mb-6">
         <TourHeader
           title={tourData.title}
           rating={tourData.rating}
@@ -251,12 +251,12 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
       />
 
       {/* Main Content Grid - Two Columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mt-4 lg:mt-6">
         {/* Main Content - Left Side (2/3) */}
         <div className="lg:col-span-2">
 
           {/* Tour Info Bar - Duration, Type, Group Size, etc. */}
-          <div className="mt-8">
+          <div className="mt-4 lg:mt-8">
             <TourInfo
               duration={tourData.duration}
               tourType={tourData.tourType}
@@ -268,7 +268,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           </div>
 
           {/* Mobile Only - Booking Section above tabs */}
-          <div className="lg:hidden">
+          <div className="lg:hidden mt-4">
             <BookingSidebar
               price={tourData.price}
               originalPrice={tourData.originalPrice}

@@ -116,7 +116,7 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
       {/* Mobile Gallery */}
       <div className="md:hidden">
         {/* Main Image with Heart Icon */}
-        <div className="relative h-[240px] rounded-2xl overflow-hidden">
+        <div className="relative h-[220px] rounded-[16px] overflow-hidden">
           <Image
             src={displayImages[0]}
             alt={title}
@@ -126,7 +126,7 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
           />
           {/* OFF Badge - Top Left */}
           {discountPercent && discountPercent > 0 && (
-            <div className="absolute top-3 left-3 bg-[#F23813] text-white px-3 py-1 rounded-full text-xs font-semibold">
+            <div className="absolute top-3 left-3 bg-[#F23813] text-white px-3 py-1 rounded-full text-[11px] font-semibold">
               -{discountPercent}% OFF
             </div>
           )}
@@ -134,11 +134,11 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
           {tourId && (
             <button
               onClick={handleToggleSave}
-              className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-110"
+              className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-110"
               aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}
             >
               <Heart
-                className={`w-5 h-5 transition-colors ${
+                className={`w-4 h-4 transition-colors ${
                   isFavorite ? "fill-[#F23813] text-[#F23813]" : "text-[#6B7280]"
                 }`}
               />
@@ -149,7 +149,7 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
         {/* Thumbnail Row + View All Photos */}
         <div className="flex items-center gap-2 mt-2">
           {/* Thumbnail 1 */}
-          <div className="relative w-[72px] h-[56px] rounded-lg overflow-hidden flex-shrink-0">
+          <div className="relative w-[64px] h-[48px] rounded-[10px] overflow-hidden flex-shrink-0">
             <Image
               src={displayImages[1]}
               alt={`${title} - Image 2`}
@@ -158,7 +158,7 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
             />
           </div>
           {/* Thumbnail 2 */}
-          <div className="relative w-[72px] h-[56px] rounded-lg overflow-hidden flex-shrink-0">
+          <div className="relative w-[64px] h-[48px] rounded-[10px] overflow-hidden flex-shrink-0">
             <Image
               src={displayImages[2]}
               alt={`${title} - Image 3`}
@@ -172,7 +172,7 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
             className="flex items-center gap-1.5 ml-auto text-[#6B7280] hover:text-[#00A699] transition-colors"
           >
             <Images className="w-4 h-4" />
-            <span className="text-xs font-medium">View all photos</span>
+            <span className="text-[11px] font-medium">View all photos</span>
           </button>
         </div>
       </div>
