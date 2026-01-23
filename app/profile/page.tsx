@@ -151,9 +151,11 @@ export default function MyProfilePage() {
   // Mock booking data for BookingCard component
   const mockBooking = {
     id: '7839',
+    tourId: 'tour-123',
     tourTitle: '3-Day Island Hopping Adventure',
     tourImage: '/destinations/italy.jpg',
     companyName: 'Island Tours Co.',
+    bookingDate: '2023-09-15',
     travelDate: '2023-10-12',
     endDate: '2023-10-15',
     travelers: 2,
