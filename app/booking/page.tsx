@@ -49,8 +49,69 @@ export default function BookingPage() {
             {mockTourData.title}
           </h1>
 
-          {/* Two-column layout */}
-          <div className="flex flex-col lg:flex-row gap-5">
+          {/* Mobile Layout - Photo section first */}
+          <div className="lg:hidden flex flex-col gap-[24.67px] px-0">
+            {/* Photo Section / Booking Summary - First on mobile */}
+            <BookingSummary tourData={mockTourData} />
+
+            {/* Details/Payment Section - Second on mobile */}
+            <div className="bg-white rounded-[9.27px] shadow-[0px_0.84px_1.69px_rgba(3,54,63,0.4),0px_-0.84px_1.69px_rgba(3,54,63,0.04)] p-[19.95px]">
+              {/* Stepper Tabs */}
+              <div className="flex gap-2 mb-6">
+                {/* Your Details Tab */}
+                <div className="flex-1 flex flex-col gap-1 items-center">
+                  <div
+                    className={`h-[5px] rounded-lg w-full transition-colors ${
+                      activeTab === 'details' ? 'bg-[#00A792]' : 'bg-[#E5E7EB]'
+                    }`}
+                  />
+                  <button
+                    onClick={() => setActiveTab('details')}
+                    className={`font-poppins text-[14px] font-semibold leading-6 transition-colors ${
+                      activeTab === 'details' ? 'text-[#00A792]' : 'text-[#6B7280]'
+                    }`}
+                  >
+                    Your Details
+                  </button>
+                </div>
+
+                {/* Payment Tab */}
+                <div className="flex-1 flex flex-col gap-1 items-center">
+                  <div
+                    className={`h-[5px] rounded-lg w-full transition-colors ${
+                      activeTab === 'payment' ? 'bg-[#00A792]' : 'bg-[#E5E7EB]'
+                    }`}
+                  />
+                  <button
+                    onClick={() => setActiveTab('payment')}
+                    className={`font-poppins text-[14px] font-semibold leading-6 transition-colors ${
+                      activeTab === 'payment' ? 'text-[#00A792]' : 'text-[#6B7280]'
+                    }`}
+                  >
+                    Payment
+                  </button>
+                </div>
+              </div>
+
+              {/* Form Content */}
+              {activeTab === 'details' && (
+                <BookingForm
+                  tourData={mockTourData}
+                  onContinue={handleContinueToPayment}
+                />
+              )}
+
+              {activeTab === 'payment' && (
+                <PaymentForm
+                  tourData={mockTourData}
+                  onBack={handleBackToDetails}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Desktop Layout - Two columns */}
+          <div className="hidden lg:flex lg:flex-row gap-5">
             {/* Left Column - Booking Form */}
             <div className="flex-1 lg:w-[922px] lg:max-w-[922px]">
               {/* White Card Container */}

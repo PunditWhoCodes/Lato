@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Poppins, Montserrat, Open_Sans, Mulish, Volkhov, Inter } from "next/font/google"
+import { Poppins, Montserrat, Open_Sans, Mulish, Volkhov, Inter, Roboto } from "next/font/google"
 import "./globals.css"
 import { ConditionalFooter } from "@/components/conditional-footer"
 import { ConditionalChat } from "@/components/conditional-chat"
@@ -48,6 +48,13 @@ const inter = Inter({
   weight: ["400", "500", "700"],
 })
 
+const roboto = Roboto({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-roboto",
+  weight: ["400", "500", "700"],
+})
+
 export const metadata: Metadata = {
   title: "Lato Marketplace - Unlock Your Next Adventure",
   description:
@@ -62,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${openSans.variable} ${mulish.variable} ${volkhov.variable} ${inter.variable} antialiased`}
+      className={`${poppins.variable} ${montserrat.variable} ${openSans.variable} ${mulish.variable} ${volkhov.variable} ${inter.variable} ${roboto.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="font-poppins flex flex-col min-h-screen bg-background" suppressHydrationWarning>

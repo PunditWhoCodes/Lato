@@ -27,43 +27,43 @@ export default function ChatsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white md:bg-white">
         <Navigation />
 
-        <div className="flex h-[calc(100vh-80px)]">
+        <div className="flex h-[calc(100vh-80px)] md:h-[calc(100vh-80px)]">
           {/* Left Sidebar - Chat List */}
-          <div className="w-full lg:w-[380px] border-r border-gray-100 bg-[#F8FAFB] flex flex-col">
-            {/* Header */}
-            <div className="p-6 pb-4">
-              <h1 className="font-bold text-xl text-[#1C1B1F] mb-5">Active Chats</h1>
+          <div className="w-full lg:w-[380px] border-r border-gray-100 bg-[#F5FAFC] md:bg-[#F8FAFB] flex flex-col">
+            {/* Header - Figma mobile: px-[10px], py-[68px] for content, title at top-[20px] */}
+            <div className="px-[10px] pt-[20px] pb-4 md:p-6 md:pb-4">
+              <h1 className="font-poppins font-light text-[17px] md:font-bold md:text-xl text-black md:text-[#1C1B1F] mb-[28px] md:mb-5">Active Chats</h1>
 
-              {/* Search */}
-              <div className="relative mb-5">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              {/* Search - Figma: 363px x 43px, rounded-24px, border #D1E4E8 */}
+              <div className="relative mb-[14px] md:mb-5">
+                <Search className="absolute left-[19px] md:left-4 top-1/2 transform -translate-y-1/2 text-[#9393C1] md:text-gray-400 h-[23px] w-[23px] md:h-5 md:w-5" />
                 <Input
                   placeholder="Search or start a new chat"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-14 rounded-xl border-gray-200 bg-white text-sm placeholder:text-gray-400"
+                  className="pl-[50px] md:pl-12 h-[43px] md:h-14 rounded-[24px] md:rounded-xl border-[#D1E4E8] md:border-gray-200 bg-white text-[12px] md:text-sm font-poppins placeholder:text-[#9393C1] md:placeholder:text-gray-400"
                 />
               </div>
 
-              {/* Toggle Tabs */}
-              <div className="flex bg-gray-100 rounded-full p-1">
+              {/* Toggle Tabs - Figma: 363px x 43px, rounded-[62px], active bg #128C7E */}
+              <div className="flex bg-white md:bg-gray-100 rounded-[62px] md:rounded-full h-[43px] md:h-auto md:p-1">
                 <button
                   onClick={() => setSelectedFilter("all")}
-                  className={`flex-1 py-2.5 px-6 rounded-full text-sm font-medium transition-all ${selectedFilter === "all"
-                      ? "bg-[#00A699] text-white"
-                      : "text-gray-600 hover:text-gray-800"
+                  className={`w-[174px] md:flex-1 h-[43px] md:h-auto md:py-2.5 md:px-6 rounded-[62px] md:rounded-full text-[12px] md:text-sm font-poppins transition-all ${selectedFilter === "all"
+                      ? "bg-[#128C7E] md:bg-[#00A699] text-white font-bold border-2 border-white"
+                      : "text-[#5A6A9D] md:text-gray-600 font-medium hover:text-gray-800"
                     }`}
                 >
                   All
                 </button>
                 <button
                   onClick={() => setSelectedFilter("unread")}
-                  className={`flex-1 py-2.5 px-6 rounded-full text-sm font-medium transition-all ${selectedFilter === "unread"
-                      ? "bg-[#00A699] text-white"
-                      : "text-gray-600 hover:text-gray-800"
+                  className={`flex-1 h-[43px] md:h-auto md:py-2.5 md:px-6 rounded-[62px] md:rounded-full text-[12px] md:text-sm font-poppins transition-all ${selectedFilter === "unread"
+                      ? "bg-[#128C7E] md:bg-[#00A699] text-white font-bold border-2 border-white"
+                      : "text-[#5A6A9D] md:text-gray-600 font-medium hover:text-gray-800"
                     }`}
                 >
                   Unread
@@ -71,13 +71,13 @@ export default function ChatsPage() {
               </div>
             </div>
 
-            {/* Chat List */}
-            <div className="flex-1 overflow-y-auto px-4">
+            {/* Chat List - Figma: px-[14px] py-[9px] per item, gap-[14px] between avatar and content */}
+            <div className="flex-1 overflow-y-auto px-0 md:px-4 mt-[28px] md:mt-0">
               {filteredConversations.map((conversation) => (
                 <Link key={conversation.id} href={`/chats/${conversation.id}`}>
-                  <div className="flex items-start gap-3 p-4 hover:bg-white rounded-xl cursor-pointer transition-colors">
-                    {/* Avatar */}
-                    <Avatar className="w-12 h-12 shrink-0">
+                  <div className="flex items-center gap-[14px] md:gap-3 px-[14px] py-[9px] md:p-4 hover:bg-white rounded-xl cursor-pointer transition-colors">
+                    {/* Avatar - Figma: 55px */}
+                    <Avatar className="w-[55px] h-[55px] md:w-12 md:h-12 shrink-0">
                       <AvatarImage src={conversation.company.avatar || "/placeholder.svg"} />
                       <AvatarFallback className="bg-[#00A699] text-white">
                         {conversation.company.name.charAt(0)}
@@ -86,27 +86,27 @@ export default function ChatsPage() {
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-semibold text-[15px] text-[#1C1B1F] truncate">
+                      <div className="flex items-center justify-between mb-[9px] md:mb-1">
+                        <h3 className="font-poppins font-medium text-[15px] text-[#09132C] md:text-[#1C1B1F] truncate leading-[28px]">
                           {conversation.company.name}
                         </h3>
-                        <span className="text-xs text-[#00A699] shrink-0 ml-2">
+                        <span className="font-poppins text-[12px] md:text-xs text-[#829C99] md:text-[#00A699] shrink-0 ml-2 leading-[19px]">
                           {formatTime(conversation.lastMessage.timestamp)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-500 truncate pr-2">
+                        <p className="font-poppins text-[11px] md:text-sm text-[#808287] md:text-gray-500 truncate pr-2 leading-[19px]">
                           {conversation.lastMessage.text}
                         </p>
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-[9px] md:gap-1 shrink-0">
                           {conversation.unreadCount > 0 ? (
-                            <span className="bg-[#00A699] text-white text-xs font-medium rounded-full min-w-5 h-5 flex items-center justify-center px-1.5">
+                            <span className="bg-[#E8F5E9] md:bg-[#00A699] text-[#128C7E] md:text-white text-[12px] md:text-xs font-poppins font-bold md:font-medium rounded-full min-w-[23px] h-[23px] md:min-w-5 md:h-5 flex items-center justify-center px-1.5">
                               {conversation.unreadCount > 5 ? "5+" : conversation.unreadCount}
                             </span>
                           ) : conversation.lastMessage.sender === "user" ? (
-                            <CheckCheck className="w-4 h-4 text-[#00A699]" />
+                            <CheckCheck className="w-[19px] h-[19px] md:w-4 md:h-4 text-[#128C7E] md:text-[#00A699]" />
                           ) : (
-                            <Pin className="w-4 h-4 text-gray-400" />
+                            <Pin className="w-[21px] h-[21px] md:w-4 md:h-4 text-[#46444F] md:text-gray-400" />
                           )}
                         </div>
                       </div>
@@ -117,7 +117,7 @@ export default function ChatsPage() {
 
               {filteredConversations.length === 0 && (
                 <div className="text-center py-12 px-4">
-                  <p className="text-gray-500 text-sm">No conversations found</p>
+                  <p className="text-gray-500 text-sm font-poppins">No conversations found</p>
                 </div>
               )}
             </div>

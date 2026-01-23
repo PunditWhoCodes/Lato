@@ -203,7 +203,7 @@ export default function ChatConversationPage() {
                     {/* Avatar */}
                     <Avatar className="w-12 h-12 shrink-0">
                       <AvatarImage src={conversation.company.avatar || "/placeholder.svg"} />
-                      <AvatarFallback className="bg-[#00A699] text-white">
+                      <AvatarFallback className="bg-[#00A699] text-white rounded-full">
                         {conversation.company.name.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
@@ -244,7 +244,7 @@ export default function ChatConversationPage() {
           {/* Right Panel - Chat Conversation */}
           <div className="flex-1 flex flex-col bg-white">
             {/* Chat Header */}
-            <div className="flex items-center justify-between px-4 lg:px-6 py-4 border-b border-gray-100">
+            <div className="flex items-center justify-between px-[15px] lg:px-6 h-[90px] lg:h-auto lg:py-4 bg-[#f5fafc] lg:bg-white lg:border-b lg:border-gray-100">
               <div className="flex items-center gap-3 lg:gap-4">
                 {/* Back button for mobile */}
                 <Link
@@ -259,8 +259,8 @@ export default function ChatConversationPage() {
                   className="flex items-center gap-3 lg:gap-4 hover:bg-gray-50 rounded-lg p-1 -m-1 transition-colors cursor-pointer"
                   aria-label="View chat info"
                 >
-                  <Avatar className="w-10 h-10 lg:w-12 lg:h-12">
-                    <AvatarImage src={currentConversation.company.avatar || "/placeholder.svg"} />
+                  <Avatar className="w-[45px] h-[45px] lg:w-12 lg:h-12 rounded-full">
+                    <AvatarImage src={currentConversation.company.avatar || "/placeholder.svg"} className="rounded-full" />
                     <AvatarFallback className="bg-[#00A699] text-white">
                       {currentConversation.company.name.charAt(0)}
                     </AvatarFallback>
@@ -269,9 +269,9 @@ export default function ChatConversationPage() {
                     <h2 className="font-bold text-[17px] text-[#1C1B1F]">
                       {currentConversation.company.name}
                     </h2>
-                    <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                    <div className="flex items-center gap-1.5 text-[10px] text-gray-500 whitespace-nowrap">
                       <span
-                        className={`w-2 h-2 rounded-full ${
+                        className={`w-[6px] h-[6px] lg:w-2 lg:h-2 rounded-full whitespace-nowrap ${
                           currentConversation.company.isOnline ? "bg-green-500" : "bg-gray-400"
                         }`}
                       />
@@ -280,15 +280,15 @@ export default function ChatConversationPage() {
                       <span>{currentConversation.company.responseTime}</span>
                       {currentConversation.company.timezone && getLocalTime(currentConversation.company.timezone) && (
                         <>
-                          <span className="text-gray-300">•</span>
-                          <span>Local: {getLocalTime(currentConversation.company.timezone)}</span>
+                          <span className="text-gray-300 whitespace-nowrap">•</span>
+                          <span className="whitespace-nowrap">Local: {getLocalTime(currentConversation.company.timezone)}</span>
                         </>
                       )}
                     </div>
                   </div>
                 </button>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="hidden lg:flex items-center gap-3">
                 {/* <button
                   className="flex justify-center items-center py-2 px-4 bg-[#00A79221] rounded-full transition-colors gap-2 text-[#00A792]"
                   aria-label="Voice call"
@@ -315,7 +315,7 @@ export default function ChatConversationPage() {
             {/* Messages Area */}
             <div
               ref={messagesContainerRef}
-              className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#F7F7F7]"
+              className="flex-1 overflow-y-auto px-[18px] py-4 lg:p-6 space-y-4 lg:space-y-6 bg-[#F7F7F7]"
             >
               {currentConversation.messages.map((message, index) => {
                 const previousMessage = currentConversation.messages[index - 1]
@@ -329,7 +329,7 @@ export default function ChatConversationPage() {
                     {/* Date Separator */}
                     {showDateSeparator && (
                       <div className="flex justify-center mb-6">
-                        <span className="px-4 py-1.5 bg-white rounded-full text-sm shadow-sm border border-[#00A792]">
+                        <span className="px-[17px] py-[3px] lg:px-4 lg:py-1.5 bg-white rounded-[61px] lg:rounded-full text-[9.15px] lg:text-sm font-inter shadow-sm border-[0.61px] lg:border border-[#00A792]">
                           {formatDateLabel(message.timestamp)}
                         </span>
                       </div>
@@ -337,39 +337,39 @@ export default function ChatConversationPage() {
 
                     {message.sender === "company" ? (
                       // Incoming message (from company)
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-[#E6F7F5] flex items-center justify-center shrink-0">
-                          <span className="text-sm font-semibold text-[#00A699]">
+                      <div className="flex items-start gap-[8px] lg:gap-3">
+                        <div className="w-[24px] h-[24px] lg:w-10 lg:h-10 rounded-[5px] lg:rounded-lg bg-[#E6F7F5] flex items-center justify-center shrink-0 overflow-hidden">
+                          <span className="text-[8px] lg:text-sm font-semibold text-[#00A699]">
                             {getInitials(currentConversation.company.name)}
                           </span>
                         </div>
-                        <div className="max-w-[60%]">
-                          <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-md px-5 py-3.5 shadow-sm">
-                            <p className="text-[#00A699] text-[15px] leading-relaxed">
+                        <div className="max-w-[70%] lg:max-w-[60%]">
+                          <div className="bg-[#f1f1f1] lg:bg-white lg:border lg:border-gray-100 rounded-bl-[7px] rounded-br-[7px] rounded-tr-[7px] lg:rounded-2xl lg:rounded-tl-md px-[10px] py-[5px] lg:px-5 lg:py-3.5 lg:shadow-sm">
+                            <p className="text-black lg:text-[#00A699] font-inter text-[9.15px] lg:text-[15px] leading-[1.5] lg:leading-relaxed">
                               {message.text}
                             </p>
                           </div>
-                          <p className="text-xs text-gray-400 mt-2 ml-1">
+                          <p className="hidden lg:block text-xs text-gray-400 mt-2 ml-1">
                             {formatTime(message.timestamp)}
                           </p>
                         </div>
                       </div>
                     ) : (
                       // Outgoing message (from user)
-                      <div className="flex items-start justify-end gap-3">
-                        <div className="max-w-[60%]">
-                          <div className="bg-[#00A699] rounded-2xl rounded-tr-md px-5 py-3.5">
-                            <p className="text-white text-[15px] leading-relaxed">
+                      <div className="flex items-start justify-end gap-[8px] lg:gap-3">
+                        <div className="max-w-[70%] lg:max-w-[60%]">
+                          <div className="bg-[#00a792] rounded-bl-[7px] rounded-br-[7px] rounded-tl-[7px] lg:rounded-2xl lg:rounded-tr-md px-[10px] py-[5px] lg:px-5 lg:py-3.5">
+                            <p className="text-white font-inter text-[9.15px] lg:text-[15px] leading-[1.5] lg:leading-relaxed">
                               {message.text}
                             </p>
                           </div>
-                          <p className="text-xs text-gray-400 mt-2 text-right mr-1">
+                          <p className="hidden lg:block text-xs text-gray-400 mt-2 text-right mr-1">
                             {formatTime(message.timestamp)}
                           </p>
                         </div>
-                        <Avatar className="w-10 h-10 shrink-0 rounded-lg">
-                          <AvatarImage src={user?.avatar || "/placeholder.svg"} className="rounded-lg" />
-                          <AvatarFallback className="bg-orange-400 text-white rounded-lg">
+                        <Avatar className="w-[24px] h-[24px] lg:w-10 lg:h-10 shrink-0 rounded-[5px] lg:rounded-lg">
+                          <AvatarImage src={user?.avatar || "/placeholder.svg"} className="rounded-[5px] lg:rounded-lg" />
+                          <AvatarFallback className="bg-orange-400 text-white text-[8px] lg:text-base rounded-[5px] lg:rounded-lg">
                             {user?.name?.charAt(0) || "U"}
                           </AvatarFallback>
                         </Avatar>
@@ -382,16 +382,16 @@ export default function ChatConversationPage() {
             </div>
 
             {/* Message Input */}
-            <div className="px-4 lg:px-6 py-4 bg-[#F7F7F7]">
+            <div className="px-[18px] lg:px-6 py-[12px] lg:py-4 bg-[#f5fafc] lg:bg-[#F7F7F7]">
               <form onSubmit={handleSendMessage} className="flex items-center gap-3">
                 <div className="flex-1 relative">
                   <Input
-                    placeholder="Type a message"
+                    placeholder="Say Something..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    className="h-14 rounded-full border-gray-200 bg-gray-50 px-5 pr-14 text-[15px] placeholder:text-gray-400"
+                    className="h-[36px] lg:h-14 rounded-[18px] lg:rounded-full border-0 lg:border lg:border-gray-200 bg-white lg:bg-gray-50 px-[18px] lg:px-5 pr-14 text-[10.5px] lg:text-[15px] placeholder:text-[#8f8f8f] lg:placeholder:text-gray-400"
                   />
-                  <SendHorizonal className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#00A792] h-5 w-5" />
+                  <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#00A792] h-[18px] w-[18px] lg:hidden" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.75V14.25M3.75 9H14.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg><SendHorizonal className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#00A792] h-5 w-5 hidden lg:block" />
                 </div>
                 {/* <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                   <rect width="29.7" height="29.7" fill="url(#pattern0_1538_5786)" />
