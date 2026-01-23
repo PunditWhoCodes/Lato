@@ -119,8 +119,8 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
   const displayTours = topTours.slice(0, 3)
 
   return (
-    <section className="py-[38px] md:py-16 lg:py-24 px-[22px] md:px-10 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-[38px] md:py-16 lg:py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-[22px] md:px-10">
         {/* Section Header */}
         <div className="flex flex-col gap-[17px] lg:gap-[43.35px] mb-6 md:mb-12 lg:mb-16">
           {/* Top Row: Tour Packages label + View More */}
@@ -163,7 +163,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
         ) : (
           <>
             {/* Mobile: Horizontal Scroll - Figma: cards 218px wide, 8px gap */}
-            <div className="md:hidden flex gap-[8px] overflow-x-auto pb-4 -mx-[22px] px-[22px] snap-x snap-mandatory scrollbar-hide">
+            <div className="md:hidden flex gap-[8px] overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
               {displayTours.map((tour) => (
                 <div key={tour.id} className="flex-shrink-0 w-[218px] snap-start">
                   <TourCard tour={tour} variant="featured" />

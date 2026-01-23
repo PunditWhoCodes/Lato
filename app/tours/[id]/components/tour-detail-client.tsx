@@ -220,8 +220,8 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
 
   return (
     <div>
-      {/* Tour Header - Breadcrumb, Title, Rating, Heart */}
-      <div className="mb-4 lg:mb-6">
+      {/* Tour Header - Breadcrumb, Title, Rating, Heart - White background on mobile to blend with navbar */}
+      <div className="mb-[6px] lg:mb-6 bg-white lg:bg-transparent -mx-[18px] px-[18px] lg:mx-0 lg:px-0 pt-[6px] pb-[6px] lg:pt-0 lg:pb-0">
         <TourHeader
           title={tourData.title}
           rating={tourData.rating}
@@ -251,12 +251,12 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
       />
 
       {/* Main Content Grid - Two Columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mt-4 lg:mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-[14px] lg:gap-8 mt-[14px] lg:mt-6">
         {/* Main Content - Left Side (2/3) */}
         <div className="lg:col-span-2">
 
           {/* Tour Info Bar - Duration, Type, Group Size, etc. */}
-          <div className="mt-4 lg:mt-8">
+          <div className="mt-[14px] lg:mt-8">
             <TourInfo
               duration={tourData.duration}
               tourType={tourData.tourType}
@@ -268,7 +268,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           </div>
 
           {/* Mobile Only - Booking Section above tabs */}
-          <div className="lg:hidden mt-4">
+          <div className="lg:hidden mt-[14px]">
             <BookingSidebar
               price={tourData.price}
               originalPrice={tourData.originalPrice}
@@ -324,7 +324,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
             />
           </div>
           {/* Get Trip Exclusive Discount CTA */}
-          <JoinExperience />
+          {/* <JoinExperience /> */}
 
           {/* About Company Section */}
           <div ref={companyRef} className="scroll-mt-24">

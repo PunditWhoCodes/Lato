@@ -45,32 +45,32 @@ export function ToursCarousel({ title, tours }: ToursCarouselProps) {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="font-poppins font-semibold text-lg md:text-xl text-black">
+      <div className="flex items-center justify-between mb-[14px] lg:mb-5">
+        <h2 className="font-poppins font-semibold text-[12px] lg:text-xl text-black">
           {title}
         </h2>
 
         {/* Navigation Arrows */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-[9px] lg:gap-3">
           <button
             onClick={() => scroll("left")}
             disabled={!showLeftArrow}
-            className={`size-10 rounded-full border flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
+            className={`size-[28px] lg:size-10 rounded-full border flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
               !showLeftArrow ? "opacity-40 cursor-not-allowed" : ""
             }`}
             aria-label="Previous tours"
           >
-            <ArrowLeft className="size-5" />
+            <ArrowLeft className="size-[14px] lg:size-5" />
           </button>
           <button
             onClick={() => scroll("right")}
             disabled={!showRightArrow}
-            className={`size-10 rounded-full border flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
+            className={`size-[28px] lg:size-10 rounded-full border flex items-center justify-center transition-all hover:border-gray-400 hover:bg-gray-50 ${
               !showRightArrow ? "opacity-40 cursor-not-allowed" : ""
             }`}
             aria-label="Next tours"
           >
-            <ArrowRight className="size-5" />
+            <ArrowRight className="size-[14px] lg:size-5" />
           </button>
         </div>
       </div>
@@ -79,7 +79,7 @@ export function ToursCarousel({ title, tours }: ToursCarouselProps) {
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+        className="flex gap-[9px] lg:gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-[14px] lg:pb-4"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",

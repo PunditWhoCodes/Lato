@@ -54,21 +54,21 @@ export function TourInfo({
   ]
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 mb-4 lg:mb-10 gap-x-4 lg:gap-x-10 gap-y-4 lg:gap-y-8 p-4 lg:p-8 bg-white rounded-[16px] lg:rounded-3xl border border-[#E5E7EB]">
+    <div className="grid grid-cols-2 lg:grid-cols-3 mb-[14px] lg:mb-10 gap-x-[14px] lg:gap-x-10 gap-y-[14px] lg:gap-y-8 p-[14px] lg:p-8 bg-white rounded-[10px] lg:rounded-3xl border border-[#E5E7EB]">
       {infoItems.map((item, index) => (
-        <div key={index} className="flex items-start gap-2 lg:gap-3">
+        <div key={index} className="flex items-start gap-[8px] lg:gap-3">
 
           <div className="mt-0.5 shrink-0">
-            <span className="[&>svg]:w-4 [&>svg]:h-4 lg:[&>svg]:w-5 lg:[&>svg]:h-5">
+            <span className="[&>svg]:w-[14px] [&>svg]:h-[14px] lg:[&>svg]:w-5 lg:[&>svg]:h-5">
               {item.icon}
             </span>
           </div>
 
-          <div className="space-y-0.5 min-w-0">
-            <p className="text-[13px] lg:text-[15px] font-semibold text-[#1C1B1F] leading-tight truncate">
+          <div className="space-y-[2px] min-w-0">
+            <p className="font-poppins text-[10px] lg:text-[15px] font-semibold text-[#1C1B1F] leading-tight truncate">
               {item.label}
             </p>
-            <p className="text-[11px] lg:text-[13px] text-[#6B7280] leading-tight line-clamp-2">
+            <p className="font-poppins text-[8px] lg:text-[13px] text-[#6B7280] leading-tight line-clamp-2">
               {item.sublabel}
             </p>
           </div>

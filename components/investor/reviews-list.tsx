@@ -22,8 +22,8 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
 
   if (reviews.length === 0) {
     return (
-      <div className="text-center py-10">
-        <p className="font-poppins text-gray-500">No reviews yet</p>
+      <div className="text-center py-[28px] lg:py-10">
+        <p className="font-poppins text-[10px] lg:text-base text-gray-500">No reviews yet</p>
       </div>
     )
   }
@@ -31,7 +31,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
   return (
     <div>
       {/* Reviews List */}
-      <div className="space-y-3">
+      <div className="space-y-[9px] lg:space-y-3">
         {visibleReviews.map((review) => (
           <ReviewCard key={review.id} review={review} />
         ))}
@@ -39,10 +39,10 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
 
       {/* Load More */}
       {hasMoreReviews && (
-        <div className="text-center mt-6">
+        <div className="text-center mt-[18px] lg:mt-6">
           <button
             onClick={handleLoadMore}
-            className="font-poppins text-sm text-primary hover:text-primary/80 transition-colors"
+            className="font-poppins text-[10px] lg:text-sm text-primary hover:text-primary/80 transition-colors"
           >
             Load more Reviews
           </button>

@@ -108,53 +108,53 @@ export function HowItWorks() {
           </Link>
         </div>
 
-        {/* CARDS - Mobile: Vertical Stack, Desktop: Grid */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 lg:gap-8 mb-6 md:mb-14">
+        {/* CARDS - Mobile: Vertical Stack (292px width), Desktop: Grid */}
+        <div className="flex flex-col items-center md:items-stretch md:max-w-6xl md:mx-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-[12.19px] md:gap-6 lg:gap-8 mb-6 md:mb-14">
           {STEPS.map((item, index) => (
             <Card
               key={index}
-              className="group bg-white border border-gray-100 rounded-[16px] md:rounded-2xl p-4 md:p-8 shadow-sm hover:shadow-xl hover:bg-[#00A792] transition-all duration-300"
+              className="group bg-white border-[0.61px] border-black/[0.09] md:border md:border-gray-100 rounded-[14.13px] md:rounded-2xl p-[15.24px] md:p-8 shadow-sm hover:shadow-xl hover:bg-[#00A792] transition-all duration-300 w-[292px] md:w-auto md:h-auto"
             >
-              <CardContent className="p-0">
-                {/* ICON */}
-                <div className="size-10 md:size-16 bg-[#00A792] group-hover:bg-white rounded-full flex items-center justify-center mb-4 md:mb-6 transition-all duration-300">
-                  <item.icon className="text-white group-hover:text-[#00A792] size-4 md:size-6 transition-colors duration-300" />
+              <CardContent className="p-0 w-[254px] md:w-auto">
+                {/* ICON - Mobile: 48.77px, Desktop: 64px */}
+                <div className="w-[48.77px] h-[48.77px] md:size-16 bg-[#00A792] group-hover:bg-white rounded-full flex items-center justify-center mb-[30.48px] md:mb-6 transition-all duration-300">
+                  <item.icon className="text-white group-hover:text-[#00A792] w-[21px] h-[21px] md:size-6 transition-colors duration-300" />
                 </div>
 
-                {/* TITLE */}
-                <h3 className="text-[14px] md:text-xl font-semibold text-black group-hover:text-white font-poppins mb-1 transition-colors duration-300">
+                {/* TITLE - Mobile: 18.29px, 500 weight */}
+                <h3 className="text-[18.29px] md:text-xl font-medium md:font-semibold text-black group-hover:text-white font-poppins leading-[150%] mb-[9.75px] md:mb-1 transition-colors duration-300">
                   {item.title}
                 </h3>
 
-                {/* SUBTITLE */}
-                <p className="text-[#00A792] group-hover:text-white font-normal font-poppins text-[11px] md:text-sm mb-3 md:mb-4 transition-colors duration-300">
+                {/* SUBTITLE - Mobile: 12.19px, 300 weight, #00A792 */}
+                <p className="text-[#00A792] group-hover:text-white font-light md:font-normal font-poppins text-[12.19px] md:text-sm leading-[150%] mb-[30.48px] md:mb-4 transition-colors duration-300">
                   {item.subtitle}
                 </p>
 
-                {/* DESCRIPTION */}
-                <p className="text-[#595959] group-hover:text-white text-[10px] md:text-sm leading-relaxed font-poppins mb-4 md:mb-6 transition-colors duration-300">
+                {/* DESCRIPTION - Mobile: 9.75px, 300 weight */}
+                <p className="text-[#595959] group-hover:text-white text-[9.75px] md:text-sm leading-[150%] md:leading-relaxed font-poppins font-light mb-[35.97px] md:mb-6 transition-colors duration-300">
                   {item.description}
                 </p>
 
-                {/* FEATURES */}
-                <ul className="space-y-1.5 md:space-y-2 mb-4 md:mb-6">
+                {/* FEATURES - Mobile: 9.75px, 300 weight */}
+                <ul className="space-y-[3px] md:space-y-2 mb-[35.97px] md:mb-6">
                   {item.features.map((feature, i) => (
                     <li
                       key={i}
-                      className="text-[10px] md:text-sm text-[#595959] group-hover:text-white flex gap-2 items-start transition-colors duration-300"
+                      className="text-[9.75px] md:text-sm text-[#595959] group-hover:text-white font-poppins font-light leading-[150%] flex gap-1 items-start transition-colors duration-300"
                     >
-                      <span className="text-gray-400 group-hover:text-white transition-colors duration-300">•</span> {feature}
+                      <span className="text-[#595959] group-hover:text-white transition-colors duration-300">•</span> {feature}
                     </li>
                   ))}
                 </ul>
 
-                {/* LEARN MORE */}
+                {/* LEARN MORE - Mobile: 9.75px, 300 weight */}
                 <Link
                   href="/tours"
-                  className="inline-flex items-center gap-1 text-[10px] md:text-sm font-medium text-gray-700 group-hover:text-white transition-colors duration-300"
+                  className="inline-flex items-center gap-[4.27px] md:gap-1 text-[9.75px] md:text-sm font-light md:font-medium text-[#595959] md:text-gray-700 group-hover:text-white transition-colors duration-300"
                 >
                   Learn More
-                  <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ChevronRight className="w-[14.63px] h-[14.63px] md:w-4 md:h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </CardContent>
             </Card>

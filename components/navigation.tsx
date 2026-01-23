@@ -51,7 +51,36 @@ export function Navigation() {
 
   return (
     <nav className="bg-[#FFFFFF] sticky top-0 z-50 border-b border-gray-100 relative">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Mobile Header - Figma: px-[47px] py-[12px], content w-[304px] */}
+      <div className="flex lg:hidden justify-center px-[47px] py-[12px]">
+        <div className="flex items-center justify-between w-[304px]">
+          <Link href="/" className="flex items-center">
+            <img
+              src="/lato-logo.png"
+              alt="Lato"
+              className="w-[41px] h-[16px] object-contain"
+            />
+          </Link>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="w-[24px] h-[24px] flex items-center justify-center"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-[24px] h-[24px]" />
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 5L20 5" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 12L6 12" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8 19L16 19" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Header */}
+      <div className="hidden lg:block max-w-7xl mx-auto px-8">
         <div className="flex justify-between items-center h-20">
           <Link href="/" className="flex items-center">
             <img
@@ -96,19 +125,7 @@ export function Navigation() {
             </Link>
           </div>
 
-          <div className="flex lg:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 sm:p-2"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5 sm:h-6 sm:w-6" /> : <Menu className="h-5 w-5 sm:h-6 sm:w-6" />}
-            </Button>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="flex items-center gap-4">
             {!isHydrated ? (
               // Show loading placeholder while hydrating
               <div className="w-24 h-10 flex items-center justify-center">
@@ -256,57 +273,53 @@ export function Navigation() {
       />
 
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#F7F7F7] min-h-[375px] overflow-y-auto">
-          {/* Login/Sign Up Row - Centered */}
-          <div className="flex justify-center pt-[27px] pb-[52px]">
-            {!isHydrated ? (
-              <div className="flex items-center justify-center">
-                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-              </div>
-            ) : user ? (
-              <div className="flex items-center gap-[5px]">
-                <Link
-                  href="/profile"
-                  className="flex items-center justify-center w-[110px] h-[38px] rounded-full font-poppins font-light text-[14px] text-black"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {user.name}
-                </Link>
-                <button
-                  onClick={async () => {
-                    await logout()
-                    setMobileMenuOpen(false)
-                  }}
-                  className="flex items-center justify-center w-[129px] h-[38px] bg-black rounded-full font-poppins font-light text-[13px] text-white"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-[5px]">
-                <Link
-                  href="/login"
-                  className="flex items-center justify-center w-[110px] h-[38px] rounded-full font-poppins font-light text-[14px] text-black"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/register"
-                  className="flex items-center justify-center w-[129px] h-[38px] bg-black rounded-full font-poppins font-light text-[13px] text-white"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
-          </div>
+        <div className="lg:hidden bg-[#F7F7F7] relative" style={{ minHeight: user ? '617px' : '375px' }}>
+          {/* Back Arrow - Figma: left: 16px, top: 78px (30px from menu top since header is 48px) */}
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="absolute left-[16px] top-[30px] flex items-center justify-center w-[37px] h-[38px] bg-white/30 rounded-full"
+            style={{ transform: 'rotate(90deg)' }}
+            aria-label="Close menu"
+          >
+            <ChevronDown className="w-[9px] h-[4.5px] text-[#141B34]" style={{ transform: 'rotate(-90deg)' }} />
+          </button>
 
-          {/* Menu Items - Left aligned */}
-          <div className="flex flex-col items-start gap-[19px] pl-[35px]">
+          {/* Not logged in: Login/Sign Up buttons - Figma: centered, top: 27px (75px - 48px header) */}
+          {!isHydrated ? (
+            <div className="absolute left-1/2 -translate-x-1/2 top-[27px] flex items-center justify-center">
+              <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+            </div>
+          ) : !user ? (
+            <div className="absolute left-1/2 -translate-x-1/2 top-[27px] flex items-center justify-between w-[290px] h-[38px]">
+              <Link
+                href="/login"
+                className="flex items-center justify-center w-[110px] h-[38px] rounded-[23px] font-poppins font-light text-[14px] text-black"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className="flex items-center justify-center w-[129px] h-[38px] bg-black rounded-[22px] font-poppins font-light text-[13px] text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Sign Up
+              </Link>
+            </div>
+          ) : null}
+
+          {/* Menu Items - Figma logged-in: left: 37px, top: 43px (91px - 48px) | not logged-in: left: 35px, top: 106px (154px - 48px) */}
+          {/* Figma: width: 140px, height: 226px, gap: 19px, font: Poppins 19.69px/30px */}
+          <div
+            className="absolute flex flex-col items-start gap-[19px] w-[140px]"
+            style={{
+              left: '37px',
+              top: user ? '43px' : '106px'
+            }}
+          >
             <Link
               href="/about"
-              className="font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
+              className="h-[30px] font-poppins font-normal text-[19.69px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
               About Us
@@ -314,7 +327,7 @@ export function Navigation() {
 
             <Link
               href="/tours"
-              className="font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
+              className="h-[30px] font-poppins font-normal text-[19.69px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
               Explore Places
@@ -322,82 +335,100 @@ export function Navigation() {
 
             <Link
               href="/destinations"
-              className="flex items-center gap-[11px] font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
+              className="flex items-center gap-[11px] h-[30px] font-poppins font-normal text-[19.69px] leading-[30px] text-[#00A792]"
               onClick={() => setMobileMenuOpen(false)}
             >
               Destination
-              <ChevronDown className="w-5 h-5" />
+              <svg width="12" height="6" viewBox="0 0 12 6" fill="none" className="rotate-180">
+                <path d="M1 1L6 5L11 1" stroke="#00A792" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </Link>
 
             <Link
               href="/travel-styles"
-              className="flex items-center gap-[8px] font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
+              className="flex items-center justify-between w-full h-[30px] font-poppins font-normal text-[19.69px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
               Travel Style
-              <ChevronDown className="w-5 h-5" />
+              <svg width="12" height="6" viewBox="0 0 12 6" fill="none">
+                <path d="M1 1L6 5L11 1" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </Link>
 
             <Link
               href="/contact"
-              className="font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
+              className="h-[30px] font-poppins font-normal text-[19.69px] leading-[30px] text-[#1C1B1F]"
               onClick={() => setMobileMenuOpen(false)}
             >
               Contact Us
             </Link>
           </div>
 
-          {/* Logged in user options */}
+          {/* Logged in user options - Figma: left: 37px, top: 301px (349px - 48px) */}
+          {/* Figma: width: 158px, height: 284px, font: Plus Jakarta Sans 21.59px/43px */}
           {user && (
-            <div className="border-t border-gray-200 mt-6 pt-4 pl-[35px] space-y-[19px]">
-              <Link
-                href="/wishlist"
-                className={`flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] ${
-                  isWishlistPage ? "text-[#00A699]" : "text-[#1C1B1F]"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
+            <div className="absolute left-[37px] top-[301px] flex flex-col items-start w-[158px]">
+              {/* Menu items with gap-[5px], height: 240px */}
+              <div className="flex flex-col items-start gap-[5px] w-full">
+                <Link
+                  href="/profile"
+                  className="h-[44px] flex items-center font-['Plus_Jakarta_Sans'] font-normal text-[21.59px] leading-[43px] text-[#3A3A3A]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  My Profile
+                </Link>
+                <Link
+                  href="/wishlist"
+                  className="h-[44px] flex items-center font-['Plus_Jakarta_Sans'] font-normal text-[21.59px] leading-[43px] text-[#3A3A3A]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Wishlist
+                  {savedToursCount > 0 && (
+                    <Badge className="ml-2 bg-[#00A699] text-white text-xs min-w-[18px] h-[18px] flex items-center justify-center p-0 rounded-full">
+                      {savedToursCount}
+                    </Badge>
+                  )}
+                </Link>
+                <Link
+                  href="/chats"
+                  className="h-[44px] flex items-center font-['Plus_Jakarta_Sans'] font-normal text-[21.59px] leading-[43px] text-[#3A3A3A]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Messages
+                  {totalUnreadMessages > 0 && (
+                    <Badge className="ml-2 bg-[#00A699] text-white text-xs min-w-[18px] h-[18px] flex items-center justify-center p-0 rounded-full">
+                      {totalUnreadMessages}
+                    </Badge>
+                  )}
+                </Link>
+                <Link
+                  href="/settings"
+                  className="h-[44px] flex items-center font-['Plus_Jakarta_Sans'] font-normal text-[21.59px] leading-[43px] text-[#3A3A3A]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Settings
+                </Link>
+                <Link
+                  href="/my-bookings"
+                  className="h-[44px] flex items-center font-['Plus_Jakarta_Sans'] font-normal text-[21.59px] leading-[43px] text-[#3A3A3A]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  My Bookings
+                </Link>
+              </div>
+              {/* Logout with border-top - Figma: border-top: 1px solid rgba(0, 0, 0, 0.1) */}
+              <button
+                onClick={async () => {
+                  await logout()
+                  setMobileMenuOpen(false)
+                }}
+                className="h-[44px] flex items-center font-['Plus_Jakarta_Sans'] font-normal text-[21.59px] leading-[43px] text-[#F23813] border-t border-black/10 w-[158px] mt-0"
               >
-                <Heart className={`h-5 w-5 ${isWishlistPage ? "fill-[#00A699]" : ""}`} />
-                Wishlist
-                {savedToursCount > 0 && (
-                  <Badge className="bg-[#00A699] text-white text-xs">
-                    {savedToursCount}
-                  </Badge>
-                )}
-              </Link>
-              <Link
-                href="/chats"
-                className={`flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] ${
-                  isChatsPage ? "text-[#00A699]" : "text-[#1C1B1F]"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <MessageCircle className="h-5 w-5" />
-                Messages
-                {totalUnreadMessages > 0 && (
-                  <Badge className="bg-[#00A699] text-white text-xs">
-                    {totalUnreadMessages}
-                  </Badge>
-                )}
-              </Link>
-              <Link
-                href="/profile"
-                className="flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <User className="h-5 w-5" />
-                Profile
-              </Link>
-              <Link
-                href="/settings"
-                className="flex items-center gap-2 font-poppins font-normal text-[20px] leading-[30px] text-[#1C1B1F]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Settings className="h-5 w-5" />
-                Settings
-              </Link>
+                Logout
+              </button>
             </div>
           )}
+
         </div>
       )}
     </nav>

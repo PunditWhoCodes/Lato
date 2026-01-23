@@ -101,12 +101,12 @@ export default function MyBookingsPage() {
             <div className="lg:col-span-3">
               {/* Tabs */}
               <div className="border-b border-gray-200">
-                <div className="flex gap-8">
+                <div className="flex gap-8 whitspace-nowrap">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`font-poppins text-[14px] pb-3 border-b-2 transition-colors ${
+                      className={`font-poppins text-[14px] pb-3 border-b-2 transition-colors whitespace-nowrap ${
                         activeTab === tab.id
                           ? 'text-[#00a792] border-[#00a792]'
                           : 'text-[#6b7280] border-transparent hover:text-[#00a792]'

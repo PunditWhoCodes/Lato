@@ -92,7 +92,7 @@ export function InvestorPageClient({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[14px] lg:space-y-6">
       {/* Company Header Card */}
       <CompanyHeader
         name={company.name}
@@ -113,14 +113,14 @@ export function InvestorPageClient({
       />
 
       {/* All Content Sections in One White Container */}
-      <div className="bg-white rounded-2xl p-6 md:p-8 border border-black/5">
+      <div className="bg-white rounded-[10px] lg:rounded-2xl px-[18px] py-[21px] lg:p-8 border border-black/5">
         {/* Reviews Section */}
         <div ref={reviewsRef} className="scroll-mt-4">
           <ReviewsList reviews={reviews} />
         </div>
 
         {/* Divider */}
-        <hr className="my-8 border-gray-100" />
+        <hr className="my-[21px] lg:my-8 border-gray-100" />
 
         {/* Tours By Company Carousel */}
         <div ref={toursRef} className="scroll-mt-4">
@@ -128,7 +128,7 @@ export function InvestorPageClient({
         </div>
 
         {/* Divider */}
-        <hr className="my-8 border-gray-100" />
+        <hr className="my-[21px] lg:my-8 border-gray-100" />
 
         {/* Top Deals Carousel */}
         <div>
@@ -136,7 +136,7 @@ export function InvestorPageClient({
         </div>
 
         {/* Divider */}
-        <hr className="my-8 border-gray-100" />
+        <hr className="my-[21px] lg:my-8 border-gray-100" />
 
         {/* About Section */}
         <div ref={aboutRef} className="scroll-mt-4">
@@ -144,7 +144,7 @@ export function InvestorPageClient({
         </div>
 
         {/* Divider */}
-        <hr className="my-8 border-gray-100" />
+        <hr className="my-[21px] lg:my-8 border-gray-100" />
 
         {/* Policies Section */}
         <div>

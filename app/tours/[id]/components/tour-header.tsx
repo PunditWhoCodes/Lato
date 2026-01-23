@@ -59,9 +59,9 @@ export function TourHeader({
   }
 
   return (
-    <div className="space-y-2 lg:space-y-3">
+    <div className="space-y-[4px] lg:space-y-3">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 lg:gap-2 text-[11px] lg:text-sm text-[#6B7280] flex-wrap">
+      <nav className="flex items-center gap-[3px] lg:gap-2 text-[10px] lg:text-sm text-[#6B7280] flex-wrap font-poppins">
         <Link href="/" className="hover:text-[#00A699] transition-colors">
           Home
         </Link>
@@ -77,15 +77,15 @@ export function TourHeader({
       <div className="flex items-start justify-between gap-3 lg:gap-4">
         {/* Left Column - Title, Location and Rating */}
         <div className="flex-1">
-          <h1 className="text-[18px] lg:text-[28px] font-semibold text-[#1C1B1F] leading-tight">
+          <h1 className="font-poppins text-[15px] lg:text-[28px] font-semibold text-[#1C1B1F] leading-tight">
             {title}
           </h1>
 
           {/* Location & Rating Row */}
-          <div className="flex flex-wrap items-center gap-2 lg:gap-4 mt-1.5 lg:mt-2">
-            {/* Location */}
-            <div className="flex items-center gap-1 text-[#818181] text-[12px] lg:text-sm">
-              <MapPin className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+          <div className="flex flex-wrap items-center gap-[6px] lg:gap-4 mt-[6px] lg:mt-2">
+            {/* Location - Hidden on mobile */}
+            <div className="hidden lg:flex items-center gap-1 text-[#818181] text-sm">
+              <MapPin className="w-4 h-4" />
               <span>{location}</span>
             </div>
 
@@ -93,21 +93,10 @@ export function TourHeader({
             <span className="text-[#E5E5E5] hidden lg:inline">|</span>
 
             {/* Rating */}
-            <div className="flex items-center gap-1 lg:gap-1.5">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-3 h-3 lg:w-4 lg:h-4 ${
-                      i < Math.floor(rating)
-                        ? "fill-[#FFA432] text-[#FFA432]"
-                        : "fill-gray-200 text-gray-200"
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-[12px] lg:text-sm font-medium text-[#1C1B1F]">{rating.toFixed(1)}</span>
-              <span className="text-[11px] lg:text-sm text-[#818181]">({reviewCount} reviews)</span>
+            <div className="flex items-center gap-[4px] lg:gap-1.5">
+              <Star className="w-[11px] h-[11px] lg:w-4 lg:h-4 fill-[#FFA432] text-[#FFA432]" />
+              <span className="font-poppins text-[10px] lg:text-sm font-medium text-[#1C1B1F]">{rating.toFixed(1)}</span>
+              <span className="font-poppins text-[10px] lg:text-sm text-[#818181]">({reviewCount} reviews)</span>
             </div>
           </div>
         </div>

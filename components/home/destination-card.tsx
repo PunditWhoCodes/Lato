@@ -21,10 +21,10 @@ export function DestinationCard({
 }: DestinationCardProps) {
   return (
     <Link href={href}>
-      <Card className="group cursor-pointer border-0 bg-transparent shadow-none">
-        
-        {/* Image */}
-        <div className="overflow-hidden rounded-2xl w-full h-52 md:h-64 mb-4">
+      <Card className="group cursor-pointer border-0 bg-transparent shadow-none flex flex-col items-center gap-[7px] lg:gap-4">
+
+        {/* Image - Mobile: 139px x 104.55px, 6.45px radius | Desktop: larger */}
+        <div className="overflow-hidden rounded-[6.45px] lg:rounded-2xl w-full h-[105px] lg:h-64">
           <ShimmerImage
             src={image}
             alt={name}
@@ -32,18 +32,20 @@ export function DestinationCard({
           />
         </div>
 
-        {/* Destination Name */}
-        <h3 className="text-center font-poppins text-lg md:text-xl font-medium text-black mb-1">
-          {flag && <span className="mr-2">{flag}</span>}
-          {name}
-        </h3>
+        {/* Text Container */}
+        <div className="flex flex-col items-center gap-[6.78px] lg:gap-1">
+          {/* Destination Name - Mobile: 9.68px, 500 weight | Desktop: larger */}
+          <h3 className="text-center font-poppins text-[9.68px] lg:text-xl font-medium text-black leading-[150%]">
+            {name}
+          </h3>
 
-        {/* Tour Count */}
-        {tourCount !== undefined && tourCount > 0 && (
-          <p className="text-center text-sm text-gray-500 font-mulish">
-            {tourCount}+ Tours
-          </p>
-        )}
+          {/* Tour Count - Mobile: 5.16px, 300 weight | Desktop: larger */}
+          {tourCount !== undefined && tourCount > 0 && (
+            <p className="text-center text-[5.16px] lg:text-sm text-[#595959] font-poppins font-light leading-[150%]">
+              {tourCount}+ Tours
+            </p>
+          )}
+        </div>
       </Card>
     </Link>
   )

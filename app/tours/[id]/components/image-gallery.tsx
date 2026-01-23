@@ -113,67 +113,71 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
         </div>
       </div>
 
-      {/* Mobile Gallery */}
-      <div className="md:hidden">
-        {/* Main Image with Heart Icon */}
-        <div className="relative h-[220px] rounded-[16px] overflow-hidden">
-          <Image
-            src={displayImages[0]}
-            alt={title}
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* OFF Badge - Top Left */}
-          {discountPercent && discountPercent > 0 && (
-            <div className="absolute top-3 left-3 bg-[#F23813] text-white px-3 py-1 rounded-full text-[11px] font-semibold">
-              -{discountPercent}% OFF
-            </div>
-          )}
-          {/* Heart/Wishlist Icon - Top Right */}
-          {tourId && (
-            <button
-              onClick={handleToggleSave}
-              className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-110"
-              aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}
-            >
-              <Heart
-                className={`w-4 h-4 transition-colors ${
-                  isFavorite ? "fill-[#F23813] text-[#F23813]" : "text-[#6B7280]"
-                }`}
-              />
-            </button>
-          )}
-        </div>
+      {/* Mobile Gallery - Figma: 368px x 296px container */}
+      <div className="md:hidden flex justify-center">
+        <div className="bg-white rounded-[8.76px] p-[10px] w-[368px]">
+          {/* Main Image - Figma: 348.24px x 195.34px */}
+          <div className="relative w-[348px] h-[195px] rounded-[8.69px] overflow-hidden">
+            <Image
+              src={displayImages[0]}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* OFF Badge - Figma: 41.43px x 11.07px, 4.72px font */}
+            {discountPercent && discountPercent > 0 && (
+              <div className="absolute top-[6px] left-[6px] bg-[#F23813] text-white px-[4.72px] py-0 h-[11px] rounded-[6.29px] text-[4.72px] font-poppins font-medium uppercase flex items-center justify-center">
+                Up to {discountPercent}% Off
+              </div>
+            )}
+            {/* Heart/Wishlist Icon - Figma: 27.32px x 25.94px, top right */}
+            {tourId && (
+              <button
+                onClick={handleToggleSave}
+                className="absolute top-[9.69px] right-[9px] w-[27.32px] h-[25.94px] bg-white rounded-full flex items-center justify-center shadow-[0px_6.22px_9.32px_-1.86px_rgba(0,0,0,0.1),0px_2.49px_3.73px_-2.49px_rgba(0,0,0,0.1)] transition-all duration-300 hover:scale-110 p-[3.73px]"
+                aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}
+              >
+                <Heart
+                  className={`w-[19.86px] h-[18.48px] transition-colors ${
+                    isFavorite ? "fill-[#F23813] text-[#F23813]" : "fill-[#F23813] text-[#F23813]"
+                  }`}
+                />
+              </button>
+            )}
+          </div>
 
-        {/* Thumbnail Row + View All Photos */}
-        <div className="flex items-center gap-2 mt-2">
-          {/* Thumbnail 1 */}
-          <div className="relative w-[64px] h-[48px] rounded-[10px] overflow-hidden flex-shrink-0">
-            <Image
-              src={displayImages[1]}
-              alt={`${title} - Image 2`}
-              fill
-              className="object-cover"
-            />
+          {/* Thumbnail Row - Figma: gap 6.31px, mt 9.64px */}
+          <div className="flex items-center gap-[6.31px] mt-[9.64px]">
+            {/* Thumbnail 1 - Figma: 109.78px x 61.54px */}
+            <div className="relative w-[109.78px] h-[61.54px] rounded-[10.51px] overflow-hidden flex-shrink-0">
+              <Image
+                src={displayImages[1]}
+                alt={`${title} - Image 2`}
+                fill
+                className="object-cover"
+              />
+            </div>
+            {/* Thumbnail 2 - Figma: 109.78px x 61.54px */}
+            <div className="relative w-[109.78px] h-[61.54px] rounded-[10.51px] overflow-hidden flex-shrink-0">
+              <Image
+                src={displayImages[2]}
+                alt={`${title} - Image 3`}
+                fill
+                className="object-cover"
+              />
+            </div>
+            {/* View All Photos Button - Figma: 116.08px x 65.07px */}
+            <button
+              onClick={() => setShowAllPhotos(true)}
+              className="w-[116.08px] h-[65.07px] bg-white rounded-[10.51px] shadow-[0px_7.86px_9.83px_-1.97px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center flex-shrink-0"
+            >
+              <div className="flex items-center gap-[3.88px] bg-white/95 rounded-full px-[9.71px] py-[5.82px]">
+                <LayoutGrid className="w-[9.06px] h-[10.4px] text-[#111928]" strokeWidth={1.5} />
+                <span className="font-poppins text-[6.8px] font-medium text-[#111928]">View all photos</span>
+              </div>
+            </button>
           </div>
-          {/* Thumbnail 2 */}
-          <div className="relative w-[64px] h-[48px] rounded-[10px] overflow-hidden flex-shrink-0">
-            <Image
-              src={displayImages[2]}
-              alt={`${title} - Image 3`}
-              fill
-              className="object-cover"
-            />
-          </div>
-          {/* View All Photos Link */}
-          <button
-            onClick={() => setShowAllPhotos(true)}
-            className="flex items-center gap-1.5 ml-auto text-[#6B7280] hover:text-[#00A699] transition-colors"
-          >
-            <Images className="w-4 h-4" />
-            <span className="text-[11px] font-medium">View all photos</span>
-          </button>
         </div>
       </div>
 

@@ -49,6 +49,7 @@ const config: Config = {
         mulish: ["var(--font-mulish)", "sans-serif"],
         openSans: ["var(--font-open-sans)", "sans-serif"],
         inter: ["var(--font-inter)", "sans-serif"],
+        roboto: ["var(--font-roboto)", "sans-serif"],
       },
       borderRadius: {
         "4xl": "30px",

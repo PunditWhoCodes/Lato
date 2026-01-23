@@ -49,7 +49,7 @@ export default async function TourDetailPage({ params }: PageProps) {
     <div className="min-h-screen bg-[#F7F7F7]">
       <Navigation />
 
-      <main className="max-w-7xl mx-auto px-4 lg:px-6 py-4 lg:py-6">
+      <main className="max-w-7xl mx-auto px-[18px] lg:px-6 py-0 lg:py-6">
         <TourDetailClient tourId={tourId} />
       </main>
     </div>

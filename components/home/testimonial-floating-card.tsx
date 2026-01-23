@@ -34,13 +34,13 @@ export function TestimonialFloatingCard({ name, avatar, rating, text }: Props) {
                 {/* Content column (name + stars) */}
                 <div>
                     <div className="flex items-center justify-between">
-                        <p className="text-xs md:text-sm font-poppins font-semibold text-gray-900">
+                        <p className="text-[11px] md:text-sm font-poppins font-semibold">
                             {name}
                         </p>
 
                     </div>
 
-                    <div className="flex items-center gap-1 mt-1">
+                    {/* <div className="flex items-center gap-1 mt-1">
                         {Array.from({ length: 5 }).map((_, i) => (
                             <Star
                                 key={i}
@@ -51,9 +51,9 @@ export function TestimonialFloatingCard({ name, avatar, rating, text }: Props) {
                         <div className="hidden md:flex items-center text-xs font-medium">
                             {rating}.0
                         </div>
-                    </div>
+                    </div> */}
 
-                    <p className="text-[11px] md:text-xs text-gray-600 leading-relaxed mt-1">
+                    <p className="text-[8px] md:text-xs text-[#1A1B1D] leading-loose mt-1">
                         &laquo; {text} &raquo;
                     </p>
                 </div>

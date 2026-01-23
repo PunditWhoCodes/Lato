@@ -115,9 +115,9 @@ export function TourItinerary({
   // Show message if no itinerary data
   if (displayItinerary.length === 0) {
     return (
-      <div className="py-8">
-        <h2 className="text-xl font-semibold text-[#1C1B1F] mb-4">Itinerary</h2>
-        <p className="text-[#6B7280]">
+      <div className="py-[21px] lg:py-8">
+        <h2 className="font-poppins text-[12px] lg:text-xl font-semibold text-[#1C1B1F] mb-[14px] lg:mb-4">Itinerary</h2>
+        <p className="font-poppins text-[10px] lg:text-base text-[#6B7280]">
           {nrOfDays
             ? `This tour spans ${nrOfDays} days. Detailed itinerary coming soon.`
             : "Detailed itinerary coming soon."}
@@ -127,13 +127,13 @@ export function TourItinerary({
   }
 
   return (
-    <div className="py-8 relative">
+    <div className="py-[21px] lg:py-8 relative">
       {/* Collapse all button top-right */}
-      <div className="flex justify-between mb-4">
-        <h2 className="text-xl font-semibold text-[#1C1B1F] mr-2">Itinerary</h2>
+      <div className="flex justify-between mb-[14px] lg:mb-4">
+        <h2 className="font-poppins text-[12px] lg:text-xl font-semibold text-[#1C1B1F] mr-2">Itinerary</h2>
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center gap-1 text-[14px] text-[#374151] rounded-full border border-[#E5E7EB] font-medium p-2"
+          className="flex items-center gap-[4px] font-poppins text-[9px] lg:text-[14px] text-[#374151] rounded-full border border-[#E5E7EB] font-medium px-[10px] py-[6px] lg:p-2"
         >
           {collapsed ? (
             <>
@@ -158,21 +158,21 @@ export function TourItinerary({
               {/* Vertical line - centered through dots */}
               {index !== displayItinerary.length - 1 && (
                 <div
-                  className="absolute left-[9px] top-[24px] bottom-0 w-[2px] bg-[#00A699]"
+                  className="absolute left-[7px] lg:left-[9px] top-[18px] lg:top-[24px] bottom-0 w-[1.5px] lg:w-[2px] bg-[#00A699]"
                 />
               )}
 
-              <div className="flex gap-3 pb-6">
+              <div className="flex gap-[10px] lg:gap-3 pb-[18px] lg:pb-6">
                 {/* Dot or special icons - fixed width container for alignment */}
-                <div className="relative z-10 shrink-0 w-5 h-5 flex items-center justify-center">
+                <div className="relative z-10 shrink-0 w-[14px] h-[14px] lg:w-5 lg:h-5 flex items-center justify-center">
                   {isFirst ? (
-                    <MapPin className="w-5 h-5 text-[#00A699]" />
+                    <MapPin className="w-[14px] h-[14px] lg:w-5 lg:h-5 text-[#00A699]" />
                   ) : isLast ? (
-                    <div className="w-5 h-5 rounded-full bg-[#EF4444] flex items-center justify-center">
-                      <Flag className="w-3 h-3 text-white" />
+                    <div className="w-[14px] h-[14px] lg:w-5 lg:h-5 rounded-full bg-[#EF4444] flex items-center justify-center">
+                      <Flag className="w-[8px] h-[8px] lg:w-3 lg:h-3 text-white" />
                     </div>
                   ) : (
-                    <div className="w-3 h-3 rounded-full bg-[#00A699]" />
+                    <div className="w-[8px] h-[8px] lg:w-3 lg:h-3 rounded-full bg-[#00A699]" />
                   )}
                 </div>
 
@@ -184,26 +184,26 @@ export function TourItinerary({
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-base font-semibold text-[#1C1B1F]">{`Day ${item.day} -`}</span> {" "}
-                        <span className="text-base font-semibold text-[#1C1B1F]">{item.title}</span>
-                        <p className="text-[13px] text-[#6B7280] flex items-center gap-1 mt-0.5">
-                          <MapPin className="w-3 h-3 text-[#6B7280]" /> {item.location}
+                        <span className="font-poppins text-[10px] lg:text-base font-semibold text-[#1C1B1F]">{`Day ${item.day} -`}</span> {" "}
+                        <span className="font-poppins text-[10px] lg:text-base font-semibold text-[#1C1B1F]">{item.title}</span>
+                        <p className="font-poppins text-[9px] lg:text-[13px] text-[#6B7280] flex items-center gap-[4px] mt-[2px]">
+                          <MapPin className="w-[10px] h-[10px] lg:w-3 lg:h-3 text-[#6B7280]" /> {item.location}
                         </p>
                       </div>
                       {isExpanded ? (
-                        <ChevronUp className="w-4 h-4 text-[#6B7280]" />
+                        <ChevronUp className="w-[12px] h-[12px] lg:w-4 lg:h-4 text-[#6B7280]" />
                       ) : (
-                        <ChevronDown className="w-4 h-4 text-[#6B7280]" />
+                        <ChevronDown className="w-[12px] h-[12px] lg:w-4 lg:h-4 text-[#6B7280]" />
                       )}
                     </div>
                   </button>
 
                   {/* Description accordion */}
                   {isExpanded && (
-                    <div className="mt-3 space-y-4">
+                    <div className="mt-[10px] lg:mt-3 space-y-[12px] lg:space-y-4">
                       {/* Day Image if available */}
                       {item.image && (
-                        <div className="relative w-full h-48 rounded-lg overflow-hidden">
+                        <div className="relative w-full h-[120px] lg:h-48 rounded-[6px] lg:rounded-lg overflow-hidden">
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -216,27 +216,27 @@ export function TourItinerary({
                       {/* Description */}
                       {item.description && (
                         <div
-                          className="text-[14px] text-[#6B7280] leading-relaxed"
+                          className="font-poppins text-[9px] lg:text-[14px] text-[#6B7280] leading-relaxed"
                           dangerouslySetInnerHTML={{ __html: item.description }}
                         />
                       )}
 
                       {/* Activities */}
                       {item.activities && item.activities.length > 0 && (
-                        <div className="space-y-2">
-                          <h4 className="text-sm font-medium text-[#1C1B1F] flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-[#00A699]" />
+                        <div className="space-y-[8px] lg:space-y-2">
+                          <h4 className="font-poppins text-[10px] lg:text-sm font-medium text-[#1C1B1F] flex items-center gap-[6px] lg:gap-2">
+                            <Activity className="w-[12px] h-[12px] lg:w-4 lg:h-4 text-[#00A699]" />
                             Activities
                           </h4>
-                          <div className="space-y-2">
+                          <div className="space-y-[6px] lg:space-y-2">
                             {item.activities.map((activity, actIdx) => (
                               <div
                                 key={actIdx}
-                                className="flex items-start gap-2 text-[13px] text-[#6B7280] bg-[#F9FAFB] p-3 rounded-lg"
+                                className="flex items-start gap-[6px] lg:gap-2 font-poppins text-[9px] lg:text-[13px] text-[#6B7280] bg-[#F9FAFB] p-[10px] lg:p-3 rounded-[6px] lg:rounded-lg"
                               >
                                 {activity.time && (
-                                  <span className="flex items-center gap-1 text-[#00A699] shrink-0">
-                                    <Clock className="w-3 h-3" />
+                                  <span className="flex items-center gap-[3px] text-[#00A699] shrink-0">
+                                    <Clock className="w-[10px] h-[10px] lg:w-3 lg:h-3" />
                                     {activity.time}
                                   </span>
                                 )}
@@ -244,14 +244,14 @@ export function TourItinerary({
                                   <span className="font-medium text-[#1C1B1F]">
                                     {activity.title}
                                     {activity.isOptional && (
-                                      <span className="ml-2 text-xs bg-gray-200 px-2 py-0.5 rounded">
+                                      <span className="ml-[6px] text-[8px] lg:text-xs bg-gray-200 px-[6px] py-[2px] rounded">
                                         Optional
                                       </span>
                                     )}
                                   </span>
                                   {activity.description && (
                                     <div
-                                      className="mt-1 [&>p]:m-0"
+                                      className="mt-[4px] [&>p]:m-0"
                                       dangerouslySetInnerHTML={{ __html: activity.description }}
                                     />
                                   )}
@@ -266,24 +266,19 @@ export function TourItinerary({
 
                   {/* Accommodation outside accordion */}
                   {item.accommodation && (
-                    <div className="flex items-center gap-2 mt-3 bg-[#F9FAFB] p-4 rounded-md">
-                      <Bed className="size-4 text-[#00A699] shrink-0" />
+                    <div className="flex items-center gap-[6px] lg:gap-2 mt-[10px] lg:mt-3 bg-[#F9FAFB] p-[12px] lg:p-4 rounded-[6px] lg:rounded-md">
+                      <Bed className="w-[12px] h-[12px] lg:w-4 lg:h-4 text-[#00A699] shrink-0" />
                       <div className="flex-1">
-                        <span className="text-sm text-[#111928] font-semibold">
+                        <span className="font-poppins text-[10px] lg:text-sm text-[#111928] font-semibold">
                           {item.accommodation}
                         </span>
                         {item.accommodationType && (
-                          <span className="text-[12px] text-[#6B7280] ml-2">
+                          <span className="font-poppins text-[9px] lg:text-[12px] text-[#6B7280] ml-[6px]">
                             ({item.accommodationType})
                           </span>
                         )}
-                        {/* {item.accommodationRating && item.accommodationRating > 0 && (
-                          <span className="text-[12px] text-[#6B7280] ml-2">
-                            Rating: {item.accommodationRating}/10
-                          </span>
-                        )} */}
                         {item.nrOfNights > 0 && (
-                          <span className="text-[12px] text-[#6B7280] ml-2">
+                          <span className="font-poppins text-[9px] lg:text-[12px] text-[#6B7280] ml-[6px]">
                             ({item.nrOfNights} {item.nrOfNights === 1 ? 'night' : 'nights'})
                           </span>
                         )}

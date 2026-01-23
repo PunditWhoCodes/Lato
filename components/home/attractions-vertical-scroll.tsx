@@ -42,6 +42,15 @@ const attractions: Attraction[] = [
 export function AttractionsVerticalScroll() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect mobile screen
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   // Track scroll progress through the section
   const { scrollYProgress } = useScroll({
@@ -78,18 +87,18 @@ export function AttractionsVerticalScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-[#FBFBFB] md:py-16 lg:py-20"
+      className="relative bg-[#FBFBFB] py-0 md:py-16 lg:py-20"
       style={{
-        height: `${attractions.length * 100}vh`,
+        height: isMobile ? `${attractions.length * 50}vh` : `${attractions.length * 100}vh`,
       }}
     >
       {/* Sticky Header Container */}
-      <div className="sticky top-20 md:top-36 h-screen flex items-center justify-center overflow-hidden">
+      <div className="sticky top-4 md:top-36 h-screen flex items-start md:items-center justify-center overflow-hidden pt-2 md:pt-0">
         <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10 w-full max-w-7xl">
           <div
             className="relative h-[600px] md:h-[700px]"
             style={{
-              clipPath: "inset(0 0 0 0 round 24px 24px 60px 60px)",
+              clipPath: "inset(0 0 0 0 round 10.9px 10.9px 30px 30px)",
             }}
           >
             {attractions.map((attraction, index) => {
@@ -139,12 +148,15 @@ export function AttractionsVerticalScroll() {
                   <div
                     className={`relative w-full h-full overflow-hidden ${
                       index === 0
-                        ? "rounded-3xl"
+                        ? "rounded-[10.9px] md:rounded-3xl"
                         : index === attractions.length - 1
-                          ? "rounded-t-3xl rounded-b-[60px]"
-                          : "rounded-3xl"
+                          ? "rounded-t-[10.9px] md:rounded-t-3xl rounded-b-[30px] md:rounded-b-[60px]"
+                          : "rounded-[10.9px] md:rounded-3xl"
                     }`}
-                    style={index === 0 ? { backgroundColor: "#00A792" } : undefined}
+                    style={{
+                      ...(index === 0 ? { backgroundColor: "#00A792" } : {}),
+                      ...(index !== 0 ? { boxShadow: "0px 3.7px 17.9px rgba(7, 22, 51, 0.3), -6.3px -14.2px 17.9px rgba(7, 22, 51, 0.3)" } : {}),
+                    }}
                   >
                     <Image
                       src={attraction.image}
@@ -157,13 +169,13 @@ export function AttractionsVerticalScroll() {
 
                     {/* Header on First Card - No blur effect */}
                     {index === 0 && (
-                      <div className="absolute top-8 md:top-12 left-8 md:left-12 right-8 md:right-12 text-white z-20">
-                        <div className="flex items-start justify-between gap-4">
+                      <div className="absolute top-3 md:top-12 left-4 md:left-12 right-4 md:right-12 text-white z-20">
+                        <div className="flex items-start justify-between gap-2 md:gap-4">
                           <div>
-                            <p className="text-white/90 font-normal text-xs md:text-sm mb-2 md:mb-3 drop-shadow-md">
+                            <p className="text-white/90 font-normal text-[6px] md:text-sm mb-1 md:mb-3 drop-shadow-md">
                               Find your next adventure in destinations that inspire you
                             </p>
-                            <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light drop-shadow-lg leading-tight">
+                            <h2 className="text-[14px] md:text-3xl lg:text-4xl xl:text-5xl font-light drop-shadow-lg leading-tight">
                               Attractions You Can&apos;t Miss
                             </h2>
                           </div>
@@ -180,20 +192,20 @@ export function AttractionsVerticalScroll() {
                     {/* Centered Name & Activities Overlay for cards 2, 3, 4 */}
                     {index !== 0 && (
                       <>
-                        {/* Arrow button at top right */}
-                        <div className="absolute top-8 md:top-12 right-8 md:right-12 z-20">
-                          <div className="relative size-9 rounded-full bg-white flex items-center justify-center overflow-hidden">
-                            <ArrowUpRight className="relative z-10 text-black size-5" />
+                        {/* Arrow button at top right - Mobile: 9.81px, Desktop: 36px */}
+                        <div className="absolute top-[5px] md:top-12 right-[6px] md:right-12 z-20">
+                          <div className="relative w-[9.81px] h-[9.81px] md:size-9 rounded-[4.9px] md:rounded-full bg-white flex items-center justify-center overflow-hidden p-[2.18px] md:p-0">
+                            <ArrowUpRight className="relative z-10 text-black w-[5.23px] h-[5.23px] md:size-5" strokeWidth={1} />
                           </div>
                         </div>
 
+                        {/* Centered overlay - Mobile: 120.6px x 35.45px, blur 6.79px */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
-                          <div className="backdrop-blur-md bg-black/30 rounded-2xl px-8 py-6 flex flex-col items-center">
-                            <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg text-center">
+                          <div className="backdrop-blur-[6.79px] md:backdrop-blur-md bg-[rgba(58,85,106,0.31)] md:bg-black/30 rounded-[5.21px] md:rounded-2xl w-[120.6px] md:w-auto h-[35.45px] md:h-auto px-2 md:px-8 py-1 md:py-6 flex flex-col items-center justify-center">
+                            <h3 className="font-roboto font-bold text-[13.9px] md:text-4xl lg:text-5xl leading-[16px] md:leading-normal text-white drop-shadow-lg text-center">
                               {attraction.name}
                             </h3>
-                            <p className="text-white/95 text-lg md:text-xl flex items-center gap-2 mt-3">
-                              <span className="inline-block w-1.5 h-1.5 bg-white rounded-full"></span>
+                            <p className="text-white font-inter font-normal text-[10.43px] md:text-xl leading-[13px] md:leading-normal text-center">
                               {attraction.activities} activities
                             </p>
                           </div>

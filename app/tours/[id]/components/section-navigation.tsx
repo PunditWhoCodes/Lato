@@ -19,23 +19,30 @@ export function SectionNavigation({
   onSectionChange,
 }: SectionNavigationProps) {
   return (
-    <div className="sticky top-20 z-40 py-6">
+    <div className="sticky top-[48px] lg:top-20 z-40 py-[10px] lg:py-6 bg-white lg:bg-[#F7F7F7]">
+      {/* Centered Navigation - Same style as investor section-nav */}
       <div className="flex justify-center">
-        <nav className="flex items-center gap-4 md:gap-8 bg-white rounded-full px-4 md:px-8 py-3 border border-black/5 shadow-sm">
-        {sections.map((section) => (
-          <button
-            key={section.id}
-            onClick={() => onSectionChange(section.id)}
-            className={cn(
-              "font-poppins text-sm md:text-base transition-colors",
-              activeSection === section.id
-                ? "text-[#00A792] rounded-full bg-[#7BBCB038] px-4 py-1 border border-[#00A792]"
-                : "text-black font-extralight hover:text-[#00A792] hover:rounded-full hover:bg-[#7BBCB038] px-4 py-1"
-            )}
-          >
-            {section.label}
-          </button>
-        ))}
+        {/* Mobile: p-[4.52px] gap-[4.52px] rounded-[45.25px] border */}
+        {/* Desktop: original styling */}
+        <nav className="flex items-center gap-[4.5px] lg:gap-8 bg-white rounded-[45px] lg:rounded-full p-[4.5px] lg:px-8 lg:py-3 border border-[#E5E7EB] lg:shadow-sm">
+          {sections.map((section) => (
+            <button
+              key={section.id}
+              onClick={() => onSectionChange(section.id)}
+              className={cn(
+                "font-poppins transition-colors",
+                // Mobile: h-[27.15px] rounded-[45.25px] text-[12px] font-light
+                // Desktop: original styling
+                "px-[14px] h-[27px] lg:px-4 lg:py-1 lg:h-auto rounded-[45px] lg:rounded-full",
+                "text-[12px] lg:text-base font-light lg:font-normal",
+                activeSection === section.id
+                  ? "text-[#00A792] bg-[#7BBCB038] border border-[#00A792]"
+                  : "text-black hover:text-[#00A792] hover:bg-[#7BBCB038] lg:font-extralight"
+              )}
+            >
+              {section.label}
+            </button>
+          ))}
         </nav>
       </div>
     </div>

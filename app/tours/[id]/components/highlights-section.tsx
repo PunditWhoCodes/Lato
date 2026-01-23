@@ -29,17 +29,17 @@ export function HighlightsSection({
   const hasMore = highlights.length > 4;
 
   return (
-    <div className="py-8 border-[#E5E5E5]">
-      <h2 className="text-lg font-semibold text-[#1C1B1F] mb-4">
+    <div className="py-[21px] lg:py-8 border-[#E5E5E5]">
+      <h2 className="font-poppins text-[12px] lg:text-lg font-semibold text-[#1C1B1F] mb-[14px] lg:mb-4">
         Highlights
       </h2>
 
       {/* Highlights List */}
-      <ul className="space-y-3 mb-6">
+      <ul className="space-y-[10px] lg:space-y-3 mb-[18px] lg:mb-6">
         {visibleHighlights.map((highlight, index) => (
-          <li key={index} className="flex items-start gap-3">
-            <span className="mt-0.5 text-[#00A699] font-bold">✓</span>
-            <span className="text-sm text-[#4B5563]">{highlight}</span>
+          <li key={index} className="flex items-start gap-[8px] lg:gap-3">
+            <span className="mt-0.5 text-[#00A699] font-bold text-[10px] lg:text-base">✓</span>
+            <span className="font-poppins text-[10px] lg:text-sm text-[#4B5563]">{highlight}</span>
           </li>
         ))}
       </ul>
@@ -48,23 +48,23 @@ export function HighlightsSection({
       {hasMore && (
         <button
           onClick={() => setShowAll(!showAll)}
-          className="flex items-center gap-1 text-sm text-[#00A699] font-medium mb-6"
+          className="flex items-center gap-[4px] font-poppins text-[10px] lg:text-sm text-[#00A699] font-medium mb-[18px] lg:mb-6"
         >
           {showAll ? (
             <>
-              Collapse all <ChevronUp className="w-4 h-4" />
+              Collapse all <ChevronUp className="w-[12px] h-[12px] lg:w-4 lg:h-4" />
             </>
           ) : (
             <>
-              Show more <ChevronDown className="w-4 h-4" />
+              Show more <ChevronDown className="w-[12px] h-[12px] lg:w-4 lg:h-4" />
             </>
           )}
         </button>
       )}
 
       {/* Map Section Container */}
-      <div className="relative w-full rounded-xl overflow-hidden">
-        <div className="relative h-[260px] w-full">
+      <div className="relative w-full rounded-[8px] lg:rounded-xl overflow-hidden">
+        <div className="relative h-[140px] lg:h-[260px] w-full">
           <Image
             src={mapImage}
             alt="Route map"
@@ -74,30 +74,30 @@ export function HighlightsSection({
         </div>
 
         {/* View Destinations - BOTTOM RIGHT */}
-        <button className="absolute bottom-4 right-4 bg-white shadow-md rounded-full px-4 py-2 flex items-center gap-2 text-sm font-medium text-[#1C1B1F] hover:bg-gray-50 transition">
-          <Map className="w-4 h-4 text-[#00A699]" />
+        <button className="absolute bottom-[10px] right-[10px] lg:bottom-4 lg:right-4 bg-white shadow-md rounded-full px-[12px] py-[6px] lg:px-4 lg:py-2 flex items-center gap-[6px] lg:gap-2 font-poppins text-[9px] lg:text-sm font-medium text-[#1C1B1F] hover:bg-gray-50 transition">
+          <Map className="w-[12px] h-[12px] lg:w-4 lg:h-4 text-[#00A699]" />
           View Destinations
         </button>
       </div>
 
       {/* Bottom Start / Destination Count / End Section */}
-      <div className="flex items-center justify-between mt-6">
+      <div className="flex items-center justify-between mt-[18px] lg:mt-6">
         {/* Start */}
         <div className="flex flex-col">
-          <span className="text-[11px] text-gray-400">Starts</span>
-          <span className="text-sm font-medium text-[#1C1B1F]">
+          <span className="font-poppins text-[8px] lg:text-[11px] text-gray-400">Starts</span>
+          <span className="font-poppins text-[10px] lg:text-sm font-medium text-[#1C1B1F]">
             {startLocation}
           </span>
         </div>
 
         {/* Destination count (center line with dots) */}
-        <div className="flex-1 flex items-center px-4">
+        <div className="flex-1 flex items-center px-[12px] lg:px-4">
           {/* Start Dot */}
-          <div className="w-3 h-3 rounded-full bg-[#00A699] shrink-0" />
+          <div className="w-[8px] h-[8px] lg:w-3 lg:h-3 rounded-full bg-[#00A699] shrink-0" />
 
           {/* Line with destination badge */}
-          <div className="flex-1 h-0.5 bg-[#00A699] relative mx-0">
-            <span className="absolute left-1/2 -translate-x-1/2 -top-4 bg-white rounded-full shadow-md px-3 py-1.5 text-[11px] text-gray-600 whitespace-nowrap">
+          <div className="flex-1 h-[2px] lg:h-0.5 bg-[#00A699] relative mx-0">
+            <span className="absolute left-1/2 -translate-x-1/2 -top-[12px] lg:-top-4 bg-white rounded-full shadow-md px-[8px] py-[4px] lg:px-3 lg:py-1.5 font-poppins text-[8px] lg:text-[11px] text-gray-600 whitespace-nowrap">
               {itineraryDays.length > 0
                 ? `${Math.max(0, itineraryDays.length - 2)} more destinations`
                 : "6 more destinations"}
@@ -105,13 +105,13 @@ export function HighlightsSection({
           </div>
 
           {/* End Dot */}
-          <div className="w-3 h-3 rounded-full bg-[#00A699] shrink-0" />
+          <div className="w-[8px] h-[8px] lg:w-3 lg:h-3 rounded-full bg-[#00A699] shrink-0" />
         </div>
 
         {/* End */}
         <div className="flex flex-col text-right">
-          <span className="text-[11px] text-gray-400">Ends</span>
-          <span className="text-sm font-medium text-[#1C1B1F]">
+          <span className="font-poppins text-[8px] lg:text-[11px] text-gray-400">Ends</span>
+          <span className="font-poppins text-[10px] lg:text-sm font-medium text-[#1C1B1F]">
             {endLocation}
           </span>
         </div>

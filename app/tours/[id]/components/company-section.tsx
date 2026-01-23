@@ -16,6 +16,10 @@ interface CompanySectionProps {
     country?: string
     countryFlag?: string
     yearsOfExperience?: number
+    numberOfTours?: number
+    ageRange?: string
+    responseTime?: string
+    responseRate?: string
   }
 }
 
@@ -26,8 +30,84 @@ export function CompanySection({ company }: CompanySectionProps) {
     <div className="py-8">
       <h2 className="text-xl font-semibold text-[#1C1B1F] mb-4">About Company</h2>
 
-      {/* Company Card */}
-      <div className="border border-[#00A79233] bg-[#00A79208] p-5 rounded-2xl">
+      {/* Mobile Company Card */}
+      <div className="lg:hidden flex justify-center">
+        <div
+          className="flex flex-col w-[373px] bg-[rgba(0,167,146,0.03)] border border-[rgba(0,167,146,0.3)] rounded-[10.91px] p-[13.82px_12.37px] gap-[3.64px]"
+          style={{ minHeight: '179px' }}
+        >
+          {/* Top Row - Avatar and Company Info */}
+          <div className="flex items-start gap-[9.1px]">
+            {/* Avatar */}
+            <div className="relative w-[43.66px] h-[43.66px] rounded-full overflow-hidden shrink-0 bg-[#E5E5E5]">
+              <Image
+                src={company.avatar || "/placeholder.svg"}
+                alt={company.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            {/* Company Info */}
+            <div className="flex-1">
+              {/* Operated by label */}
+              <span className="text-[8.73px] text-[#111928]">Operated by</span>
+
+              {/* Name + Follow Button Row */}
+              <div className="flex items-center justify-between">
+                <h3 className="text-[13.1px] font-bold text-[#111928]">{company.name}</h3>
+                <button
+                  className="w-[62.88px] h-[21.83px] border border-[#00A792] rounded-[13.1px] text-[7.86px] text-[#00A792] font-medium"
+                  style={{ borderWidth: '0.436644px' }}
+                >
+                  + Follow
+                </button>
+              </div>
+
+              {/* Rating + Verified Badge Row */}
+              <div className="flex items-center justify-between gap-[11.79px] mt-[3.64px]">
+                {/* Rating */}
+                <div className="flex items-center gap-[2.55px]">
+                  <span className="text-[7.3px] font-semibold text-[#000000]">{company.rating.toFixed(1)}</span>
+                  <Star className="w-[6.88px] h-[6.88px] fill-[#FFA432] text-[#FFA432]" />
+                  <span className="text-[7.3px] font-semibold text-[#A7A9AF]">({company.reviews.toLocaleString()} reviews)</span>
+                </div>
+
+                {/* Verified Badge */}
+                {company.verified && (
+                  <div className="flex items-center gap-[1.97px] bg-[rgba(0,167,146,0.07)] px-[3.94px] py-[3.94px] rounded-[39.4px]">
+                    <BadgeCheck className="w-[7.88px] h-[7.88px] text-[#3EB368]" />
+                    <span className="text-[5.91px] text-[#6B7280]">Verified Company</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Stats - Vertical list with horizontal label/value pairs */}
+          <div className="flex flex-col gap-[3.64px] mt-[11.79px]">
+            <div className="flex items-center gap-[2.55px]">
+              <span className="text-[7.3px] font-semibold text-[#000000]">Number of tours</span>
+              <span className="text-[7.3px] font-semibold text-[#A7A9AF]">{company.numberOfTours || 565}</span>
+            </div>
+            <div className="flex items-center gap-[2.55px]">
+              <span className="text-[7.3px] font-semibold text-[#000000]">Age Range</span>
+              <span className="text-[7.3px] font-semibold text-[#A7A9AF]">{company.ageRange || "16 to 85 years old"}</span>
+            </div>
+            <div className="flex items-center gap-[2.55px]">
+              <span className="text-[7.3px] font-semibold text-[#000000]">Response time</span>
+              <span className="text-[7.3px] font-semibold text-[#A7A9AF]">{company.responseTime || "12 hours"}</span>
+            </div>
+            <div className="flex items-center gap-[2.55px]">
+              <span className="text-[7.3px] font-semibold text-[#000000]">Response rate</span>
+              <span className="text-[7.3px] font-semibold text-[#A7A9AF]">{company.responseRate || "96%"}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Company Card */}
+      <div className="hidden lg:block border border-[#00A79233] bg-[#00A79208] p-5 rounded-2xl">
         {/* Top Row - Avatar, Name, Verified Badge, Buttons */}
         <div className="flex items-start gap-4 mb-4">
           {/* Avatar */}

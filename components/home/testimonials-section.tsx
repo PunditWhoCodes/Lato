@@ -65,8 +65,8 @@ export function TestimonialsSection() {
   return (
     <section className="py-20 bg-[#F7F7F7] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 mb-16">
-        <p className="text-lg font-mulish text-gray-500 mb-3">Testimonials</p>
-        <h2 className="font-poppins font-light text-4xl md:text-5xl">
+        <p className="text-[10px] md:text-lg font-mulish text-gray-500 mb-3">Testimonials</p>
+        <h2 className="font-poppins font-light text-[22px] md:text-5xl">
           What are customers saying about Lato
         </h2>
       </div>

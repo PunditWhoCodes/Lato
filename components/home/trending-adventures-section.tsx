@@ -25,8 +25,8 @@ export function TrendingAdventuresSection() {
   }
 
   return (
-    <section className="py-6 md:py-12 lg:py-20 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-6 md:py-12 lg:py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-[22px] md:px-10">
 
         {/* Header Section - Figma pixel-perfect */}
         <div className="flex justify-between items-start mb-4 md:mb-10 lg:mb-14">
@@ -74,7 +74,7 @@ export function TrendingAdventuresSection() {
         </div>
 
         {/* Mobile: Horizontal Scroll */}
-        <div className="md:hidden flex gap-3 overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
+        <div className="md:hidden flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
           {trendingTours.map((tour) => (
             <div key={tour.id} className="flex-shrink-0 w-[calc(50%-6px)] snap-start">
               <TrendingTourCard tour={tour} />

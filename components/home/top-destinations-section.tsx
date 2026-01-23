@@ -82,21 +82,35 @@ export function TopDestinationsSection() {
     : FALLBACK_DESTINATIONS
 
   return (
-    <section className="py-12 md:py-20 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-6 md:py-12 lg:py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-[22px] md:px-6">
 
         {/* Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
-          <div>
-            <p className="text-sm md:text-base font-light font-poppins text-black mb-2">
+        <div className="flex justify-between items-start mb-[12px] lg:mb-16">
+          <div className="flex flex-col gap-[6.6px] lg:gap-2">
+            <p className="text-[6.3px] md:text-sm lg:text-base font-light font-poppins text-black leading-[150%]">
               Find your next adventure in destinations that inspire you
             </p>
-            <h2 className="font-poppins font-light text-3xl md:text-4xl lg:text-5xl text-black leading-tight">
+            <h2 className="font-poppins font-light text-[22px] md:text-4xl lg:text-5xl text-black leading-[150%]">
               Top Destinations
             </h2>
           </div>
 
-          {/* View More Button */}
+          {/* View More - Mobile */}
+          <Link
+            href="/tours"
+            className="md:hidden flex items-center gap-[2.5px] group"
+          >
+            <span className="font-mulish font-semibold text-[6.3px] text-[#495560] group-hover:text-black transition-colors">
+              View More
+            </span>
+            <div className="relative flex items-center justify-center bg-black rounded-[7px] overflow-hidden w-[14px] h-[14px]">
+              <ArrowUpRight className="relative z-10 text-white w-[8px] h-[8px] transition-transform duration-300 group-hover:rotate-45" />
+              <span className="absolute inset-0 bg-[#00A792] rounded-[7px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+            </div>
+          </Link>
+
+          {/* View More Button - Desktop */}
           <Link
             href="/tours"
             className="hidden lg:flex items-center gap-3 group"
@@ -121,9 +135,9 @@ export function TopDestinationsSection() {
           </div>
         )}
 
-        {/* Grid - 2x2 on mobile, 4 columns on desktop */}
+        {/* Grid - Mobile: 2 cols, 6.81px h-gap, 12.39px v-gap | Desktop: 4 cols */}
         {!isLoading && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-[6.81px] gap-y-[12.39px] md:gap-6 lg:gap-10">
             {displayDestinations.map((destination, index) => (
               <DestinationCard
                 key={destination.countryCode || index}

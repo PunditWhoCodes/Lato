@@ -20,9 +20,9 @@ export function ListingHero({ destination, tourCount }: ListingHeroProps) {
     : "9,900+"
 
   return (
-    <section className="bg-[#F7F7F7]">
+    <section className="bg-white lg:bg-[#F7F7F7]">
       {/* Breadcrumb */}
-      <nav className="max-w-7xl mx-auto px-4 lg:px-6 py-4 lg:py-6">
+      <nav className="max-w-7xl mx-auto px-4 lg:px-6 pt-[6px] pb-[6px] lg:py-6">
         <div className="flex items-center gap-1.5 lg:gap-2 text-[11px] lg:text-[13px] text-gray-500 flex-wrap">
           <Link href="/" className="hover:text-[#00A792]">
             Home
@@ -39,14 +39,14 @@ export function ListingHero({ destination, tourCount }: ListingHeroProps) {
       </nav>
 
       {/* Hero */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 pb-6 lg:pb-10">
-        <div className="relative h-[280px] lg:h-[360px] rounded-[16px] lg:rounded-[28px] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 pb-6 lg:pb-10 flex justify-center lg:block">
+        <div className="relative w-[359px] lg:w-full h-[565px] lg:h-[360px] rounded-[30px] lg:rounded-[28px] overflow-hidden">
           {/* Background Image */}
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage:
-                "url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=2400&auto=format&fit=crop')",
+                "url('https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=2400&auto=format&fit=crop')",
             }}
           />
 
