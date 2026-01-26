@@ -464,10 +464,11 @@ export default function RegisterPage() {
 
       {/* Back Button - Mobile positioning */}
       <button
+        type="button"
         onClick={handleBack}
-        className="absolute top-[78px] left-4 md:top-8 md:left-8 z-10 w-[38px] h-[37px] md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+        className="absolute top-[78px] left-4 md:top-8 md:left-8 z-20 w-[38px] h-[37px] md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors touch-manipulation"
       >
-        <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
+        <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white pointer-events-none" />
       </button>
 
       {/* Location Badge - Hidden on mobile */}
