@@ -628,6 +628,8 @@ export function mapTripDetailResponseToTourDetail(
   const userTrip = response.userTrips?.[0]
   const user = userTrip?.user
 
+  const userTripUuid = userTrip?.id || response.id
+
   // Get title and description
   const title = getTranslatedContent(response.titles) || 'Untitled Tour'
   const description = getTranslatedContent(response.descriptions) || ''
@@ -679,8 +681,8 @@ export function mapTripDetailResponseToTourDetail(
   if (userTrip?.travelapp_visits && userTrip.travelapp_visits > 50) badges.push('Popular')
 
   return {
-    id: parseInt(response.id.split('-')[0], 16),
-    uuid: response.id,
+    id: parseInt(userTripUuid.split('-')[0], 16),
+    uuid: userTripUuid,
     title,
     company: {
       name: user?.company?.name || user?.name || 'Unknown Company',
