@@ -68,7 +68,7 @@ export function HowItWorks() {
 
         {/* HEADER - Figma pixel-perfect */}
         <div className="flex justify-between items-start mb-6 md:mb-12 lg:mb-16">
-          <div className="flex flex-col gap-[11px]">
+          <div className="flex flex-col gap-[11.4px]">
             <p className="text-[6.3px] md:text-base font-light text-black font-poppins leading-[150%]">
               Our Process
             </p>
@@ -77,7 +77,7 @@ export function HowItWorks() {
             </h2>
           </div>
 
-          {/* View More - Mobile - Figma: 14.2px button, 6.3px text */}
+          {/* View More - Mobile - Figma: 14.207px button, 6.314px text, rounded-7.103px */}
           <Link
             href="/about"
             className="md:hidden flex items-center gap-[2.5px] group"
@@ -85,9 +85,9 @@ export function HowItWorks() {
             <span className="font-mulish font-semibold text-[6.3px] text-[#495560] group-hover:text-black transition-colors">
               View More
             </span>
-            <div className="relative flex items-center justify-center bg-black rounded-[7px] overflow-hidden w-[14px] h-[14px]">
-              <ArrowUpRight className="relative z-10 text-white w-[8px] h-[8px] transition-transform duration-300 group-hover:rotate-45" />
-              <span className="absolute inset-0 bg-[#00A792] rounded-[7px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+            <div className="relative flex items-center justify-center bg-black rounded-[7.1px] overflow-hidden w-[14.2px] h-[14.2px] p-[3.2px]">
+              <ArrowUpRight className="relative z-10 text-white w-[7.6px] h-[7.6px] transition-transform duration-300 group-hover:rotate-45" />
+              <span className="absolute inset-0 bg-[#00A792] rounded-[7.1px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
             </div>
           </Link>
 
