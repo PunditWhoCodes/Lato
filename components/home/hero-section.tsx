@@ -1,16 +1,23 @@
 "use client"
 
+import { useState } from "react"
 import { SearchBar } from "./search-bar"
 import { Button } from "@/components/ui/button"
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
 export function HeroSection() {
+  const [isMobileButtonActive, setIsMobileButtonActive] = useState(false)
+
+  const handleMobileTap = () => {
+    setIsMobileButtonActive(true)
+    setTimeout(() => setIsMobileButtonActive(false), 300)
+  }
   return (
     <section className="relative bg-[#F7F7F7] px-[14px] pt-[21px] md:pt-12 pb-0 md:pb-20">
       <div className="max-w-7xl mx-auto">
         {/* Mobile Layout - Figma pixel-perfect */}
-        <div className="md:hidden flex flex-col items-center gap-[20px]">
+        <div className="md:hidden flex flex-col items-center gap-[32px]">
           {/* Top Section - Heading and Subtitle */}
           <div className="flex flex-col items-end w-[345px]">
             {/* Heading - Full width, left aligned */}
@@ -23,17 +30,17 @@ export function HeroSection() {
               <p className="font-poppins font-light text-[8.2px] leading-[150%] text-black">
                 Explore stunning destinations, unique experience, and unforgettable journey with Lato.
               </p>
-              {/* Book Now Button */}
-              <div className="group">
-                <Link
-                  href="/tours"
-                  className="relative overflow-hidden bg-black text-white rounded-[30px] h-[21px] w-[81px] px-[6px] py-[3.7px] font-poppins font-light flex items-center justify-between"
-                >
-                  <span className="relative z-10 text-[7.4px] leading-[150%]">Book Now</span>
-                  <ArrowUpRight className="relative z-10 w-[10px] h-[10px] transition-transform duration-300 group-hover:rotate-45" />
-                  <span className="absolute inset-0 bg-[#00A792] rounded-[30px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-                </Link>
-              </div>
+              {/* Book Now Button - Figma: 80.5px x 20.5px */}
+              <Link
+                href="/tours"
+                onClick={handleMobileTap}
+                onTouchStart={handleMobileTap}
+                className="group relative overflow-hidden bg-black text-white rounded-[30px] h-[20.5px] w-[80.5px] px-[6.2px] py-[3.7px] font-poppins font-light flex items-center justify-between touch-manipulation"
+              >
+                <span className="relative z-10 text-[7.4px] leading-[150%]">Book Now</span>
+                <ArrowUpRight className={`relative z-10 w-[9.9px] h-[9.9px] transition-transform duration-300 group-hover:rotate-45 ${isMobileButtonActive ? "rotate-45" : ""}`} />
+                <span className={`absolute inset-0 bg-[#00A792] rounded-[30px] transition-all duration-500 ease-out z-0 ${isMobileButtonActive ? "scale-150 opacity-100" : "scale-0 opacity-0 group-hover:scale-150 group-hover:opacity-100"}`}></span>
+              </Link>
             </div>
           </div>
 
@@ -46,6 +53,8 @@ export function HeroSection() {
               }}
             />
           </div>
+
+          <SearchBar />
         </div>
 
         {/* Desktop Layout */}
