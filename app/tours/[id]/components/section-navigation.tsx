@@ -19,7 +19,7 @@ export function SectionNavigation({
   onSectionChange,
 }: SectionNavigationProps) {
   return (
-    <div className="sticky top-[48px] lg:top-20 z-40 py-[10px] lg:py-6 lg:bg-[#F7F7F7]">
+    <div className="sticky w-[360px] lg:w-full top-[38px] lg:top-20 z-40 py-2.5 lg:py-4 -mx-[18px] px-[18px] lg:mx-0 lg:px-0">
       {/* Centered Navigation - Same style as investor section-nav */}
       <div className="flex justify-center">
         {/* Mobile: p-[4.52px] gap-[4.52px] rounded-[45.25px] border */}

@@ -22,7 +22,7 @@ export function SectionNav({
   onWriteReview,
 }: SectionNavProps) {
   return (
-    <div className="flex flex-col gap-[10px] lg:gap-4 py-[14px] lg:py-6">
+    <div className="sticky top-[48px] lg:top-20 z-40 bg-[#F7F7F7] -mx-[18px] px-[18px] lg:-mx-6 lg:px-6 flex flex-col gap-[10px] lg:gap-4 py-[14px] lg:py-4">
       {/* Row 1: Navigation Tabs - Centered */}
       <div className="flex justify-center">
         {/* Mobile: p-[4.52px] gap-[4.52px] rounded-[45.25px] border */}
