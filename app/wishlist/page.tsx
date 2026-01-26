@@ -108,7 +108,9 @@ function WishlistTourCard({ tour }: { tour: SavedTourData }) {
     : 0
   const hasDiscount = discountPercent > 0
 
-  const handleRemove = () => {
+  const handleRemove = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     toggleSaveTour(tourIdentifier)
   }
 
@@ -118,11 +120,12 @@ function WishlistTourCard({ tour }: { tour: SavedTourData }) {
       <div className="lg:hidden relative bg-white rounded-[7px] p-[15px] flex flex-col gap-[19px]">
         {/* Delete Button - Top Right */}
         <button
+          type="button"
           onClick={handleRemove}
-          className="absolute top-[22px] right-[25px] z-10 bg-white rounded-full p-[4px] shadow-[0px_7px_11px_-2px_rgba(0,0,0,0.1),0px_3px_4px_-3px_rgba(0,0,0,0.1)]"
+          className="absolute top-[22px] right-[25px] z-10 bg-white rounded-full p-[4px] shadow-[0px_7px_11px_-2px_rgba(0,0,0,0.1),0px_3px_4px_-3px_rgba(0,0,0,0.1)] touch-manipulation"
           aria-label="Remove from wishlist"
         >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none">
             <path d="M17.3185 4.8847L16.7681 13.7883C16.6275 16.0631 16.5572 17.2005 15.987 18.0183C15.7051 18.4226 15.3421 18.7638 14.9212 19.0202C14.0699 19.5389 12.9303 19.5389 10.6511 19.5389C8.36896 19.5389 7.22787 19.5389 6.37593 19.0192C5.95473 18.7624 5.59166 18.4205 5.30985 18.0156C4.73984 17.1965 4.67108 16.0575 4.53355 13.7795L3.99658 4.8847" stroke="#F23813" strokeWidth="1.3322" strokeLinecap="round"/>
             <path d="M7.99316 10.4221H13.322" stroke="#F23813" strokeWidth="1.3322" strokeLinecap="round"/>
             <path d="M9.32568 13.9031H11.9901" stroke="#F23813" strokeWidth="1.3322" strokeLinecap="round"/>
@@ -332,6 +335,7 @@ function WishlistTourCard({ tour }: { tour: SavedTourData }) {
         {/* Desktop: Hover-reveal delete button */}
         <div className="w-0 group-hover/card:w-12 overflow-hidden bg-[#F23813] flex items-center justify-center transition-all duration-300 ease-out rounded-r-2xl shrink-0">
           <button
+            type="button"
             onClick={handleRemove}
             className="w-full h-full flex items-center justify-center text-white hover:bg-[#E54D2E] transition-colors"
             aria-label="Remove from wishlist"
