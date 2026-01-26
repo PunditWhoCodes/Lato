@@ -563,261 +563,265 @@ export function SearchBar() {
         </div>
       </div>
 
-      {/* Mobile Layout */}
-      <div className="md:hidden bg-white rounded-[20px] p-4 space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
-        {/* First Field - Destination Dropdown */}
-        <div ref={destinationMobileRef} className="relative">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              setShowDestinationDropdown(!showDestinationDropdown)
-              setShowCalendar(false)
-              setShowPassengerDropdown(false)
-            }}
-            className="w-full flex items-center justify-between h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
-          >
-            <span className={`font-montserrat text-sm ${destination ? "text-[#112211]" : "text-[#112211]/50"}`}>
-              {destination || "Destination"}
-            </span>
-            <MapPin className="size-4 text-[#00A792]" />
-          </button>
+      {/* Mobile Layout - Figma: Frame 1984078326 */}
+      <div className="md:hidden w-full bg-white/8 backdrop-blur-[41.94px] rounded-[14.87px] py-[18.57px]">
+        {/* Inner Container - Frame 1984078325 */}
+        <div className="flex flex-col items-center gap-[18px] w-[317.12px] mx-auto">
 
-          {/* Destination Dropdown - Mobile */}
-          {showDestinationDropdown && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
-              {destinations.map((dest) => (
-                <button
-                  key={dest}
-                  onClick={(e) => handleDestinationSelect(e, dest)}
-                  className={`w-full px-4 py-3 text-left text-sm hover:bg-[#F0FDFC] transition-colors ${
-                    destination === dest ? "bg-[#E6F7F5] text-[#00A792]" : "text-[#112211]"
-                  }`}
-                >
-                  {dest}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Second Field - Calendar Dropdown */}
-        <div ref={calendarMobileRef} className="relative">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              setShowCalendar(!showCalendar)
-              setShowDestinationDropdown(false)
-              setShowPassengerDropdown(false)
-            }}
-            className="w-full flex items-center justify-between h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
-          >
-            <span className={`font-montserrat text-sm ${startDate || endDate ? "text-[#112211]" : "text-[#112211]/50"}`}>
-              {getDateRangeDisplay()}
-            </span>
-            <Calendar className="w-5 h-5 text-[#00A792]" />
-          </button>
-
-          {/* Calendar Dropdown - Mobile */}
-          {showCalendar && (
-            <div
-              className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4"
-              onClick={(e) => e.stopPropagation()}
+          {/* Text Field 1 - Destination */}
+          <div ref={destinationMobileRef} className="relative w-[301.26px]">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowDestinationDropdown(!showDestinationDropdown)
+                setShowCalendar(false)
+                setShowPassengerDropdown(false)
+              }}
+              className="w-[301.26px] h-[52.03px] bg-white rounded-[7.55px] border-r-[0.76px] border-black/9 flex items-center pl-[14.87px] pr-0"
             >
-              {/* Date Type Toggle */}
-              <div className="flex gap-2 mb-4">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setDateType("start")
-                  }}
-                  className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
-                    dateType === "start"
-                      ? "bg-[#00A792] text-white"
-                      : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
-                  }`}
-                >
-                  Start Date {startDate ? "✓" : "*"}
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setDateType("end")
-                  }}
-                  className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
-                    dateType === "end"
-                      ? "bg-[#00A792] text-white"
-                      : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
-                  }`}
-                >
-                  End Date {endDate ? "✓" : "*"}
-                </button>
+              <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${destination ? "text-[#112211]" : "text-[#112211]"}`}>
+                {destination || "Destination"}
+              </span>
+              {/* Location Icon Container */}
+              <div className="flex items-center justify-center w-[44.6px] h-[44.6px] p-[11.15px]">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.5 10.2812C10.5701 10.2812 11.4375 9.41382 11.4375 8.34375C11.4375 7.27368 10.5701 6.40625 9.5 6.40625C8.42993 6.40625 7.5625 7.27368 7.5625 8.34375C7.5625 9.41382 8.42993 10.2812 9.5 10.2812Z" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M9.5 2.53125C7.96146 2.53125 6.48597 3.14279 5.39876 4.23001C4.31154 5.31722 3.7 6.79271 3.7 8.33125C3.7 9.68562 3.97438 10.5519 4.74375 11.5469L9.5 17.4688L14.2562 11.5469C15.0256 10.5519 15.3 9.68562 15.3 8.33125C15.3 6.79271 14.6885 5.31722 13.6012 4.23001C12.514 3.14279 11.0385 2.53125 9.5 2.53125Z" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
+            </button>
 
-              {/* Calendar Header */}
-              <div className="flex items-center justify-between mb-4">
-                <button
-                  onClick={goToPrevMonth}
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <ChevronLeft className="w-5 h-5 text-[#112211]" />
-                </button>
-                <span className="font-medium text-[#112211]">
-                  {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-                </span>
-                <button
-                  onClick={goToNextMonth}
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <ChevronRight className="w-5 h-5 text-[#112211]" />
-                </button>
-              </div>
-
-              {/* Day Headers */}
-              <div className="grid grid-cols-7 gap-1 mb-2">
-                {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                  <div key={day} className="text-center text-xs font-medium text-gray-500 py-1">
-                    {day}
-                  </div>
+            {/* Destination Dropdown - Mobile */}
+            {showDestinationDropdown && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[7.55px] shadow-lg z-50 max-h-60 overflow-y-auto">
+                {destinations.map((dest) => (
+                  <button
+                    key={dest}
+                    onClick={(e) => handleDestinationSelect(e, dest)}
+                    className={`w-full px-[14.87px] py-3 text-left font-montserrat text-[12.08px] hover:bg-[#F0FDFC] transition-colors ${
+                      destination === dest ? "bg-[#E6F7F5] text-[#00A792]" : "text-[#112211]"
+                    }`}
+                  >
+                    {dest}
+                  </button>
                 ))}
               </div>
+            )}
+          </div>
 
-              {/* Calendar Days */}
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: startingDay }).map((_, index) => (
-                  <div key={`empty-mobile-${index}`} className="w-9 h-9" />
-                ))}
-                {Array.from({ length: daysInMonth }).map((_, index) => {
-                  const day = index + 1
-                  const isStart = isStartDate(day)
-                  const isEnd = isEndDate(day)
-                  const inRange = isInRange(day)
+          {/* Text Field 2 - Travel Style */}
+          <div ref={calendarMobileRef} className="relative w-[301.26px]">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowCalendar(!showCalendar)
+                setShowDestinationDropdown(false)
+                setShowPassengerDropdown(false)
+              }}
+              className="w-[301.26px] h-[52.03px] bg-white rounded-[7.55px] flex items-center pl-[14.87px] pr-[14.87px]"
+            >
+              <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${startDate || endDate ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
+                {startDate || endDate ? getDateRangeDisplay() : "Travel Style"}
+              </span>
+            </button>
 
-                  return (
-                    <button
-                      key={day}
-                      onClick={(e) => handleDayClick(e, day)}
-                      className={`w-9 h-9 rounded-full text-sm transition-colors ${
-                        isStart || isEnd
-                          ? "bg-[#00A792] text-white"
-                          : inRange
-                          ? "bg-[#E6F7F5] text-[#00A792]"
-                          : isToday(day)
-                          ? "ring-1 ring-[#00A792] text-[#00A792]"
-                          : "hover:bg-gray-100 text-[#112211]"
-                      }`}
-                    >
+            {/* Calendar Dropdown - Mobile */}
+            {showCalendar && (
+              <div
+                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[7.55px] shadow-lg z-50 p-4"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Date Type Toggle */}
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setDateType("start")
+                    }}
+                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all ${
+                      dateType === "start"
+                        ? "bg-[#00A792] text-white"
+                        : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
+                    }`}
+                  >
+                    Start Date {startDate ? "✓" : "*"}
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setDateType("end")
+                    }}
+                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all ${
+                      dateType === "end"
+                        ? "bg-[#00A792] text-white"
+                        : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
+                    }`}
+                  >
+                    End Date {endDate ? "✓" : "*"}
+                  </button>
+                </div>
+
+                {/* Calendar Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    onClick={goToPrevMonth}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-[#112211]" />
+                  </button>
+                  <span className="font-medium text-[#112211] text-[12.08px]">
+                    {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                  </span>
+                  <button
+                    onClick={goToNextMonth}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5 text-[#112211]" />
+                  </button>
+                </div>
+
+                {/* Day Headers */}
+                <div className="grid grid-cols-7 gap-1 mb-2">
+                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                    <div key={day} className="text-center text-[10px] font-medium text-gray-500 py-1">
                       {day}
-                    </button>
-                  )
-                })}
-              </div>
-
-              {/* Selected dates summary */}
-              {(startDate || endDate) && (
-                <div className="mt-4 pt-3 border-t border-gray-100 text-sm text-[#6B7280]">
-                  {startDate && <div>Start: {formatDate(startDate)}</div>}
-                  {endDate && <div>End: {formatDate(endDate)}</div>}
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
-          )}
-        </div>
 
-        {/* Third Field - Passenger Dropdown */}
-        <div ref={passengerMobileRef} className="relative">
+                {/* Calendar Days */}
+                <div className="grid grid-cols-7 gap-1">
+                  {Array.from({ length: startingDay }).map((_, index) => (
+                    <div key={`empty-mobile-${index}`} className="w-8 h-8" />
+                  ))}
+                  {Array.from({ length: daysInMonth }).map((_, index) => {
+                    const day = index + 1
+                    const isStart = isStartDate(day)
+                    const isEnd = isEndDate(day)
+                    const inRange = isInRange(day)
+
+                    return (
+                      <button
+                        key={day}
+                        onClick={(e) => handleDayClick(e, day)}
+                        className={`w-8 h-8 rounded-full text-[12px] transition-colors ${
+                          isStart || isEnd
+                            ? "bg-[#00A792] text-white"
+                            : inRange
+                            ? "bg-[#E6F7F5] text-[#00A792]"
+                            : isToday(day)
+                            ? "ring-1 ring-[#00A792] text-[#00A792]"
+                            : "hover:bg-gray-100 text-[#112211]"
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Selected dates summary */}
+                {(startDate || endDate) && (
+                  <div className="mt-4 pt-3 border-t border-gray-100 text-[12.08px] text-[#6B7280]">
+                    {startDate && <div>Start: {formatDate(startDate)}</div>}
+                    {endDate && <div>End: {formatDate(endDate)}</div>}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Text Field 3 - Select Duration */}
+          <div ref={passengerMobileRef} className="relative w-[301.26px]">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowPassengerDropdown(!showPassengerDropdown)
+                setShowDestinationDropdown(false)
+                setShowCalendar(false)
+              }}
+              className="w-[301.26px] h-[52.03px] bg-white rounded-[7.55px] flex items-center pl-[14.87px] pr-[14.87px]"
+            >
+              <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${adults > 1 || children > 0 ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
+                {adults > 1 || children > 0 ? getPassengerSummary() : "Select Duration"}
+              </span>
+            </button>
+
+            {/* Passenger Dropdown - Mobile */}
+            {showPassengerDropdown && (
+              <div
+                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[7.55px] shadow-lg z-50 p-4"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Adults Row */}
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-[#112211] font-medium text-[12.08px]">Adults</span>
+                  <div className="flex items-center border border-gray-200 rounded-lg">
+                    <button
+                      onClick={(e) => handleAdultsChange(e, -1)}
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-8 h-8 flex items-center justify-center text-[#112211] font-medium text-[12.08px] border-x border-gray-200">
+                      {adults}
+                    </span>
+                    <button
+                      onClick={(e) => handleAdultsChange(e, 1)}
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Children Row */}
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-[#112211] font-medium text-[12.08px]">Children</span>
+                  <div className="flex items-center border border-gray-200 rounded-lg">
+                    <button
+                      onClick={(e) => handleChildrenChange(e, -1)}
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-8 h-8 flex items-center justify-center text-[#112211] font-medium text-[12.08px] border-x border-gray-200">
+                      {children}
+                    </span>
+                    <button
+                      onClick={(e) => handleChildrenChange(e, 1)}
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Done Button */}
+                <div className="group pt-3">
+                  <button
+                    onClick={handlePassengerDone}
+                    className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[22.65px] font-montserrat font-medium h-[40px] text-[12.08px]"
+                  >
+                    <span className="relative z-10">Done</span>
+                    <span className="absolute inset-0 bg-black rounded-[22.65px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Search Button - Figma: 317.12px x 49.83px */}
           <button
-            onClick={(e) => {
-              e.stopPropagation()
-              setShowPassengerDropdown(!showPassengerDropdown)
-              setShowDestinationDropdown(false)
-              setShowCalendar(false)
-            }}
-            className="w-full flex items-center justify-between h-12 bg-gray-50 border border-black/[0.09] rounded-2xl px-4"
+            onClick={handleSearch}
+            className="group relative w-[317.12px] h-[49.83px] bg-[#00A792] rounded-[22.65px] flex items-center justify-center overflow-hidden"
           >
-            <span className={`font-montserrat text-sm ${adults > 0 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}`}>
-              {getPassengerSummary()}
+            <span className="relative z-10 font-montserrat font-medium text-[12.08px] leading-[15px] text-white">
+              Search
             </span>
-            <ChevronDown className={`w-5 h-5 text-[#00A792] transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
+            <span className="absolute inset-0 bg-black rounded-[22.65px] scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
           </button>
 
-          {/* Passenger Dropdown - Mobile */}
-          {showPassengerDropdown && (
-            <div
-              className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Adults Row */}
-              <div className="flex items-center justify-between py-3">
-                <span className="text-[#112211] font-medium">Adults</span>
-                <div className="flex items-center border border-gray-200 rounded-lg">
-                  <button
-                    onClick={(e) => handleAdultsChange(e, -1)}
-                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
-                    {adults}
-                  </span>
-                  <button
-                    onClick={(e) => handleAdultsChange(e, 1)}
-                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Children Row */}
-              <div className="flex items-center justify-between py-3">
-                <span className="text-[#112211] font-medium">Children</span>
-                <div className="flex items-center border border-gray-200 rounded-lg">
-                  <button
-                    onClick={(e) => handleChildrenChange(e, -1)}
-                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
-                    {children}
-                  </span>
-                  <button
-                    onClick={(e) => handleChildrenChange(e, 1)}
-                    className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Done Button */}
-              <div className="group pt-3">
-                <button
-                  onClick={handlePassengerDone}
-                  className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium h-10 text-sm"
-                >
-                  <span className="relative z-10">Done</span>
-                  <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Search Button */}
-        <div className="group w-full">
-          <Button
-            onClick={handleSearch}
-            className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-full font-montserrat font-medium h-12"
-            style={{
-              fontSize: '16px',
-            }}
-          >
-            <span className="relative z-10">Search</span>
-
-            {/* Radial expanding hover overlay */}
-            <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-          </Button>
         </div>
       </div>
     </div>
