@@ -115,7 +115,7 @@ export function InvestorPageClient({
       {/* All Content Sections in One White Container */}
       <div className="bg-white rounded-[10px] lg:rounded-2xl px-[18px] py-[21px] lg:p-8 border border-black/5">
         {/* Reviews Section */}
-        <div ref={reviewsRef} className="scroll-mt-4">
+        <div ref={reviewsRef} className="scroll-mt-32 lg:scroll-mt-40">
           <ReviewsList reviews={reviews} />
         </div>
 
@@ -123,7 +123,7 @@ export function InvestorPageClient({
         <hr className="my-[21px] lg:my-8 border-gray-100" />
 
         {/* Tours By Company Carousel */}
-        <div ref={toursRef} className="scroll-mt-4">
+        <div ref={toursRef} className="scroll-mt-32 lg:scroll-mt-40">
           <ToursCarousel title={`Tours By ${company.name}`} tours={tours} />
         </div>
 
@@ -139,7 +139,7 @@ export function InvestorPageClient({
         <hr className="my-[21px] lg:my-8 border-gray-100" />
 
         {/* About Section */}
-        <div ref={aboutRef} className="scroll-mt-4">
+        <div ref={aboutRef} className="scroll-mt-32 lg:scroll-mt-40">
           <AboutSection companyName={company.name} description={company.about} />
         </div>
 
@@ -153,7 +153,7 @@ export function InvestorPageClient({
       </div>
 
       {/* Contact Experts Section (Guides) */}
-      <div ref={guidesRef} className="scroll-mt-4">
+      <div ref={guidesRef} className="scroll-mt-32 lg:scroll-mt-40">
         <ContactExperts
           onAskQuestion={handleAskQuestion}
           onChatWithUs={handleChatWithUs}
