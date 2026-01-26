@@ -34,75 +34,95 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
   if (variant === "featured") {
     return (
       <Link href={`/tours/${tourLink}`}>
-        {/* Mobile Card */}
-        <Card className="md:hidden group hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden border border-black/9 rounded-[11px] p-[7px]">
-          {/* Image */}
-          <div className="relative overflow-hidden mb-2 rounded-[7px]">
-            <ShimmerImage
-              src={tour.image || "/placeholder.svg"}
-              alt={tour.title}
-              className="w-full h-[121px] object-cover group-hover:scale-105 transition-transform duration-500 rounded-[7px]"
-            />
-          </div>
+        {/* Mobile Card - Figma: 218.23px width, 221.44px height, padding 7.13px, gap 7.49px, border-radius 11.19px */}
+        <Card className="md:hidden group hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden flex flex-col p-[7.13px] gap-[7.49px] w-[218.23px] h-[221.44px] border-[0.37px] border-black/9 rounded-[11.19px]">
+          {/* Frame 2608743 - Image container with title/rating row */}
+          <div className="flex flex-col items-center gap-[10.34px] w-[203.96px] h-[145.22px]">
+            {/* Image - Figma: 203.96px x 120.88px, border-radius 7.13px */}
+            <div className="relative overflow-hidden w-[203.96px] h-[120.88px] rounded-[7.13px]">
+              <ShimmerImage
+                src={tour.image || "/placeholder.svg"}
+                alt={tour.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-[7.13px]"
+              />
+            </div>
 
-          {/* Content */}
-          <div className="flex flex-col gap-1.5 px-0.5">
-            {/* Title and Rating Row */}
-            <div className="flex items-start justify-between gap-1">
-              <h3 className="font-poppins font-medium text-[#1C2B38] leading-tight flex-1 text-[7.5px] line-clamp-2">
+            {/* Frame 2608742 - Title and Rating Row */}
+            <div className="flex flex-row justify-between items-start w-[203.96px] h-[14px] gap-[13.55px]">
+              <h3 className="font-poppins font-medium text-[7.46px] leading-[9px] text-[#1C2B38] w-[153.61px] h-[14px] line-clamp-2">
                 {tour.title}
               </h3>
-              <div className="flex items-center gap-0.5 shrink-0">
-                <Star className="w-[10px] h-[10px] fill-[#FFA432] text-[#FFA432]" />
-                <span className="font-mulish font-semibold text-[#778088] text-[6.7px]">
+              {/* Frame 2608741 - Rating */}
+              <div className="flex flex-row items-center gap-[3.57px] w-[23.19px] h-[9.63px]">
+                <Star className="w-[9.63px] h-[9.63px] fill-[#FFA432] text-[#FFA432]" />
+                <span className="font-mulish font-semibold text-[6.71px] leading-[8px] text-[#778088]">
                   {tour.rating}
                 </span>
               </div>
             </div>
+          </div>
 
-            {/* Price */}
+          {/* Frame 2608745 - Price and Features section */}
+          <div className="flex flex-col items-start gap-[7.49px] w-[203.96px]">
+            {/* Price Group */}
             <div className="flex flex-col">
-              <div className="font-volkhov font-bold text-[#7BBCB0] text-[7.5px]">
-                ${tour.price}
-              </div>
-              <div className="font-poppins text-[#778088] text-[6px]">
-                per person
-              </div>
-            </div>
-
-            {/* Features */}
-            <div className="flex flex-col gap-0.5">
-              <div className="flex items-center gap-1">
-                <Clock className="w-[6px] h-[6px] text-[#495560]" />
-                <span className="font-poppins text-[#495560] text-[6px]">
-                  {tour.duration} days
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Bus className="w-[7px] h-[5px] text-[#495560]" />
-                <span className="font-mulish text-[#495560] text-[6px]">
-                  Transport
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Users className="w-[7px] h-[5px] text-[#495560]" />
-                <span className="font-mulish text-[#495560] text-[6px]">
-                  Family Plan
-                </span>
-              </div>
-            </div>
-
-            {/* Book Now Button */}
-            <div className="group mt-1">
-              <Button
-                className="relative overflow-hidden bg-black text-white flex items-center justify-center gap-1 h-[19px] w-[73px] rounded-[11px] px-2"
+              <span
+                className="font-volkhov font-bold text-[7.46px] leading-[9px] text-[#7BBCB0]"
+                style={{ textShadow: '0px 1.78px 4.64px rgba(255, 255, 255, 0.4)' }}
               >
-                <span className="relative z-10 font-poppins font-light text-[6.7px]">
-                  Book Now
-                </span>
-                <ArrowUpRight className="relative z-10 w-[9px] h-[9px] transition-transform duration-300 group-hover:rotate-45" />
-                <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-              </Button>
+                ${tour.price}
+              </span>
+              <span className="font-poppins font-normal text-[5.97px] leading-[9px] text-[#778088]">
+                per person
+              </span>
+            </div>
+
+            {/* Features and Button Row */}
+            <div className="flex flex-row justify-between items-end w-full">
+              {/* Features Column */}
+              <div className="flex flex-col gap-[3.57px]">
+                <div className="flex items-center gap-[2px]">
+                  <Clock className="w-[6px] h-[6px] text-[#495560]" />
+                  <span className="font-poppins font-normal text-[5.97px] leading-[9px] text-[#495560]">
+                    Duration {tour.duration} hours
+                  </span>
+                </div>
+                <div className="flex items-center gap-[2px]">
+                  <Bus className="w-[7px] h-[5px] text-[#495560]" />
+                  <span className="font-poppins font-normal text-[5.97px] leading-[7px] text-[#495560]">
+                    Transport Facility
+                  </span>
+                </div>
+                <div className="flex items-center gap-[2px]">
+                  <Users className="w-[7px] h-[5px] text-[#495560]" />
+                  <span className="font-poppins font-normal text-[5.97px] leading-[7px] text-[#495560]">
+                    Family Plan
+                  </span>
+                </div>
+              </div>
+
+              {/* Book Now Button */}
+              <button className="group/btn relative isolate flex flex-col justify-center items-center w-[73.08px] h-[18.64px] bg-black rounded-[11.19px] px-[5.59px] py-[3.36px] overflow-hidden">
+                {/* Frame 2608775 */}
+                <div className="relative z-10 flex flex-row justify-between items-center w-[49.59px] h-[8.95px] gap-[12.68px] whitespace-nowrap">
+                  <span className="font-poppins font-light text-[6.71px] leading-[149.77%] text-white">
+                    Book Now
+                  </span>
+                  <svg
+                    width="9"
+                    height="9"
+                    viewBox="0 0 9 9"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="transition-transform duration-300 group-hover/btn:rotate-45"
+                  >
+                    <path d="M6.33843 2.60999L2.23709 6.71133" stroke="white" strokeWidth="0.559274" strokeLinecap="round"/>
+                    <path d="M4.10135 2.23718H6.33844C6.51421 2.23718 6.60209 2.23718 6.65669 2.29179C6.71129 2.34639 6.71129 2.43427 6.71129 2.61003V4.84713" stroke="white" strokeWidth="0.559274" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                {/* Hover effect */}
+                <span className="absolute inset-0 bg-[#00A792] rounded-[11.19px] scale-0 opacity-0 transition-all duration-500 ease-out group-hover/btn:scale-150 group-hover/btn:opacity-100 z-0"></span>
+              </button>
             </div>
           </div>
         </Card>
@@ -197,8 +217,105 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
 
   // Default and discount variants
   return (
-    <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border-0 shadow-lg bg-white overflow-hidden rounded-4xl">
-      <Link href={`/tours/${tourLink}`}>
+    <Link href={`/tours/${tourLink}`}>
+      {/* Mobile Card - Figma: 345px x 352.35px */}
+      <Card className="md:hidden group hover:shadow-xl transition-all duration-300 cursor-pointer bg-white overflow-hidden flex flex-col p-[11.27px] gap-[11.84px] w-[345px] h-[352.35px] border-[0.59px] border-black/9 rounded-[17.68px]">
+        {/* Frame 2608743 - Image + Title/Rating */}
+        <div className="flex flex-col items-center gap-[16.35px] w-[322.45px] h-[230.45px]">
+          {/* Image */}
+          <div className="relative overflow-hidden w-[322.45px] h-[191.1px] rounded-[11.27px]">
+            <ShimmerImage
+              src={tour.image || "/placeholder.svg"}
+              alt={tour.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-[11.27px]"
+            />
+          </div>
+
+          {/* Frame 2608742 - Title and Rating Row */}
+          <div className="flex flex-row justify-between items-start w-[322.45px] h-[23px] gap-[21.42px]">
+            <h3 className="font-poppins font-medium text-[11.79px] leading-[15px] text-[#1C2B38] w-[242.85px] line-clamp-2">
+              {tour.title}
+            </h3>
+            {/* Frame 2608741 - Rating */}
+            <div className="flex flex-row items-center gap-[5.64px]">
+              <Star className="w-[15.22px] h-[15.22px] fill-[#FFA432] text-[#FFA432]" />
+              <span className="font-mulish font-semibold text-[10.61px] leading-[13px] text-[#778088]">
+                {tour.rating}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Frame 2608745 - Price and Features section */}
+        <div className="flex flex-col items-start gap-[11.84px] w-[322.45px] h-[87.51px]">
+          {/* Group 231 - Price */}
+          <div className="relative w-[55.59px] h-[26.4px]">
+            <span
+              className="absolute left-0 top-0 w-[38px] h-[15px] font-volkhov font-bold text-[11.79px] leading-[15px] text-right text-[#7BBCB0]"
+              style={{ textShadow: '0px 2.82px 7.33px rgba(255, 255, 255, 0.4)' }}
+            >
+              ${tour.price}
+            </span>
+            <span className="absolute left-[4.59px] top-[12.4px] w-[51px] h-[14px] font-poppins font-normal text-[9.43px] leading-[14px] text-[#778088]">
+              per person
+            </span>
+          </div>
+
+          {/* Frame 2608744 - Features and Button Row */}
+          <div className="flex flex-row justify-between items-end w-[322.45px] h-[49.27px]">
+            {/* Frame 2608740 - Features Column */}
+            <div className="flex flex-col justify-center items-start gap-[5.64px] w-[78.36px] h-[49.27px]">
+              {/* Group 202 - Duration */}
+              <div className="flex items-center gap-[4.13px] w-[90.77px] h-[14px]">
+                <Clock className="w-[9.02px] h-[9.02px] text-[#495560]" />
+                <span className="w-[78px] h-[14px] font-poppins font-normal text-[9.43px] leading-[14px] text-[#495560]">
+                  Duration {tour.duration} hours
+                </span>
+              </div>
+              {/* Group 201 - Transport */}
+              <div className="flex items-center gap-[2.95px] w-[91.31px] h-[12px]">
+                <Bus className="w-[11.05px] h-[7.89px] text-[#495560]" />
+                <span className="w-[77px] h-[12px] font-mulish font-semibold text-[9.43px] leading-[12px] text-[#495560]">
+                  Transport Facility
+                </span>
+              </div>
+              {/* Group 200 - Family Plan */}
+              <div className="flex items-center gap-[2.95px] w-[65.4px] h-[12px]">
+                <Users className="w-[10.76px] h-[7.89px] text-[#495560]" />
+                <span className="w-[52px] h-[12px] font-mulish font-semibold text-[9.43px] leading-[12px] text-[#495560]">
+                  Family Plan
+                </span>
+              </div>
+            </div>
+
+            {/* Button (1) - Book Now */}
+            <button className="group/btn relative isolate flex flex-col justify-center items-center w-[115.53px] h-[29.47px] bg-black rounded-[17.68px] px-[8.84px] py-[5.31px] gap-[5.89px] overflow-hidden">
+              {/* Frame 2608775 */}
+              <div className="relative z-10 flex flex-row justify-between items-center w-[78.4px] h-[14.15px] gap-[20.04px]">
+                <span className="w-[51px] h-[7px] font-poppins font-light text-[10.61px] leading-[149.77%] text-white whitespace-nowrap">
+                  Book Now
+                </span>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 15 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-[14.15px] h-[14.15px] transition-transform duration-300 group-hover/btn:rotate-45"
+                >
+                  <path d="M10.0176 4.12695L3.53711 10.6074" stroke="white" strokeWidth="0.884175" strokeLinecap="round"/>
+                  <path d="M6.48438 3.53711H10.0221C10.3003 3.53711 10.4394 3.53711 10.5257 3.62345C10.6121 3.70978 10.6121 3.84888 10.6121 4.12707V7.66485" stroke="white" strokeWidth="0.884175" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              {/* Hover effect */}
+              <span className="absolute inset-0 bg-[#00A792] rounded-[17.68px] scale-0 opacity-0 transition-all duration-500 ease-out group-hover/btn:scale-150 group-hover/btn:opacity-100 z-0"></span>
+            </button>
+          </div>
+        </div>
+      </Card>
+
+      {/* Desktop Card */}
+      <Card className="hidden md:block group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border-0 shadow-lg bg-white overflow-hidden rounded-4xl">
         <div className="relative overflow-hidden h-56">
           <ShimmerImage
             src={tour.image || "/placeholder.svg"}
@@ -281,7 +398,7 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
             </div>
           </div>
         </CardContent>
-      </Link>
-    </Card>
+      </Card>
+    </Link>
   )
 }
