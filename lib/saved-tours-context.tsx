@@ -66,8 +66,9 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
       if (stored) {
         const parsed = JSON.parse(stored)
         const migratedTours = migrateToStringIds(parsed)
-        setSavedTours(migratedTours)
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(migratedTours))
+        const uniqueTours = [...new Set(migratedTours)]
+        setSavedTours(uniqueTours)
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(uniqueTours))
       }
 
       // Load saved tour data
@@ -75,7 +76,17 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
       if (storedData) {
         const parsedData = JSON.parse(storedData)
         if (Array.isArray(parsedData)) {
-          setSavedToursData(parsedData)
+          const seen = new Set<string>()
+          const uniqueData = parsedData.filter((tour: SavedTourData) => {
+            const id = getTourIdentifier(tour)
+            if (seen.has(id)) return false
+            seen.add(id)
+            return true
+          })
+          setSavedToursData(uniqueData)
+          if (uniqueData.length !== parsedData.length) {
+            localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(uniqueData))
+          }
         }
       }
     } catch (error) {
@@ -118,7 +129,10 @@ export function SavedToursProvider({ children }: { children: React.ReactNode }) 
         )
         return prev.filter((id) => id !== tourId)
       } else {
-        // Add to saved tours
+        // Add to saved tours 
+        if (prev.includes(tourId)) {
+          return prev
+        }
         if (tourData) {
           const dataToSave: SavedTourData = {
             id: tourData.id,
