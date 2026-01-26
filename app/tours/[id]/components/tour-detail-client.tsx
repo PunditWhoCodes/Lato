@@ -286,7 +286,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           <div className="py-2">
 
             {/* Highlights Section with Map */}
-            <div ref={highlightsRef} className="scroll-mt-24">
+            <div ref={highlightsRef} className="scroll-mt-32 lg:scroll-mt-40">
               <HighlightsSection
                 highlights={tourData.highlights}
                 startLocation={startLocationName}
@@ -298,7 +298,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
             </div>
 
             {/* Tour Itinerary - Day by Day */}
-            <div ref={itineraryRef} className="scroll-mt-24">
+            <div ref={itineraryRef} className="scroll-mt-32 lg:scroll-mt-40">
               <TourItinerary
                 itineraryDays={tourData.itineraryDays}
                 nrOfDays={tourData.nrOfDays}
@@ -327,7 +327,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           {/* <JoinExperience /> */}
 
           {/* About Company Section */}
-          <div ref={companyRef} className="scroll-mt-24">
+          <div ref={companyRef} className="scroll-mt-32 lg:scroll-mt-40">
             <CompanySection company={tourData.company} />
           </div>
 
@@ -335,7 +335,7 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
           <RelatedTours tourName={tourData.title} />
 
           {/* Customer Reviews */}
-          <div ref={reviewsRef} className="scroll-mt-24">
+          <div ref={reviewsRef} className="scroll-mt-32 lg:scroll-mt-40">
             <ReviewsSection
               reviews={aggregatedReviews.length > 0 ? aggregatedReviews : undefined}
               rating={reviewsRating > 0 ? reviewsRating : tourData.rating}
