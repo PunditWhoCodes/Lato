@@ -31,18 +31,18 @@ export function TrendingAdventuresSection() {
         {/* Header Section - Figma pixel-perfect */}
         <div className="flex justify-between items-start mb-4 md:mb-10 lg:mb-14">
           <div className="flex flex-col gap-[6.6px]">
-            {/* Top text - Figma: 7px height ~6.3px font */}
-            <p className="font-poppins text-[6.3px] md:text-lg font-light leading-[150%]">
+            {/* Top text - Figma: 10px font */}
+            <p className="font-poppins text-[10px] md:text-lg font-light leading-[150%]">
               Find your next adventure in destinations
             </p>
 
-            {/* Heading - Figma: 15px height ~22px font (same as How It Works) */}
+            {/* Heading - Figma: 22px */}
             <h2 className="font-poppins font-light text-[22px] md:text-4xl lg:text-[56px] leading-[150%] text-black">
               Trending Adventures
             </h2>
           </div>
 
-          {/* View More - Mobile - Figma: 14.2px button, 6.3px text */}
+          {/* View More - Mobile - Figma: 14.207px button, 6.314px text, rounded-7.103px */}
           <Link
             href="/tours"
             className="md:hidden flex items-center gap-[2.5px] group"
@@ -50,9 +50,9 @@ export function TrendingAdventuresSection() {
             <span className="font-mulish font-semibold text-[6.3px] text-[#495560] group-hover:text-black transition-colors">
               View More
             </span>
-            <div className="relative flex items-center justify-center bg-black rounded-[7px] overflow-hidden w-[14px] h-[14px]">
-              <ArrowUpRight className="relative z-10 text-white w-[8px] h-[8px] transition-transform duration-300 group-hover:rotate-45" />
-              <span className="absolute inset-0 bg-[#00A792] rounded-[7px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+            <div className="relative flex items-center justify-center bg-black rounded-[7.1px] overflow-hidden w-[14.2px] h-[14.2px] p-[3.2px]">
+              <ArrowUpRight className="relative z-10 text-white w-[7.6px] h-[7.6px] transition-transform duration-300 group-hover:rotate-45" />
+              <span className="absolute inset-0 bg-[#00A792] rounded-[7.1px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
             </div>
           </Link>
 
