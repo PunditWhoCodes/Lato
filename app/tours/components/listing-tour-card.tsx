@@ -61,7 +61,8 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
     ? getDiscountPercent(tour.originalPrice!, tour.price)
     : 0
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
     e.stopPropagation()
     // Pass tour data for saving to localStorage
     toggleSaveTour(tourIdentifier, {
@@ -108,13 +109,14 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
 
           {/* Heart/Favorite Icon - Top Left */}
           <button
+            type="button"
             onClick={handleFavoriteClick}
-            className={`absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${
+            className={`absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 z-10 touch-manipulation ${
               isFavorite ? "rotate-360" : ""
             }`}
           >
             <Heart
-              className={`w-4 h-4 transition-colors ${
+              className={`w-4 h-4 transition-colors pointer-events-none ${
                 isFavorite ? "fill-[#F23813] text-[#F23813]" : "text-[#6B7280]"
               }`}
             />
@@ -264,13 +266,14 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
 
           {/* Heart/Favorite Icon - Top Right */}
           <button
+            type="button"
             onClick={handleFavoriteClick}
-            className={`absolute top-2.5 right-2.5 size-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${
+            className={`absolute top-2.5 right-2.5 size-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 z-10 touch-manipulation ${
               isFavorite ? "rotate-360" : ""
             }`}
           >
             <Heart
-              className={`size-4 transition-colors ${
+              className={`size-4 transition-colors pointer-events-none ${
                 isFavorite ? "fill-[#F23813] text-[#F23813]" : "text-black"
               }`}
             />
