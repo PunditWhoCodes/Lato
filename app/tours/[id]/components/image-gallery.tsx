@@ -19,7 +19,9 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
   const { toggleSaveTour, isTourSaved } = useSavedTours()
   const isFavorite = tourId ? isTourSaved(tourId) : false
 
-  const handleToggleSave = () => {
+  const handleToggleSave = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     if (!tourId) return
     if (tourData) {
       toggleSaveTour(tourId, {
@@ -134,13 +136,14 @@ export function ImageGallery({ images, title, discountPercent, tourId, tourData 
             {/* Heart/Wishlist Icon - Figma: 27.32px x 25.94px, top right */}
             {tourId && (
               <button
+                type="button"
                 onClick={handleToggleSave}
-                className="absolute top-[9.69px] right-[9px] w-[27.32px] h-[25.94px] bg-white rounded-full flex items-center justify-center shadow-[0px_6.22px_9.32px_-1.86px_rgba(0,0,0,0.1),0px_2.49px_3.73px_-2.49px_rgba(0,0,0,0.1)] transition-all duration-300 hover:scale-110 p-[3.73px]"
+                className="absolute top-[9.69px] right-[9px] w-[27.32px] h-[25.94px] bg-white rounded-full flex items-center justify-center shadow-[0px_6.22px_9.32px_-1.86px_rgba(0,0,0,0.1),0px_2.49px_3.73px_-2.49px_rgba(0,0,0,0.1)] transition-all duration-300 hover:scale-110 p-[3.73px] z-10 touch-manipulation"
                 aria-label={isFavorite ? "Remove from saved tours" : "Save tour"}
               >
                 <Heart
-                  className={`w-[19.86px] h-[18.48px] transition-colors ${
-                    isFavorite ? "fill-[#F23813] text-[#F23813]" : "fill-[#F23813] text-[#F23813]"
+                  className={`w-[19.86px] h-[18.48px] transition-colors pointer-events-none ${
+                    isFavorite ? "fill-[#F23813] text-[#F23813]" : "fill-none text-[#6B7280]"
                   }`}
                 />
               </button>
