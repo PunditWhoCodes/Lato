@@ -122,7 +122,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
     <section className="py-[38px] md:py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto pl-[22px] md:px-10">
         {/* Section Header */}
-        <div className="flex flex-col gap-[17px] lg:gap-[43.35px] mb-6 md:mb-12 lg:mb-16">
+        <div className="flex flex-col gap-[17px] lg:gap-[43.35px] mb-6 md:mb-12 lg:mb-16 pr-5">
           {/* Top Row: Tour Packages label + View More */}
           <div className="flex items-start justify-between">
             <div className="flex flex-col gap-[17px]">
