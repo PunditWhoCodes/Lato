@@ -76,8 +76,8 @@ export function FeaturedActivities() {
       <div className="max-w-[1920px] mx-auto">
         {/* Header - Figma pixel-perfect */}
         <div className="flex justify-between items-start mb-[63px] md:mb-12">
-          <div className="flex flex-col gap-[15px]">
-            <p className="font-poppins font-light text-[8.5px] md:text-base leading-[150%]">
+          <div className="flex flex-col gap-[15.35px]">
+            <p className="font-poppins font-light text-[8.53px] md:text-base leading-[150%]">
               Discover the world your way
             </p>
             <h2 className="font-poppins font-light text-[22px] md:text-4xl lg:text-[42px] leading-[150%] lg:leading-[56px] text-black">
@@ -114,7 +114,7 @@ export function FeaturedActivities() {
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex gap-[11px] md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 -mx-[17px] px-[17px]"
+          className="flex gap-[10.66px] md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 -mx-[17px] px-[17px]"
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
@@ -123,7 +123,7 @@ export function FeaturedActivities() {
           {activities.map((activity) => (
             <div
               key={activity.id}
-              className="relative flex-shrink-0 w-[148px] md:w-[340px] lg:w-[380px] h-[163px] md:h-[320px] lg:h-[380px] rounded-[9px] md:rounded-3xl overflow-hidden group cursor-pointer"
+              className="relative flex-shrink-0 w-[148.38px] md:w-[340px] lg:w-[380px] h-[163.3px] md:h-[320px] lg:h-[380px] rounded-[8.53px] md:rounded-3xl overflow-hidden group cursor-pointer"
             >
               {/* Background Image */}
               <div
@@ -138,10 +138,10 @@ export function FeaturedActivities() {
 
               {/* Content - Figma: title 12.791px, subtitle 6.822px, gap 8.954px */}
               <div className="absolute bottom-0 left-0 right-0 p-3 md:p-8">
-                <h3 className="font-poppins font-medium text-[13px] md:text-3xl text-white mb-[9px] md:mb-2">
+                <h3 className="font-poppins font-medium text-[12.79px] md:text-3xl text-white mb-[8.95px] md:mb-2">
                   {activity.title}
                 </h3>
-                <p className="font-poppins font-light text-[7px] md:text-base text-white/90 leading-[150%]">
+                <p className="font-poppins font-light text-[6.82px] md:text-base text-white/90 leading-[150%]">
                   {activity.tourCount}
                 </p>
               </div>
