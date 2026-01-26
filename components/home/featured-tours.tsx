@@ -120,7 +120,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
 
   return (
     <section className="py-[38px] md:py-16 lg:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-[22px] md:px-10">
+      <div className="max-w-7xl mx-auto pl-[22px] md:px-10">
         {/* Section Header */}
         <div className="flex flex-col gap-[17px] lg:gap-[43.35px] mb-6 md:mb-12 lg:mb-16">
           {/* Top Row: Tour Packages label + View More */}
@@ -129,7 +129,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
               <p className="font-poppins font-light text-[7.4px] md:text-base lg:text-[18.85px] leading-[150%] text-black">
                 Tour Packages
               </p>
-              {/* Heading */}
+              {/* Heading - Figma mobile: 22px */}
               <h2 className="font-poppins font-light text-[22px] md:text-4xl lg:text-[56.54px] leading-[150%] lg:leading-[85px] text-black max-w-[233px] md:max-w-[592px]">
                 Explore Our Exclusive Tour Packages
               </h2>
@@ -142,9 +142,9 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
               <span className="font-mulish font-semibold text-[7.4px] text-[#495560] group-hover:text-black transition-colors">
                 View More
               </span>
-              <div className="relative flex items-center justify-center bg-black rounded-[8px] overflow-hidden w-[17px] h-[17px]">
-                <ArrowUpRight className="relative z-10 text-white w-[9px] h-[9px] transition-transform duration-300 group-hover:rotate-45" />
-                <span className="absolute inset-0 bg-[#00A792] rounded-[8px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+              <div className="relative flex items-center justify-center bg-black rounded-[8.3px] overflow-hidden w-[16.6px] h-[16.6px]">
+                <ArrowUpRight className="relative z-10 text-white w-[8.9px] h-[8.9px] transition-transform duration-300 group-hover:rotate-45" />
+                <span className="absolute inset-0 bg-[#00A792] rounded-[8.3px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
               </div>
             </Link>
           </div>
@@ -162,7 +162,7 @@ export function FeaturedTours({ filters }: FeaturedToursProps) {
           </div>
         ) : (
           <>
-            {/* Mobile: Horizontal Scroll - Figma: cards 218px wide, 8px gap */}
+            {/* Mobile: Horizontal Scroll - Figma: cards 218.225px wide, 8px gap */}
             <div className="md:hidden flex gap-[8px] overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
               {displayTours.map((tour) => (
                 <div key={tour.id} className="flex-shrink-0 w-[218px] snap-start">
