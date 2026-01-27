@@ -52,9 +52,11 @@ export function HeroSection() {
                 backgroundImage: "url('/hero-image.jpg')",
               }}
             />
+            {/* Search Bar - Positioned at bottom of hero image with glassmorphism */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+              <SearchBar />
+            </div>
           </div>
-
-          <SearchBar />
         </div>
 
         {/* Desktop Layout */}
