@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
+import { BookNowButton } from "@/components/ui/book-now-button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -411,10 +412,13 @@ export default function ChatPage() {
                       <Button className="w-full" asChild>
                         <Link href={`/tours/${currentConversation.tour.id}`}>View Tour Details</Link>
                       </Button>
-                      <Button variant="outline" className="w-full bg-transparent">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Book Now
-                      </Button>
+                      <BookNowButton
+                        href={`/tours/${currentConversation.tour.id}/book`}
+                        size="sm"
+                        variant="outline"
+                        showArrow={false}
+                        className="w-full"
+                      />
                     </div>
                   </CardContent>
                 </Card>
