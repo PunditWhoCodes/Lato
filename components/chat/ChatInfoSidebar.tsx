@@ -3,6 +3,7 @@
 import { X, Clock, Users, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { BookNowButton } from "@/components/ui/book-now-button"
 
 interface ChatInfoSidebarProps {
   isOpen: boolean
@@ -169,12 +170,13 @@ export function ChatInfoSidebar({
                 View Tour Details
               </Link>
 
-              <Link
+              <BookNowButton
                 href={`/tours/${tour.id}/book`}
-                className="w-[202px] lg:w-full h-[37px] lg:h-auto lg:py-3 flex items-center justify-center rounded-[24px] lg:rounded-full border-[0.8px] lg:border border-[#A7A9AF] text-[#3A3A3A] font-poppins text-[11px] lg:text-sm font-normal hover:bg-gray-50"
-              >
-                Book Now
-              </Link>
+                size="sm"
+                variant="outline"
+                showArrow={false}
+                className="w-[202px] lg:w-full"
+              />
             </div>
           </div>
 
