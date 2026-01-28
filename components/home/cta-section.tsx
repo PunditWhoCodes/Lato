@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export function CTASection() {
   return (
-    <section className="relative w-full h-[200px] md:aspect-[16/9] lg:aspect-[16/7] xl:aspect-[16/6] md:max-h-[730px] bg-white">
+    <section className="relative w-full h-[200px] md:h-[1250px] md:aspect-[16/9] lg:aspect-[16/8] xl:aspect-[16/8] md:max-h-[730px] bg-white overflow-hidden">
       {/* Background Image */}
       <Image
         src="/cta-img.jpg"
@@ -30,7 +30,7 @@ export function CTASection() {
               className="relative overflow-hidden inline-flex items-center justify-center bg-black border-[0.4px] border-black text-white rounded-[12px] w-[160px] h-[21px] font-poppins font-normal text-[7.4px] leading-[150%]"
             >
               <span className="relative z-10">Talk to a Travel Expert</span>
-              <span className="absolute inset-0 bg-[#00A792] rounded-[12px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+              <span className="absolute inset-0 bg-[#00A792] rounded-[12px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-110 group-hover:opacity-100 z-0"></span>
             </Link>
           </div>
         </div>
@@ -49,7 +49,7 @@ export function CTASection() {
               className="relative overflow-hidden inline-flex items-center justify-center bg-black text-white rounded-full px-8 py-3.5 text-base font-poppins font-medium shadow-lg"
             >
               <span className="relative z-10">Talk to a Travel Expert</span>
-              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+              <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-110 group-hover:opacity-100 z-0"></span>
             </Link>
           </div>
         </div>
