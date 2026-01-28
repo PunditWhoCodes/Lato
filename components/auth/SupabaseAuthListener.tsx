@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { supabase } from "@/lib/supabase"
 import { useStore } from "@/lib/store"
 import type { User } from "@/lib/types/auth"
+import { setAccessTokenCookie, clearAccessTokenCookie } from "@/lib/utils/token"
 
 function mapSupabaseUser(supabaseUser: NonNullable<Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"]>["user"]): User {
   return {
@@ -29,17 +30,21 @@ export function SupabaseAuthListener() {
         if (error) {
           console.error("Error checking auth session:", error)
           setUser(null)
+          clearAccessTokenCookie()
           return
         }
 
         if (session?.user) {
           setUser(mapSupabaseUser(session.user))
+          setAccessTokenCookie(session.access_token, session.expires_in || 3600)
         } else {
           setUser(null)
+          clearAccessTokenCookie()
         }
       } catch (error) {
         console.error("Error checking auth session:", error)
         setUser(null)
+        clearAccessTokenCookie()
       } finally {
         setHydrated(true)
       }
@@ -51,10 +56,13 @@ export function SupabaseAuthListener() {
       async (event, session) => {
         if (event === "SIGNED_IN" && session?.user) {
           setUser(mapSupabaseUser(session.user))
+          setAccessTokenCookie(session.access_token, session.expires_in || 3600)
         } else if (event === "SIGNED_OUT") {
           setUser(null)
+          clearAccessTokenCookie()
         } else if (event === "TOKEN_REFRESHED" && session?.user) {
           setUser(mapSupabaseUser(session.user))
+          setAccessTokenCookie(session.access_token, session.expires_in || 3600)
         } else if (event === "USER_UPDATED" && session?.user) {
           setUser(mapSupabaseUser(session.user))
         }
