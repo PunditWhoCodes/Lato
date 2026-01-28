@@ -563,13 +563,13 @@ export function SearchBar() {
         </div>
       </div>
 
-      {/* Mobile Layout - Figma: Frame 1984078326 */}
-      <div className="md:hidden w-full bg-white/8 backdrop-blur-[41.94px] rounded-[14.87px] py-[18.57px]">
-        {/* Inner Container - Frame 1984078325 */}
-        <div className="flex flex-col items-center gap-[18px] w-[317.12px] mx-auto">
+      {/* Mobile Layout - Figma: Frame 1984078325 */}
+      <div className="md:hidden w-full bg-[rgba(217,217,217,0.2)] backdrop-blur-[20px] border border-white rounded-[10px] py-[18px]">
+        {/* Inner Container */}
+        <div className="flex flex-col items-center gap-[18px] w-[317px] mx-auto">
 
           {/* Text Field 1 - Destination */}
-          <div ref={destinationMobileRef} className="relative w-[301.26px]">
+          <div ref={destinationMobileRef} className="relative w-[301px]">
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -577,7 +577,7 @@ export function SearchBar() {
                 setShowCalendar(false)
                 setShowPassengerDropdown(false)
               }}
-              className="w-[301.26px] h-[52.03px] bg-white rounded-[7.55px] border-r-[0.76px] border-black/9 flex items-center pl-[14.87px] pr-0"
+              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-0"
             >
               <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${destination ? "text-[#112211]" : "text-[#112211]"}`}>
                 {destination || "Destination"}
@@ -593,7 +593,7 @@ export function SearchBar() {
 
             {/* Destination Dropdown - Mobile */}
             {showDestinationDropdown && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[7.55px] shadow-lg z-50 max-h-60 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[20px] shadow-lg z-50 max-h-60 overflow-y-auto">
                 {destinations.map((dest) => (
                   <button
                     key={dest}
@@ -610,7 +610,7 @@ export function SearchBar() {
           </div>
 
           {/* Text Field 2 - Travel Style */}
-          <div ref={calendarMobileRef} className="relative w-[301.26px]">
+          <div ref={calendarMobileRef} className="relative w-[301px]">
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -618,7 +618,7 @@ export function SearchBar() {
                 setShowDestinationDropdown(false)
                 setShowPassengerDropdown(false)
               }}
-              className="w-[301.26px] h-[52.03px] bg-white rounded-[7.55px] flex items-center pl-[14.87px] pr-[14.87px]"
+              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-[15px]"
             >
               <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${startDate || endDate ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
                 {startDate || endDate ? getDateRangeDisplay() : "Travel Style"}
@@ -628,7 +628,7 @@ export function SearchBar() {
             {/* Calendar Dropdown - Mobile */}
             {showCalendar && (
               <div
-                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[7.55px] shadow-lg z-50 p-4"
+                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[20px] shadow-lg z-50 p-4"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Date Type Toggle */}
@@ -732,7 +732,7 @@ export function SearchBar() {
           </div>
 
           {/* Text Field 3 - Select Duration */}
-          <div ref={passengerMobileRef} className="relative w-[301.26px]">
+          <div ref={passengerMobileRef} className="relative w-[301px]">
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -740,7 +740,7 @@ export function SearchBar() {
                 setShowDestinationDropdown(false)
                 setShowCalendar(false)
               }}
-              className="w-[301.26px] h-[52.03px] bg-white rounded-[7.55px] flex items-center pl-[14.87px] pr-[14.87px]"
+              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-[15px]"
             >
               <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${adults > 1 || children > 0 ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
                 {adults > 1 || children > 0 ? getPassengerSummary() : "Select Duration"}
@@ -750,7 +750,7 @@ export function SearchBar() {
             {/* Passenger Dropdown - Mobile */}
             {showPassengerDropdown && (
               <div
-                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[7.55px] shadow-lg z-50 p-4"
+                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[20px] shadow-lg z-50 p-4"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Adults Row */}
@@ -811,15 +811,15 @@ export function SearchBar() {
             )}
           </div>
 
-          {/* Search Button - Figma: 317.12px x 49.83px */}
+          {/* Search Button */}
           <button
             onClick={handleSearch}
-            className="group relative w-[317.12px] h-[49.83px] bg-[#00A792] rounded-[22.65px] flex items-center justify-center overflow-hidden"
+            className="group relative w-[301px] h-[50px] bg-[#00A792] rounded-[30px] flex items-center justify-center overflow-hidden"
           >
-            <span className="relative z-10 font-montserrat font-medium text-[12.08px] leading-[15px] text-white">
+            <span className="relative z-10 font-montserrat font-medium text-[12px] leading-[15px] text-white">
               Search
             </span>
-            <span className="absolute inset-0 bg-black rounded-[22.65px] scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
+            <span className="absolute inset-0 bg-black rounded-[30px] scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
           </button>
 
         </div>
