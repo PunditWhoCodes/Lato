@@ -4,11 +4,12 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Star, Heart, Clock, Users, Bus, ArrowUpRight } from "lucide-react"
+import { Star, Heart, Clock, Users, Bus } from "lucide-react"
 import type { Tour } from "@/types"
 import { useSavedTours } from "@/lib/saved-tours-context"
 import { cn } from "@/lib/utils"
 import { ShimmerImage } from "@/components/ui/shimmer-image"
+import { BookNowButton } from "@/components/ui/book-now-button"
 
 interface TourCardProps {
   tour: Tour
@@ -102,27 +103,11 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
               </div>
 
               {/* Book Now Button */}
-              <button className="group/btn relative isolate flex flex-col justify-center items-center w-[73.08px] h-[18.64px] bg-black rounded-[11.19px] px-[5.59px] py-[3.36px] overflow-hidden">
-                {/* Frame 2608775 */}
-                <div className="relative z-10 flex flex-row justify-between items-center w-[49.59px] h-[8.95px] gap-[12.68px] whitespace-nowrap">
-                  <span className="font-poppins font-light text-[6.71px] leading-[149.77%] text-white">
-                    Book Now
-                  </span>
-                  <svg
-                    width="9"
-                    height="9"
-                    viewBox="0 0 9 9"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="transition-transform duration-300 group-hover/btn:rotate-45"
-                  >
-                    <path d="M6.33843 2.60999L2.23709 6.71133" stroke="white" strokeWidth="0.559274" strokeLinecap="round"/>
-                    <path d="M4.10135 2.23718H6.33844C6.51421 2.23718 6.60209 2.23718 6.65669 2.29179C6.71129 2.34639 6.71129 2.43427 6.71129 2.61003V4.84713" stroke="white" strokeWidth="0.559274" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                {/* Hover effect */}
-                <span className="absolute inset-0 bg-[#00A792] rounded-[11.19px] scale-0 opacity-0 transition-all duration-500 ease-out group-hover/btn:scale-150 group-hover/btn:opacity-100 z-0"></span>
-              </button>
+              <BookNowButton
+                href={`/tours/${tourLink}/book`}
+                size="xs"
+                className="w-[73.08px]"
+              />
             </div>
           </div>
         </Card>
@@ -189,25 +174,11 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
               </div>
 
               {/* Right: Book Now Button */}
-              <div className="group">
-                <Button
-                  className="relative overflow-hidden bg-black text-white flex items-center gap-4 h-auto flex-shrink-0"
-                  style={{
-                    width: '175.07px',
-                    height: '44.66px',
-                    borderRadius: '26.8px',
-                    padding: '8.04px 13.4px',
-                  }}
-                >
-                  <span className="relative z-10 font-poppins font-light" style={{ fontSize: '16.08px', lineHeight: '149.77%' }}>
-                    Book Now
-                  </span>
-                  <ArrowUpRight className="relative z-10 w-[21.44px] h-[21.44px] transition-transform duration-300 group-hover:rotate-45" />
-
-                  {/* Radial expanding hover overlay */}
-                  <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-                </Button>
-              </div>
+              <BookNowButton
+                href={`/tours/${tourLink}/book`}
+                size="md"
+                className="w-[175.07px]"
+              />
             </div>
           </div>
         </Card>
@@ -289,27 +260,11 @@ export function TourCard({ tour, variant = "default", discountPercent }: TourCar
             </div>
 
             {/* Button (1) - Book Now */}
-            <button className="group/btn relative isolate flex flex-col justify-center items-center w-[115.53px] h-[29.47px] bg-black rounded-[17.68px] px-[8.84px] py-[5.31px] gap-[5.89px] overflow-hidden">
-              {/* Frame 2608775 */}
-              <div className="relative z-10 flex flex-row justify-between items-center w-[78.4px] h-[14.15px] gap-[20.04px]">
-                <span className="w-[51px] h-[7px] font-poppins font-light text-[10.61px] leading-[149.77%] text-white whitespace-nowrap">
-                  Book Now
-                </span>
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 15 15"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-[14.15px] h-[14.15px] transition-transform duration-300 group-hover/btn:rotate-45"
-                >
-                  <path d="M10.0176 4.12695L3.53711 10.6074" stroke="white" strokeWidth="0.884175" strokeLinecap="round"/>
-                  <path d="M6.48438 3.53711H10.0221C10.3003 3.53711 10.4394 3.53711 10.5257 3.62345C10.6121 3.70978 10.6121 3.84888 10.6121 4.12707V7.66485" stroke="white" strokeWidth="0.884175" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              {/* Hover effect */}
-              <span className="absolute inset-0 bg-[#00A792] rounded-[17.68px] scale-0 opacity-0 transition-all duration-500 ease-out group-hover/btn:scale-150 group-hover/btn:opacity-100 z-0"></span>
-            </button>
+            <BookNowButton
+              href={`/tours/${tourLink}/book`}
+              size="md"
+              className="w-[115.53px] h-[29.47px]"
+            />
           </div>
         </div>
       </Card>
