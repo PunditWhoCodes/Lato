@@ -98,7 +98,7 @@ export async function register(data: RegisterRequest): Promise<AuthResponse> {
         name: data.name,
         role: data.role || 'TRAVELER',
       },
-      emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?type=email_verification`,
+      // Don't include emailRedirectTo - we want OTP verification, not magic link
     },
   })
 
@@ -116,8 +116,8 @@ export async function register(data: RegisterRequest): Promise<AuthResponse> {
     throw new Error('An account with this email already exists. Please sign in instead.')
   }
 
-  // For Supabase, if email confirmation is disabled, session will be returned
-  // If email confirmation is enabled, session will be null
+  // For Supabase with email confirmation enabled, session will be null
+  // User needs to verify email with OTP before getting a session
   const session = authData.session
 
   const user: User = {
@@ -280,6 +280,66 @@ export async function resendVerificationEmail(email: string): Promise<{ message:
   }
 
   return { message: 'Verification email sent successfully' }
+}
+
+export async function resendOTP(email: string): Promise<{ message: string }> {
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: email,
+  })
+
+  if (error) {
+    throw new Error(error.message || 'Failed to resend OTP')
+  }
+
+  return { message: 'Verification code sent successfully' }
+}
+
+/**
+ * Verify OTP code for signup
+ * This verifies the 6-digit code sent to user's email during registration
+ */
+export async function verifyOTP(email: string, token: string): Promise<AuthResponse> {
+  // For signup verification, use type 'signup'
+  const { data: authData, error } = await supabase.auth.verifyOtp({
+    email: email,
+    token: token,
+    type: 'signup',
+  })
+
+  if (error) {
+    // Provide user-friendly error messages
+    if (error.message.includes('expired')) {
+      throw new Error('Verification code has expired. Please request a new code.')
+    }
+    if (error.message.includes('invalid') || error.message.includes('Invalid')) {
+      throw new Error('Invalid verification code. Please check and try again.')
+    }
+    throw new Error(error.message || 'Verification failed. Please try again.')
+  }
+
+  if (!authData.user || !authData.session) {
+    throw new Error('Verification failed. Please try again.')
+  }
+
+  const user: User = {
+    id: authData.user.id,
+    email: authData.user.email || '',
+    name: authData.user.user_metadata?.name || authData.user.email?.split('@')[0] || 'User',
+    role: (authData.user.user_metadata?.role as User['role']) || 'TRAVELER',
+    avatar: authData.user.user_metadata?.avatar,
+    emailVerified: true,
+    createdAt: authData.user.created_at,
+  }
+
+  return {
+    user,
+    tokens: {
+      accessToken: authData.session.access_token,
+      refreshToken: authData.session.refresh_token,
+      expiresIn: authData.session.expires_in || 3600,
+    },
+  }
 }
 
 /**

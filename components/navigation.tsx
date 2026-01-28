@@ -28,6 +28,30 @@ const currencies = [
   { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
 ]
 
+// Regions with their countries for mobile destination dropdown
+const MOBILE_REGIONS = [
+  {
+    name: "Africa",
+    places: 23,
+    countries: ["Morocco", "Egypt", "Kenya", "South Africa", "Tanzania", "Nigeria"],
+  },
+  {
+    name: "Europe",
+    places: 23,
+    countries: ["Italy", "Spain", "Turkey", "France", "Greece", "Portugal", "Germany", "Netherlands", "Switzerland", "Croatia"],
+  },
+  {
+    name: "Asia",
+    places: 23,
+    countries: ["Thailand", "Japan", "Indonesia", "Vietnam", "Malaysia", "Singapore", "Philippines", "South Korea", "China", "India"],
+  },
+  {
+    name: "South America",
+    places: 23,
+    countries: ["Peru", "Brazil", "Argentina", "Mexico", "Colombia", "Chile"],
+  },
+]
+
 export function Navigation() {
   const pathname = usePathname()
   const { user, logout, isHydrated } = useAuth()
@@ -36,6 +60,11 @@ export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0])
   const [openDropdown, setOpenDropdown] = useState<"destinations" | "travel-style" | null>(null)
+
+  // Mobile menu dropdown states
+  const [mobileDestinationExpanded, setMobileDestinationExpanded] = useState(false)
+  const [mobileTravelStyleExpanded, setMobileTravelStyleExpanded] = useState(false)
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
 
   const handleDropdownOpen = (dropdown: "destinations" | "travel-style") => {
     setOpenDropdown(dropdown)
@@ -62,7 +91,15 @@ export function Navigation() {
             />
           </Link>
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => {
+              setMobileMenuOpen(!mobileMenuOpen)
+              if (mobileMenuOpen) {
+                // Reset states when closing
+                setMobileDestinationExpanded(false)
+                setMobileTravelStyleExpanded(false)
+                setSelectedRegion(null)
+              }
+            }}
             className="w-[24px] h-[24px] flex items-center justify-center"
             aria-label="Toggle menu"
           >
@@ -273,10 +310,15 @@ export function Navigation() {
       />
 
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#F7F7F7] relative" style={{ minHeight: user ? '617px' : '375px' }}>
+        <div className="lg:hidden bg-[#F7F7F7] relative overflow-y-auto" style={{ minHeight: mobileDestinationExpanded ? (selectedRegion ? '900px' : '650px') : (user ? '617px' : '375px') }}>
           {/* Back Arrow - Figma: left: 16px, top: 78px (30px from menu top since header is 48px) */}
           <button
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={() => {
+              setMobileMenuOpen(false)
+              setMobileDestinationExpanded(false)
+              setMobileTravelStyleExpanded(false)
+              setSelectedRegion(null)
+            }}
             className="absolute left-[16px] top-[30px] flex items-center justify-center w-[37px] h-[38px] bg-white/30 rounded-full"
             style={{ transform: 'rotate(90deg)' }}
             aria-label="Close menu"
@@ -333,27 +375,61 @@ export function Navigation() {
               Explore Places
             </Link>
 
-            <Link
-              href="/destinations"
-              className="flex items-center gap-[11px] h-[30px] font-poppins font-normal text-[19.69px] leading-[30px] text-[#00A792]"
-              onClick={() => setMobileMenuOpen(false)}
+            <button
+              onClick={() => {
+                setMobileDestinationExpanded(!mobileDestinationExpanded)
+                setMobileTravelStyleExpanded(false)
+                setSelectedRegion(null)
+              }}
+              className="flex items-center gap-[11px] h-[30px] font-poppins font-normal text-[19.69px] leading-[30px]"
             >
-              Destination
-              <svg width="12" height="6" viewBox="0 0 12 6" fill="none" className="rotate-180">
-                <path d="M1 1L6 5L11 1" stroke="#00A792" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <span className={mobileDestinationExpanded ? "text-[#00A792]" : "text-[#1C1B1F]"}>
+                Destination
+              </span>
+              <svg
+                width="12"
+                height="6"
+                viewBox="0 0 12 6"
+                fill="none"
+                className={`transition-transform duration-200 ${mobileDestinationExpanded ? "rotate-180" : ""}`}
+              >
+                <path
+                  d="M1 1L6 5L11 1"
+                  stroke={mobileDestinationExpanded ? "#00A792" : "#141B34"}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
-            </Link>
+            </button>
 
-            <Link
-              href="/travel-styles"
-              className="flex items-center justify-between w-full h-[30px] font-poppins font-normal text-[19.69px] leading-[30px] text-[#1C1B1F]"
-              onClick={() => setMobileMenuOpen(false)}
+            <button
+              onClick={() => {
+                setMobileTravelStyleExpanded(!mobileTravelStyleExpanded)
+                setMobileDestinationExpanded(false)
+                setSelectedRegion(null)
+              }}
+              className="flex items-center justify-between w-full h-[30px] font-poppins font-normal text-[19.69px] leading-[30px]"
             >
-              Travel Style
-              <svg width="12" height="6" viewBox="0 0 12 6" fill="none">
-                <path d="M1 1L6 5L11 1" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <span className={mobileTravelStyleExpanded ? "text-[#00A792]" : "text-[#1C1B1F]"}>
+                Travel Style
+              </span>
+              <svg
+                width="12"
+                height="6"
+                viewBox="0 0 12 6"
+                fill="none"
+                className={`transition-transform duration-200 ${mobileTravelStyleExpanded ? "rotate-180" : ""}`}
+              >
+                <path
+                  d="M1 1L6 5L11 1"
+                  stroke={mobileTravelStyleExpanded ? "#00A792" : "#141B34"}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
-            </Link>
+            </button>
 
             <Link
               href="/contact"
@@ -364,9 +440,74 @@ export function Navigation() {
             </Link>
           </div>
 
+          {/* Destination Dropdown Cards - Show when expanded */}
+          {mobileDestinationExpanded && (
+            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center w-[341px]" style={{ top: user ? '200px' : '263px' }}>
+              <div className="bg-[#F7F7F7] rounded-[8.99px] p-[16px] w-[334px]">
+                <div className="flex flex-col gap-[18px]">
+                  {MOBILE_REGIONS.map((region) => (
+                    <button
+                      key={region.name}
+                      onClick={() => setSelectedRegion(selectedRegion === region.name ? null : region.name)}
+                      className={`flex items-center justify-between w-[300.5px] h-[83.68px] px-[13.5px] py-[10.8px] rounded-[10px] transition-all ${
+                        selectedRegion === region.name
+                          ? "bg-[#00A792] shadow-[0px_42.59px_39.22px_0px_rgba(192,207,205,0.45)]"
+                          : "bg-[#FCFDFE]"
+                      }`}
+                    >
+                      <div className="flex flex-col items-start">
+                        <span className={`font-poppins font-medium text-[17.71px] leading-[27px] ${
+                          selectedRegion === region.name ? "text-white" : "text-[#1C1B1F]"
+                        }`}>
+                          {region.name}
+                        </span>
+                        <span className={`font-poppins font-light text-[17.09px] leading-[26px] ${
+                          selectedRegion === region.name ? "text-white" : "text-[#1C1B1F]/40"
+                        }`}>
+                          {region.places} Places
+                        </span>
+                      </div>
+                      {selectedRegion === region.name && (
+                        <ChevronDown className="w-[10.8px] h-[5.4px] text-white -rotate-90" strokeWidth={1.5} />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Countries Grid - Show when region is selected */}
+              {selectedRegion && (
+                <div className="mt-[40px] px-[35px] w-full">
+                  <h3 className="font-poppins font-normal text-[19.69px] leading-[30px] text-[#1C1B1F] mb-[20px]">
+                    {selectedRegion}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-x-[80px] gap-y-[8.58px]">
+                    {MOBILE_REGIONS.find(r => r.name === selectedRegion)?.countries.map((country) => (
+                      <Link
+                        key={country}
+                        href={`/tours?destination=${encodeURIComponent(country)}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="font-['Plus_Jakarta_Sans'] font-normal text-[18.52px] leading-[37px] text-[#3A3A3A] text-left hover:text-[#00A792] transition-colors"
+                      >
+                        {country}
+                      </Link>
+                    ))}
+                  </div>
+                  <Link
+                    href={`/tours?region=${encodeURIComponent(selectedRegion)}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="inline-block font-poppins font-normal text-[14px] text-[#00A792] mt-[20px]"
+                  >
+                    View All
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Logged in user options - Figma: left: 37px, top: 301px (349px - 48px) */}
           {/* Figma: width: 158px, height: 284px, font: Plus Jakarta Sans 21.59px/43px */}
-          {user && (
+          {user && !mobileDestinationExpanded && (
             <div className="absolute left-[37px] top-[301px] flex flex-col items-start w-[158px]">
               {/* Menu items with gap-[5px], height: 240px */}
               <div className="flex flex-col items-start gap-[5px] w-full">

@@ -27,40 +27,44 @@ export function RegisterVerifiedStep({
   }, [autoRedirect, onContinue, redirectDelay])
 
   return (
-    <div className="bg-white rounded-3xl shadow-2xl px-12 py-10 w-full max-w-[400px]">
-      <div className="flex justify-center mb-3">
+    <div className="bg-white rounded-[10.5px] md:rounded-[20px] shadow-2xl px-[70px] py-8 md:px-[125px] md:py-[68px] w-full max-w-[357px] md:max-w-[719px] mx-auto">
+      <div className="flex flex-col items-center gap-[25px]">
+        {/* Logo */}
         <Link href="/">
           <Image
             src="/lato-logo.png"
             alt="Lato"
-            width={100}
-            height={40}
-            className="h-10 w-auto"
+            width={117}
+            height={45}
+            className="h-[29px] md:h-[45px] w-auto"
           />
         </Link>
+
+        {/* Success Icon and Message */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-[#E6F7F5] rounded-full flex items-center justify-center">
+            <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10 text-[#00A792]" />
+          </div>
+          <h2 className="text-center text-[19.6px] md:text-[30px] font-normal text-black">
+            Email Verified
+          </h2>
+        </div>
+
+        {!autoRedirect && onContinue && (
+          <button
+            onClick={onContinue}
+            className="w-[264px] md:w-[404px] h-[32.7px] md:h-[50px] bg-[#00A792] hover:bg-[#008F7A] text-white font-semibold text-[9.15px] md:text-[14px] rounded-[30px] transition-colors"
+          >
+            Continue
+          </button>
+        )}
+
+        {autoRedirect && (
+          <p className="text-center text-[9.15px] md:text-[14px] text-black">
+            Redirecting you shortly...
+          </p>
+        )}
       </div>
-
-      <div className="flex items-center justify-center gap-2">
-        <h2 className="text-center text-xl font-semibold text-[#1C1B1F]">
-          Number Verified
-        </h2>
-        <CheckCircle2 className="w-5 h-5 text-[#00A699]" />
-      </div>
-
-      {!autoRedirect && onContinue && (
-        <button
-          onClick={onContinue}
-          className="w-full mt-6 bg-[#00A699] hover:bg-[#008F84] text-white font-medium py-3 rounded-full transition-colors"
-        >
-          Continue
-        </button>
-      )}
-
-      {autoRedirect && (
-        <p className="text-center text-xs text-[#9CA3AF] mt-4">
-          Redirecting you shortly...
-        </p>
-      )}
     </div>
   )
 }

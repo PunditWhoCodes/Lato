@@ -10,7 +10,7 @@ import { RegisterSelectTypeStep, UserType } from "@/components/auth/RegisterSele
 import { RegisterVerifiedStep } from "@/components/auth/RegisterVerifiedStep"
 import { RegisterCheckEmailStep } from "@/components/auth/RegisterCheckEmailStep"
 import { useAuth } from "@/lib/hooks/useAuth"
-import { signInWithGoogle, signInWithApple, resendVerificationEmail } from "@/lib/api/auth"
+import { signInWithGoogle, signInWithApple, resendVerificationEmail, verifyOTP, resendOTP } from "@/lib/api/auth"
 
 type RegistrationStep = "form" | "otp" | "select_type" | "check_email" | "verified"
 
@@ -81,8 +81,8 @@ export default function RegisterPage() {
         name,
         role: userType === "tour_operator" ? "PROVIDER" : "TRAVELER",
       })
-      // Registration successful - show check email step
-      setCurrentStep("check_email")
+      // Registration successful - show OTP verification step
+      setCurrentStep("otp")
     } catch (err) {
       // Handle specific error messages
       const errorMessage = err instanceof Error ? err.message : "Registration failed. Please try again."
@@ -101,15 +101,32 @@ export default function RegisterPage() {
     }
   }
 
-  const handleOTPVerify = (otp: string) => {
-    // OTP verification is handled by Supabase via email link
-    // This is kept for UI flow compatibility
-    setCurrentStep("verified")
+  const handleOTPVerify = async (otp: string) => {
+    setLocalError(null)
+    setLocalLoading(true)
+    try {
+      const response = await verifyOTP(email, otp)
+      // Store tokens and user in auth state
+      if (response.tokens && response.user) {
+        // Update auth store with verified user
+        localStorage.setItem("accessToken", response.tokens.accessToken)
+        localStorage.setItem("refreshToken", response.tokens.refreshToken)
+      }
+      setCurrentStep("verified")
+    } catch (err) {
+      setLocalError(err instanceof Error ? err.message : "Invalid OTP. Please try again.")
+    } finally {
+      setLocalLoading(false)
+    }
   }
 
-  const handleOTPResend = () => {
-    // Resend verification email would be handled here
-    alert("Verification email has been resent")
+  const handleOTPResend = async () => {
+    setLocalError(null)
+    try {
+      await resendOTP(email)
+    } catch (err) {
+      setLocalError(err instanceof Error ? err.message : "Failed to resend verification code")
+    }
   }
 
   const handleResendVerificationEmail = async () => {
@@ -172,12 +189,21 @@ export default function RegisterPage() {
     switch (currentStep) {
       case "otp":
         return (
-          <RegisterOTPStep
-            email={email}
-            onVerify={handleOTPVerify}
-            onResend={handleOTPResend}
-            isLoading={showLoading}
-          />
+          <>
+            {displayError && (
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 max-w-[357px] md:max-w-[540px] w-full px-4">
+                <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm text-center">
+                  {displayError}
+                </div>
+              </div>
+            )}
+            <RegisterOTPStep
+              email={email}
+              onVerify={handleOTPVerify}
+              onResend={handleOTPResend}
+              isLoading={showLoading}
+            />
+          </>
         )
 
       case "select_type":

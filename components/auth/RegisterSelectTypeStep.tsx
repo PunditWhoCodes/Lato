@@ -134,7 +134,7 @@ export function RegisterSelectTypeStep({ onSelect, isLoading = false }: Register
       <p className="text-center text-[12px] md:text-sm text-black mt-4 md:mt-6">
         Already have an account?{" "}
         <Link href="/login" className="text-[#00A792] font-medium hover:underline">
-          Login
+          Sign in
         </Link>
       </p>
     </div>
