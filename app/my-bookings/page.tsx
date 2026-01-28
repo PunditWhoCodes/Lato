@@ -101,7 +101,7 @@ export default function MyBookingsPage() {
             <div className="lg:col-span-3">
               {/* Tabs */}
               <div className="border-b border-gray-200">
-                <div className="flex gap-8 whitspace-nowrap">
+                <div className="flex gap-6 whitspace-nowrap">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
