@@ -1,18 +1,9 @@
 "use client"
 
-import { useState } from "react"
 import { SearchBar } from "./search-bar"
-import { Button } from "@/components/ui/button"
-import { ArrowUpRight } from "lucide-react"
-import Link from "next/link"
+import { BookNowButton } from "@/components/ui/book-now-button"
 
 export function HeroSection() {
-  const [isMobileButtonActive, setIsMobileButtonActive] = useState(false)
-
-  const handleMobileTap = () => {
-    setIsMobileButtonActive(true)
-    setTimeout(() => setIsMobileButtonActive(false), 300)
-  }
   return (
     <section className="relative bg-[#F7F7F7] px-[14px] pt-[21px] md:pt-12 pb-0 md:pb-20">
       <div className="max-w-7xl mx-auto">
@@ -31,16 +22,11 @@ export function HeroSection() {
                 Explore stunning destinations, unique experience, and unforgettable journey with Lato.
               </p>
               {/* Book Now Button - Figma: 80.5px x 20.5px */}
-              <Link
+              <BookNowButton
                 href="/tours"
-                onClick={handleMobileTap}
-                onTouchStart={handleMobileTap}
-                className="group relative overflow-hidden bg-black text-white rounded-[30px] h-[20.5px] w-[80.5px] px-[6.2px] py-[3.7px] font-poppins font-light flex items-center justify-between touch-manipulation"
-              >
-                <span className="relative z-10 text-[7.4px] leading-[150%]">Book Now</span>
-                <ArrowUpRight className={`relative z-10 w-[9.9px] h-[9.9px] transition-transform duration-300 group-hover:rotate-45 ${isMobileButtonActive ? "rotate-45" : ""}`} />
-                <span className={`absolute inset-0 bg-[#00A792] rounded-[30px] transition-all duration-500 ease-out z-0 ${isMobileButtonActive ? "scale-150 opacity-100" : "scale-0 opacity-0 group-hover:scale-150 group-hover:opacity-100"}`}></span>
-              </Link>
+                size="sm"
+                className="w-[80.5px] md:hidden"
+              />
             </div>
           </div>
 
@@ -73,18 +59,10 @@ export function HeroSection() {
               <p className="font-poppins text-base font-light text-black/80 leading-relaxed">
                 Explore stunning destinations, unique experience, and unforgettable journey with Lato.
               </p>
-              <div className="group">
-                <Button
-                  asChild
-                  className="relative overflow-hidden bg-black text-white rounded-full h-auto py-2 px-5 font-poppins font-light flex items-center gap-[34px] text-lg"
-                >
-                  <Link href="/tours">
-                    <span className="relative z-10">Book Now</span>
-                    <ArrowUpRight className="relative z-10 size-8 transition-transform duration-300 group-hover:rotate-45" />
-                    <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-                  </Link>
-                </Button>
-              </div>
+              <BookNowButton
+                href="/tours"
+                size="lg"
+              />
             </div>
           </div>
 
