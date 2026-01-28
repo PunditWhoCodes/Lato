@@ -170,7 +170,7 @@ export function Navigation() {
               </div>
             ) : user ? (
               <>
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-1 text-gray-700 hover:text-[#00A699] transition-colors font-normal text-[15px] outline-none">
                       {selectedCurrency.code}
@@ -234,7 +234,7 @@ export function Navigation() {
                   )}
                 </Link>
 
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0 hover:ring-2 hover:ring-[#00A699]/20">
                       <Avatar className="h-10 w-10">
