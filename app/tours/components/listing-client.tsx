@@ -504,14 +504,14 @@ export function ListingClient() {
 
             {/* Mobile Filters Overlay */}
             {showMobileFilters && (
-              <div className="fixed inset-0 z-50 lg:hidden">
+              <div className="fixed top-[40px] left-0 right-0 bottom-0 z-40 lg:hidden">
                 <div
                   className="absolute inset-0 bg-black/50"
                   onClick={() => setShowMobileFilters(false)}
                 />
-                <div className="absolute right-0 top-0 h-full w-full max-w-[300px] bg-white overflow-y-auto">
-                  <div className="sticky top-0 bg-white z-10 flex items-center justify-between p-4 border-b">
-                    <h2 className="font-semibold text-[15px]">Filters</h2>
+                <div className="absolute right-0 top-0 h-full w-full max-w-[300px] bg-white overflow-y-auto z-10">
+                  <div className="sticky top-0 bg-white z-20 flex items-center justify-between p-4 border-b-2 border-gray-200">
+                    <h2 className="font-semibold text-[15px] text-[#1C2B38]">Filters</h2>
                     <button
                       onClick={() => setShowMobileFilters(false)}
                       className="p-1 hover:bg-gray-100 rounded-full"
@@ -624,7 +624,7 @@ export function ListingClient() {
                 {/* Sort Dropdown */}
                 <div className="flex items-center gap-1.5 lg:gap-2">
                   <span className="hidden sm:inline text-[12px] lg:text-[13px] text-[#495560]">Popularity:</span>
-                  <DropdownMenu>
+                  <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                       <button className="flex items-center justify-between gap-1.5 lg:gap-2 w-[167px] lg:w-[180px] px-2.5 lg:px-3 py-2 bg-white border border-[#E5E5E5] rounded-[8px] text-[12px] lg:text-[13px] text-[#1C1B1F] hover:bg-[#F7F7F7] transition-colors">
                         <span className="truncate">{getSortLabel()}</span>

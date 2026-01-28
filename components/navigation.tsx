@@ -310,7 +310,7 @@ export function Navigation() {
       />
 
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#F7F7F7] relative overflow-y-auto" style={{ minHeight: mobileDestinationExpanded ? (selectedRegion ? '900px' : '650px') : (user ? '617px' : '375px') }}>
+        <div className="lg:hidden bg-[#F7F7F7] relative overflow-y-auto scroll-smooth" style={{ minHeight: mobileDestinationExpanded ? (selectedRegion ? '900px' : '650px') : mobileTravelStyleExpanded ? '700px' : (user ? '617px' : '375px') }}>
           {/* Back Arrow - Figma: left: 16px, top: 78px (30px from menu top since header is 48px) */}
           <button
             onClick={() => {
@@ -442,7 +442,7 @@ export function Navigation() {
 
           {/* Destination Dropdown Cards - Show when expanded */}
           {mobileDestinationExpanded && (
-            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center w-[341px]" style={{ top: user ? '200px' : '263px' }}>
+            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center w-[341px]" style={{ top: user ? '175px' : '238px' }}>
               <div className="bg-[#F7F7F7] rounded-[8.99px] p-[16px] w-[334px]">
                 <div className="flex flex-col gap-[18px]">
                   {MOBILE_REGIONS.map((region) => (
@@ -505,9 +505,44 @@ export function Navigation() {
             </div>
           )}
 
+          {/* Travel Style Dropdown - Show when expanded */}
+          {mobileTravelStyleExpanded && (
+            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center w-[341px]" style={{ top: user ? '225px' : '288px' }}>
+              <div className="bg-[#F7F7F7] rounded-[8.99px] p-[16px] w-[334px]">
+                <div className="flex flex-col gap-[12px]">
+                  {[
+                    { name: "Adventure", items: ["Bungee Jumping", "Hiking & Trekking", "Mountain Biking", "Rock Climbing", "Skydiving"] },
+                    { name: "Cultural", items: ["Architecture", "Art & Museums", "Festivals", "Food & Wine", "Historical Tours"] },
+                    { name: "Family", items: ["Beach Resorts", "City Breaks", "Educational Tours", "Kid-Friendly", "Theme Parks"] },
+                    { name: "Nature", items: ["Bird Watching", "Camping", "Eco Tours", "National Parks"] },
+                    { name: "Relaxation", items: ["Beach Holidays", "Cruise Ships", "Luxury Resorts", "Spa Retreats", "Wellness Tours"] },
+                  ].map((category) => (
+                    <div key={category.name} className="bg-[#FCFDFE] rounded-[10px] p-[13.5px]">
+                      <h4 className="font-poppins font-medium text-[16px] leading-[24px] text-[#1C1B1F] mb-[8px]">
+                        {category.name}
+                      </h4>
+                      <div className="flex flex-wrap gap-[8px]">
+                        {category.items.map((item) => (
+                          <Link
+                            key={item}
+                            href={`/tours?style=${encodeURIComponent(item)}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="font-['Plus_Jakarta_Sans'] font-normal text-[14px] leading-[20px] text-[#3A3A3A] hover:text-[#00A792] transition-colors"
+                          >
+                            {item}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Logged in user options - Figma: left: 37px, top: 301px (349px - 48px) */}
           {/* Figma: width: 158px, height: 284px, font: Plus Jakarta Sans 21.59px/43px */}
-          {user && !mobileDestinationExpanded && (
+          {user && !mobileDestinationExpanded && !mobileTravelStyleExpanded && (
             <div className="absolute left-[37px] top-[301px] flex flex-col items-start w-[158px]">
               {/* Menu items with gap-[5px], height: 240px */}
               <div className="flex flex-col items-start gap-[5px] w-full">
@@ -541,13 +576,6 @@ export function Navigation() {
                       {totalUnreadMessages}
                     </Badge>
                   )}
-                </Link>
-                <Link
-                  href="/settings"
-                  className="h-[44px] flex items-center font-['Plus_Jakarta_Sans'] font-normal text-[21.59px] leading-[43px] text-[#3A3A3A]"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Settings
                 </Link>
                 <Link
                   href="/my-bookings"

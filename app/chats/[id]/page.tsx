@@ -315,7 +315,7 @@ export default function ChatConversationPage() {
             {/* Messages Area */}
             <div
               ref={messagesContainerRef}
-              className="flex-1 overflow-y-auto px-[18px] py-4 lg:p-6 space-y-4 lg:space-y-6 bg-[#F7F7F7]"
+              className="flex-1 overflow-y-auto pl-[18px] pr-[20px] py-4 lg:p-6 space-y-4 lg:space-y-6 bg-[#F7F7F7]"
             >
               {currentConversation.messages.map((message, index) => {
                 const previousMessage = currentConversation.messages[index - 1]
@@ -382,7 +382,7 @@ export default function ChatConversationPage() {
             </div>
 
             {/* Message Input */}
-            <div className="px-[18px] lg:px-6 py-[12px] lg:py-4 bg-[#f5fafc] lg:bg-[#F7F7F7]">
+            <div className="pl-[18px] pr-[20px] lg:px-6 py-[12px] lg:py-4 bg-[#f5fafc] lg:bg-[#F7F7F7]">
               <form onSubmit={handleSendMessage} className="flex items-center gap-3">
                 <div className="flex-1 relative">
                   <Input
@@ -391,7 +391,7 @@ export default function ChatConversationPage() {
                     onChange={(e) => setNewMessage(e.target.value)}
                     className="h-[36px] lg:h-14 rounded-[18px] lg:rounded-full border-0 lg:border lg:border-gray-200 bg-white lg:bg-gray-50 px-[18px] lg:px-5 pr-14 text-[10.5px] lg:text-[15px] placeholder:text-[#8f8f8f] lg:placeholder:text-gray-400"
                   />
-                  <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#00A792] h-[18px] w-[18px] lg:hidden" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.75V14.25M3.75 9H14.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg><SendHorizonal className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#00A792] h-5 w-5 hidden lg:block" />
+                  <Send className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#00A792] h-[18px] w-[18px] lg:hidden" /><SendHorizonal className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#00A792] h-5 w-5 hidden lg:block" />
                 </div>
                 {/* <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                   <rect width="29.7" height="29.7" fill="url(#pattern0_1538_5786)" />

@@ -401,7 +401,7 @@ export function ListingFiltersSidebar({
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => setDateType("start")}
-            className={`flex-1 py-2.5 rounded-full text-[12px] font-medium transition-all ${
+            className={`flex-1 py-2.5 px-3 rounded-full text-[12px] font-medium transition-all ${
               dateType === "start"
                 ? "bg-[#00A792] text-white"
                 : "border border-[#00A792] text-[#00A792]"
@@ -411,7 +411,7 @@ export function ListingFiltersSidebar({
           </button>
           <button
             onClick={() => setDateType("end")}
-            className={`flex-1 py-2.5 rounded-full text-[12px] font-medium transition-all ${
+            className={`flex-1 py-2.5 px-3 rounded-full text-[12px] font-medium transition-all ${
               dateType === "end"
                 ? "bg-[#00A792] text-white"
                 : "border border-[#00A792] text-[#00A792]"
@@ -557,6 +557,11 @@ function DualRangeSlider({
     setDragging(handle)
   }
 
+  const handleTouchStart = (handle: "min" | "max") => (e: React.TouchEvent) => {
+    e.preventDefault()
+    setDragging(handle)
+  }
+
   const handleMove = useCallback((clientX: number) => {
     if (!trackRef.current || !dragging) return
 
@@ -575,16 +580,41 @@ function DualRangeSlider({
     if (!dragging) return
 
     const handleMouseMove = (e: MouseEvent) => handleMove(e.clientX)
-    const handleMouseUp = () => setDragging(null)
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches[0]) handleMove(e.touches[0].clientX)
+    }
+    const handleEnd = () => setDragging(null)
 
     document.addEventListener("mousemove", handleMouseMove)
-    document.addEventListener("mouseup", handleMouseUp)
+    document.addEventListener("mouseup", handleEnd)
+    document.addEventListener("touchmove", handleTouchMove, { passive: false })
+    document.addEventListener("touchend", handleEnd)
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove)
-      document.removeEventListener("mouseup", handleMouseUp)
+      document.removeEventListener("mouseup", handleEnd)
+      document.removeEventListener("touchmove", handleTouchMove)
+      document.removeEventListener("touchend", handleEnd)
     }
   }, [dragging, handleMove])
+
+  // Handle click on track to move nearest handle
+  const handleTrackClick = (e: React.MouseEvent) => {
+    if (!trackRef.current) return
+    const rect = trackRef.current.getBoundingClientRect()
+    const percent = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100))
+    const value = Math.round(min + (percent / 100) * (max - min))
+
+    // Move the nearest handle
+    const distToMin = Math.abs(value - values[0])
+    const distToMax = Math.abs(value - values[1])
+
+    if (distToMin <= distToMax) {
+      onChange([Math.min(value, values[1] - 1), values[1]])
+    } else {
+      onChange([values[0], Math.max(value, values[0] + 1)])
+    }
+  }
 
   return (
     <div>
@@ -592,23 +622,29 @@ function DualRangeSlider({
         <span>{formatLabel(values[0], "min")}</span>
         <span>{formatLabel(values[1], "max")}</span>
       </div>
-      <div ref={trackRef} className="relative h-[4px] bg-[#E5E5E5] rounded-full">
+      <div
+        ref={trackRef}
+        className="relative h-[4px] bg-[#E5E5E5] rounded-full cursor-pointer"
+        onClick={handleTrackClick}
+      >
         <div
-          className="absolute h-full bg-[#00A792] rounded-full"
+          className="absolute h-full bg-[#00A792] rounded-full pointer-events-none"
           style={{
             left: `${getPercent(values[0])}%`,
             right: `${100 - getPercent(values[1])}%`,
           }}
         />
         <div
-          className="absolute -top-[6px] w-4 h-4 bg-white border-2 border-[#00A792] rounded-full cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+          className="absolute -top-[6px] w-4 h-4 bg-white border-2 border-[#00A792] rounded-full cursor-pointer shadow-sm hover:shadow-md transition-shadow touch-none"
           style={{ left: `calc(${getPercent(values[0])}% - 8px)` }}
           onMouseDown={handleMouseDown("min")}
+          onTouchStart={handleTouchStart("min")}
         />
         <div
-          className="absolute -top-[6px] w-4 h-4 bg-white border-2 border-[#00A792] rounded-full cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+          className="absolute -top-[6px] w-4 h-4 bg-white border-2 border-[#00A792] rounded-full cursor-pointer shadow-sm hover:shadow-md transition-shadow touch-none"
           style={{ left: `calc(${getPercent(values[1])}% - 8px)` }}
           onMouseDown={handleMouseDown("max")}
+          onTouchStart={handleTouchStart("max")}
         />
       </div>
     </div>
@@ -644,16 +680,32 @@ function SingleSlider({
     if (!dragging) return
 
     const handleMouseMove = (e: MouseEvent) => handleMove(e.clientX)
-    const handleMouseUp = () => setDragging(false)
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches[0]) handleMove(e.touches[0].clientX)
+    }
+    const handleEnd = () => setDragging(false)
 
     document.addEventListener("mousemove", handleMouseMove)
-    document.addEventListener("mouseup", handleMouseUp)
+    document.addEventListener("mouseup", handleEnd)
+    document.addEventListener("touchmove", handleTouchMove, { passive: false })
+    document.addEventListener("touchend", handleEnd)
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove)
-      document.removeEventListener("mouseup", handleMouseUp)
+      document.removeEventListener("mouseup", handleEnd)
+      document.removeEventListener("touchmove", handleTouchMove)
+      document.removeEventListener("touchend", handleEnd)
     }
   }, [dragging, handleMove])
+
+  // Handle click on track to move handle
+  const handleTrackClick = (e: React.MouseEvent) => {
+    if (!trackRef.current) return
+    const rect = trackRef.current.getBoundingClientRect()
+    const percent = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100))
+    const newValue = Math.round(min + (percent / 100) * (max - min))
+    onChange(newValue)
+  }
 
   return (
     <div>
@@ -661,15 +713,23 @@ function SingleSlider({
         <span>{min}</span>
         <span>{max}</span>
       </div>
-      <div ref={trackRef} className="relative h-[4px] bg-[#E5E5E5] rounded-full">
+      <div
+        ref={trackRef}
+        className="relative h-[4px] bg-[#E5E5E5] rounded-full cursor-pointer"
+        onClick={handleTrackClick}
+      >
         <div
-          className="absolute h-full bg-[#00A792] rounded-full"
+          className="absolute h-full bg-[#00A792] rounded-full pointer-events-none"
           style={{ width: `${getPercent(value)}%` }}
         />
         <div
-          className="absolute -top-[6px] w-4 h-4 bg-white border-2 border-[#00A792] rounded-full cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+          className="absolute -top-[6px] w-4 h-4 bg-white border-2 border-[#00A792] rounded-full cursor-pointer shadow-sm hover:shadow-md transition-shadow touch-none"
           style={{ left: `calc(${getPercent(value)}% - 8px)` }}
           onMouseDown={(e) => {
+            e.preventDefault()
+            setDragging(true)
+          }}
+          onTouchStart={(e) => {
             e.preventDefault()
             setDragging(true)
           }}
