@@ -5,6 +5,7 @@ import "./globals.css"
 import { ConditionalFooter } from "@/components/conditional-footer"
 import { ConditionalChat } from "@/components/conditional-chat"
 import { Providers } from "@/components/providers"
+import { Toaster } from "sonner"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -77,6 +78,7 @@ export default function RootLayout({
           {children}
           <ConditionalFooter />
           {/* <ConditionalChat /> */}
+          <Toaster position="top-right" richColors closeButton />
         </Providers>
       </body>
     </html>
