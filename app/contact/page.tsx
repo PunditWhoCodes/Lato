@@ -41,18 +41,22 @@ export default function ContactPage() {
               {/* Social Media Icons - Desktop Only */}
               <div className="hidden lg:flex flex-col items-center gap-[16px]">
                 {/* Facebook */}
-                <Link
-                  href="#"
+                <a
+                  href="https://facebook.com/latotravel"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-[33px] h-[33px] rounded-full border border-[#B7B7B7] flex items-center justify-center hover:border-[#00A792] transition-colors"
                 >
                   <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.5 3.75V2.625C3.5 2.252 3.752 2 4.125 2H4.75V0H3.5C2.395 0 1.5 0.895 1.5 2V3.75H0.5V5.5H1.5V10H3.5V5.5H4.75L5.5 3.75H3.5Z" fill="#1E2532"/>
                   </svg>
-                </Link>
+                </a>
 
                 {/* Instagram */}
-                <Link
-                  href="#"
+                <a
+                  href="https://instagram.com/latotravel"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-[33px] h-[33px] rounded-full border border-[#B7B7B7] flex items-center justify-center hover:border-[#00A792] transition-colors"
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,17 +64,19 @@ export default function ContactPage() {
                     <path d="M6 2.919C4.298 2.919 2.919 4.298 2.919 6C2.919 7.702 4.298 9.081 6 9.081C7.702 9.081 9.081 7.702 9.081 6C9.081 4.298 7.702 2.919 6 2.919ZM6 8C4.895 8 4 7.105 4 6C4 4.895 4.895 4 6 4C7.105 4 8 4.895 8 6C8 7.105 7.105 8 6 8Z" fill="#1E2532"/>
                     <path d="M9.203 3.517C9.6 3.517 9.923 3.195 9.923 2.797C9.923 2.4 9.6 2.077 9.203 2.077C8.805 2.077 8.483 2.4 8.483 2.797C8.483 3.195 8.805 3.517 9.203 3.517Z" fill="#1E2532"/>
                   </svg>
-                </Link>
+                </a>
 
                 {/* Twitter */}
-                <Link
-                  href="#"
+                <a
+                  href="https://x.com/latotravel"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-[33px] h-[33px] rounded-full border border-[#B7B7B7] flex items-center justify-center hover:border-[#00A792] transition-colors"
                 >
                   <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 0.94C9.64 1.1 9.26 1.2 8.86 1.24C9.27 0.99 9.58 0.6 9.72 0.13C9.34 0.36 8.92 0.53 8.48 0.62C8.12 0.23 7.59 0 7 0C5.9 0 5 0.9 5 2C5 2.16 5.02 2.31 5.05 2.46C3.3 2.37 1.75 1.58 0.71 0.37C0.54 0.66 0.44 1 0.44 1.36C0.44 2.06 0.8 2.67 1.33 3.03C1.02 3.02 0.72 2.93 0.46 2.79V2.81C0.46 3.79 1.14 4.61 2.04 4.79C1.88 4.84 1.7 4.86 1.52 4.86C1.39 4.86 1.27 4.85 1.14 4.83C1.39 5.64 2.13 6.23 3 6.24C2.31 6.78 1.44 7.1 0.5 7.1C0.33 7.1 0.17 7.09 0.01 7.07C0.91 7.64 1.97 7.97 3.11 7.97C6.98 7.97 9.09 4.9 9.09 2.2C9.09 2.11 9.09 2.02 9.09 1.93C9.49 1.64 9.83 1.27 10.09 0.85L10 0.94Z" fill="#1E2532"/>
                   </svg>
-                </Link>
+                </a>
               </div>
             </div>
 
