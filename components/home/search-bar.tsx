@@ -303,7 +303,7 @@ export function SearchBar() {
                 setShowCalendar(false)
                 setShowPassengerDropdown(false)
               }}
-              className="w-full h-full flex items-center outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              className="w-full h-full flex items-center outline-none bg-transparent font-montserrat text-sm lg:text-base cursor-pointer"
             >
               <span className={destination ? "text-[#112211]" : "text-[#112211]/50"}>
                 {destination || "Destination"}
@@ -317,7 +317,7 @@ export function SearchBar() {
                   <button
                     key={dest}
                     onClick={(e) => handleDestinationSelect(e, dest)}
-                    className={`w-full px-4 py-3 text-left text-sm hover:bg-[#F0FDFC] transition-colors ${
+                    className={`w-full px-4 py-3 text-left text-sm hover:bg-[#F0FDFC] transition-colors cursor-pointer ${
                       destination === dest ? "bg-[#E6F7F5] text-[#00A792]" : "text-[#112211]"
                     }`}
                   >
@@ -330,7 +330,7 @@ export function SearchBar() {
 
           {/* Map Icon - Only on large screens */}
           <button
-            className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px]"
+            className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px] cursor-pointer"
           >
             <div className="flex items-center justify-center">
               <MapPin className="size-4 text-[#00A792]" />
@@ -346,7 +346,7 @@ export function SearchBar() {
                 setShowDestinationDropdown(false)
                 setShowPassengerDropdown(false)
               }}
-              className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base cursor-pointer"
             >
               <span className={startDate || endDate ? "text-[#112211]" : "text-[#112211]/50"}>
                 {getDateRangeDisplay()}
@@ -367,7 +367,7 @@ export function SearchBar() {
                       e.stopPropagation()
                       setDateType("start")
                     }}
-                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
+                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                       dateType === "start"
                         ? "bg-[#00A792] text-white"
                         : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
@@ -380,7 +380,7 @@ export function SearchBar() {
                       e.stopPropagation()
                       setDateType("end")
                     }}
-                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
+                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                       dateType === "end"
                         ? "bg-[#00A792] text-white"
                         : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
@@ -394,7 +394,7 @@ export function SearchBar() {
                 <div className="flex items-center justify-between mb-4">
                   <button
                     onClick={goToPrevMonth}
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5 text-[#112211]" />
                   </button>
@@ -403,7 +403,7 @@ export function SearchBar() {
                   </span>
                   <button
                     onClick={goToNextMonth}
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5 text-[#112211]" />
                   </button>
@@ -435,7 +435,7 @@ export function SearchBar() {
                       <button
                         key={day}
                         onClick={(e) => handleDayClick(e, day)}
-                        className={`w-9 h-9 rounded-full text-sm transition-colors ${
+                        className={`w-9 h-9 rounded-full text-sm transition-colors cursor-pointer ${
                           isStart || isEnd
                             ? "bg-[#00A792] text-white"
                             : inRange
@@ -471,7 +471,7 @@ export function SearchBar() {
                 setShowDestinationDropdown(false)
                 setShowCalendar(false)
               }}
-              className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base"
+              className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base cursor-pointer"
             >
               <span className={adults > 0 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}>
                 {getPassengerSummary()}
@@ -491,7 +491,7 @@ export function SearchBar() {
                   <div className="flex items-center border border-gray-200 rounded-lg">
                     <button
                       onClick={(e) => handleAdultsChange(e, -1)}
-                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -500,7 +500,7 @@ export function SearchBar() {
                     </span>
                     <button
                       onClick={(e) => handleAdultsChange(e, 1)}
-                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -513,7 +513,7 @@ export function SearchBar() {
                   <div className="flex items-center border border-gray-200 rounded-lg">
                     <button
                       onClick={(e) => handleChildrenChange(e, -1)}
-                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -522,7 +522,7 @@ export function SearchBar() {
                     </span>
                     <button
                       onClick={(e) => handleChildrenChange(e, 1)}
-                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                      className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -533,7 +533,7 @@ export function SearchBar() {
                 <div className="group pt-3">
                   <button
                     onClick={handlePassengerDone}
-                    className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium h-10 text-sm"
+                    className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium h-10 text-sm cursor-pointer"
                   >
                     <span className="relative z-10">Done</span>
                     <span className="absolute inset-0 bg-black rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
@@ -548,7 +548,7 @@ export function SearchBar() {
         <div className="group flex-none ml-4 lg:ml-0 mr-2 lg:mr-4">
           <Button
             onClick={handleSearch}
-            className="relative overflow-hidden bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium"
+            className="relative overflow-hidden bg-[#00A792] text-white rounded-[30px] font-montserrat font-medium cursor-pointer"
             style={{
               width: '150px',
               height: '50px',
@@ -577,7 +577,7 @@ export function SearchBar() {
                 setShowCalendar(false)
                 setShowPassengerDropdown(false)
               }}
-              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-0"
+              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-0 cursor-pointer"
             >
               <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${destination ? "text-[#112211]" : "text-[#112211]"}`}>
                 {destination || "Destination"}
@@ -598,7 +598,7 @@ export function SearchBar() {
                   <button
                     key={dest}
                     onClick={(e) => handleDestinationSelect(e, dest)}
-                    className={`w-full px-[14.87px] py-3 text-left font-montserrat text-[12.08px] hover:bg-[#F0FDFC] transition-colors ${
+                    className={`w-full px-[14.87px] py-3 text-left font-montserrat text-[12.08px] hover:bg-[#F0FDFC] transition-colors cursor-pointer ${
                       destination === dest ? "bg-[#E6F7F5] text-[#00A792]" : "text-[#112211]"
                     }`}
                   >
@@ -618,11 +618,20 @@ export function SearchBar() {
                 setShowDestinationDropdown(false)
                 setShowPassengerDropdown(false)
               }}
-              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-[15px]"
+              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-0 cursor-pointer"
             >
               <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${startDate || endDate ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
                 {startDate || endDate ? getDateRangeDisplay() : "Travel Style"}
               </span>
+              {/* Calendar Icon Container */}
+              <div className="flex items-center justify-center w-[44.6px] h-[44.6px] p-[11.15px]">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2.375" y="3.5625" width="14.25" height="13.0625" rx="2" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2.375 7.125H16.625" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M6.33337 1.1875V3.5625" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12.6666 1.1875V3.5625" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
             </button>
 
             {/* Calendar Dropdown - Mobile */}
@@ -638,7 +647,7 @@ export function SearchBar() {
                       e.stopPropagation()
                       setDateType("start")
                     }}
-                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all ${
+                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all cursor-pointer ${
                       dateType === "start"
                         ? "bg-[#00A792] text-white"
                         : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
@@ -651,7 +660,7 @@ export function SearchBar() {
                       e.stopPropagation()
                       setDateType("end")
                     }}
-                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all ${
+                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all cursor-pointer ${
                       dateType === "end"
                         ? "bg-[#00A792] text-white"
                         : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
@@ -665,7 +674,7 @@ export function SearchBar() {
                 <div className="flex items-center justify-between mb-4">
                   <button
                     onClick={goToPrevMonth}
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5 text-[#112211]" />
                   </button>
@@ -674,7 +683,7 @@ export function SearchBar() {
                   </span>
                   <button
                     onClick={goToNextMonth}
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5 text-[#112211]" />
                   </button>
@@ -704,7 +713,7 @@ export function SearchBar() {
                       <button
                         key={day}
                         onClick={(e) => handleDayClick(e, day)}
-                        className={`w-8 h-8 rounded-full text-[12px] transition-colors ${
+                        className={`w-8 h-8 rounded-full text-[12px] transition-colors cursor-pointer ${
                           isStart || isEnd
                             ? "bg-[#00A792] text-white"
                             : inRange
@@ -740,11 +749,20 @@ export function SearchBar() {
                 setShowDestinationDropdown(false)
                 setShowCalendar(false)
               }}
-              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-[15px]"
+              className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-0 cursor-pointer"
             >
               <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${adults > 1 || children > 0 ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
                 {adults > 1 || children > 0 ? getPassengerSummary() : "Select Duration"}
               </span>
+              {/* Users Icon Container */}
+              <div className="flex items-center justify-center w-[44.6px] h-[44.6px] p-[11.15px]">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.4583 16.625V15.0417C13.4583 14.2014 13.1244 13.3956 12.5305 12.8017C11.9366 12.2078 11.1308 11.875 10.2916 11.875H4.75C3.91083 11.875 3.10497 12.2078 2.51111 12.8017C1.91726 13.3956 1.58331 14.2014 1.58331 15.0417V16.625" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M7.52081 8.70833C9.27174 8.70833 10.6916 7.28845 10.6916 5.5375C10.6916 3.78655 9.27174 2.36667 7.52081 2.36667C5.76988 2.36667 4.35 3.78655 4.35 5.5375C4.35 7.28845 5.76988 8.70833 7.52081 8.70833Z" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M17.4167 16.625V15.0417C17.4161 14.3398 17.1854 13.6581 16.7612 13.1028C16.337 12.5475 15.7433 12.1501 15.0667 11.9696" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12.6667 2.46958C13.3451 2.64907 13.9406 3.04665 14.366 3.60279C14.7914 4.15893 15.0226 4.84194 15.0226 5.545C15.0226 6.24806 14.7914 6.93107 14.366 7.48721C13.9406 8.04335 13.3451 8.44093 12.6667 8.62042" stroke="#00A792" strokeWidth="1.13" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
             </button>
 
             {/* Passenger Dropdown - Mobile */}
@@ -759,7 +777,7 @@ export function SearchBar() {
                   <div className="flex items-center border border-gray-200 rounded-lg">
                     <button
                       onClick={(e) => handleAdultsChange(e, -1)}
-                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -768,7 +786,7 @@ export function SearchBar() {
                     </span>
                     <button
                       onClick={(e) => handleAdultsChange(e, 1)}
-                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -781,7 +799,7 @@ export function SearchBar() {
                   <div className="flex items-center border border-gray-200 rounded-lg">
                     <button
                       onClick={(e) => handleChildrenChange(e, -1)}
-                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg"
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -790,7 +808,7 @@ export function SearchBar() {
                     </span>
                     <button
                       onClick={(e) => handleChildrenChange(e, 1)}
-                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg"
+                      className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -801,7 +819,7 @@ export function SearchBar() {
                 <div className="group pt-3">
                   <button
                     onClick={handlePassengerDone}
-                    className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[22.65px] font-montserrat font-medium h-[40px] text-[12.08px]"
+                    className="relative overflow-hidden w-full bg-[#00A792] text-white rounded-[22.65px] font-montserrat font-medium h-[40px] text-[12.08px] cursor-pointer"
                   >
                     <span className="relative z-10">Done</span>
                     <span className="absolute inset-0 bg-black rounded-[22.65px] scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
@@ -814,7 +832,7 @@ export function SearchBar() {
           {/* Search Button */}
           <button
             onClick={handleSearch}
-            className="group relative w-[301px] h-[50px] bg-[#00A792] rounded-[30px] flex items-center justify-center overflow-hidden"
+            className="group relative w-[301px] h-[50px] bg-[#00A792] rounded-[30px] flex items-center justify-center overflow-hidden cursor-pointer"
           >
             <span className="relative z-10 font-montserrat font-medium text-[12px] leading-[15px] text-white">
               Search
