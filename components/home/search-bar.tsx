@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, ChevronDown, ChevronLeft, ChevronRight, Calendar, Minus, Plus } from "lucide-react"
+import { MapPin, ChevronLeft, ChevronRight, Calendar, Minus, Plus, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useRef, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
@@ -303,11 +303,12 @@ export function SearchBar() {
                 setShowCalendar(false)
                 setShowPassengerDropdown(false)
               }}
-              className="w-full h-full flex items-center outline-none bg-transparent font-montserrat text-sm lg:text-base cursor-pointer"
+              className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base cursor-pointer"
             >
               <span className={destination ? "text-[#112211]" : "text-[#112211]/50"}>
                 {destination || "Destination"}
               </span>
+              <MapPin className="w-5 h-5 text-[#00A792]" />
             </button>
 
             {/* Destination Dropdown */}
@@ -327,15 +328,6 @@ export function SearchBar() {
               </div>
             )}
           </div>
-
-          {/* Map Icon - Only on large screens */}
-          <button
-            className="hidden lg:flex items-center justify-center absolute left-[calc(29.88%-29.53px)] z-10 w-[59.06px] h-[59.06px] p-[14.77px] cursor-pointer"
-          >
-            <div className="flex items-center justify-center">
-              <MapPin className="size-4 text-[#00A792]" />
-            </div>
-          </button>
 
           {/* Second Field - Calendar Dropdown */}
           <div ref={calendarDesktopRef} className="relative flex items-center flex-1 h-full bg-white px-4 lg:px-5">
@@ -473,10 +465,10 @@ export function SearchBar() {
               }}
               className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base cursor-pointer"
             >
-              <span className={adults > 0 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}>
-                {getPassengerSummary()}
+              <span className={adults > 1 || children > 0 ? "text-[#112211]" : "text-[#112211]/50"}>
+                {adults > 1 || children > 0 ? getPassengerSummary() : "Passengers"}
               </span>
-              <ChevronDown className={`w-5 h-5 text-[#00A792] transition-transform ${showPassengerDropdown ? "rotate-180" : ""}`} />
+              <Users className="w-5 h-5 text-[#00A792]" />
             </button>
 
             {/* Passenger Dropdown */}
