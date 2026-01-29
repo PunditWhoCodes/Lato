@@ -101,16 +101,18 @@ export function TourItinerary({
       }))
     : (itinerary ? itinerary.map(mapLegacyToDisplay) : defaultItinerary.map(mapLegacyToDisplay))
 
-  const [expandedDays, setExpandedDays] = useState<number[]>(displayItinerary.map(d => d.day))
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsedDays, setCollapsedDays] = useState<number[]>([])
+  const [allCollapsed, setAllCollapsed] = useState(false)
 
   const toggleDay = (day: number) => {
-    setExpandedDays(prev =>
+    setCollapsedDays(prev =>
       prev.includes(day)
         ? prev.filter(d => d !== day)
         : [...prev, day]
     )
   }
+
+  const isItemExpanded = (day: number) => !collapsedDays.includes(day) && !allCollapsed
 
   // Show message if no itinerary data
   if (displayItinerary.length === 0) {
@@ -132,18 +134,10 @@ export function TourItinerary({
       <div className="flex justify-between mb-[14px] lg:mb-4">
         <h2 className="font-poppins text-[12px] lg:text-xl font-semibold text-[#1C1B1F] mr-2">Itinerary</h2>
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => setAllCollapsed(!allCollapsed)}
           className="flex items-center gap-[4px] font-poppins text-[9px] lg:text-[14px] text-[#374151] rounded-full border border-[#E5E7EB] font-medium px-[10px] py-[6px] lg:p-2"
         >
-          {collapsed ? (
-            <>
-              Expand all
-            </>
-          ) : (
-            <>
-              Collapse all
-            </>
-          )}
+          {allCollapsed ? "Expand all" : "Collapse all"}
         </button>
       </div>
 
@@ -151,7 +145,7 @@ export function TourItinerary({
         {displayItinerary.map((item, index) => {
           const isFirst = index === 0
           const isLast = index === displayItinerary.length - 1
-          const isExpanded = expandedDays.includes(item.day) && !collapsed
+          const isExpanded = isItemExpanded(item.day)
 
           return (
             <div key={item.day} className="relative">
