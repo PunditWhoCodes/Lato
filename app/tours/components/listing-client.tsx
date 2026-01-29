@@ -495,7 +495,7 @@ export function ListingClient() {
             <div className="lg:hidden mb-4">
               <button
                 onClick={() => setShowMobileFilters(true)}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-[#E5E5E5] rounded-[10px] text-[13px] font-medium text-[#495560]"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-[#E5E5E5] rounded-[10px] text-[13px] font-medium text-[#495560] cursor-pointer"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 Filters
@@ -514,7 +514,7 @@ export function ListingClient() {
                     <h2 className="font-semibold text-[15px] text-[#1C2B38]">Filters</h2>
                     <button
                       onClick={() => setShowMobileFilters(false)}
-                      className="p-1 hover:bg-gray-100 rounded-full"
+                      className="p-1 hover:bg-gray-100 rounded-full cursor-pointer"
                     >
                       <X className="w-5 h-5" />
                     </button>
@@ -626,7 +626,7 @@ export function ListingClient() {
                   <span className="hidden sm:inline text-[12px] lg:text-[13px] text-[#495560]">Popularity:</span>
                   <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
-                      <button className="flex items-center justify-between gap-1.5 lg:gap-2 w-[167px] lg:w-[180px] px-2.5 lg:px-3 py-2 bg-white border border-[#E5E5E5] rounded-[8px] text-[12px] lg:text-[13px] text-[#1C1B1F] hover:bg-[#F7F7F7] transition-colors">
+                      <button className="flex items-center justify-between gap-1.5 lg:gap-2 w-[167px] lg:w-[180px] px-2.5 lg:px-3 py-2 bg-white border border-[#E5E5E5] rounded-[8px] text-[12px] lg:text-[13px] text-[#1C1B1F] hover:bg-[#F7F7F7] transition-colors cursor-pointer">
                         <span className="truncate">{getSortLabel()}</span>
                         <ChevronDown className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-[#495560] shrink-0" />
                       </button>
@@ -664,7 +664,7 @@ export function ListingClient() {
                 <div className="hidden lg:flex items-center gap-0.5 border border-[#E5E5E5] rounded-[8px] p-1">
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-1.5 rounded-[6px] transition-colors ${
+                    className={`p-1.5 rounded-[6px] transition-colors cursor-pointer ${
                       viewMode === "grid"
                         ? "bg-[#00A792] text-white"
                         : "text-[#495560] hover:bg-[#F7F7F7]"
@@ -675,7 +675,7 @@ export function ListingClient() {
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-1.5 rounded-[6px] transition-colors ${
+                    className={`p-1.5 rounded-[6px] transition-colors cursor-pointer ${
                       viewMode === "list"
                         ? "bg-[#00A792] text-white"
                         : "text-[#495560] hover:bg-[#F7F7F7]"
