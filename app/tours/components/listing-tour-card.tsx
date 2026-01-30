@@ -111,7 +111,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
           <button
             type="button"
             onClick={handleFavoriteClick}
-            className={`absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 z-10 touch-manipulation ${
+            className={`absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 z-10 touch-manipulation cursor-pointer ${
               isFavorite ? "rotate-360" : ""
             }`}
           >
@@ -207,7 +207,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
                 e.stopPropagation()
                 onClick()
               }}
-              className="sm:hidden mt-3 w-full border text-white bg-black py-2 rounded-full text-[11px] font-medium hover:bg-[#00A792] transition-colors"
+              className="sm:hidden mt-3 w-full border text-white bg-black py-2 rounded-full text-[11px] font-medium hover:bg-[#00A792] transition-colors cursor-pointer"
             >
               View Now
             </button>
@@ -237,7 +237,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
                 e.stopPropagation()
                 onClick()
               }}
-              className="border text-white bg-black px-5 py-2 rounded-full text-[12px] font-medium hover:bg-[#00A792] transition-colors whitespace-nowrap"
+              className="border text-white bg-black px-5 py-2 rounded-full text-[12px] font-medium hover:bg-[#00A792] transition-colors whitespace-nowrap cursor-pointer"
             >
               View Now
             </button>
@@ -268,7 +268,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
           <button
             type="button"
             onClick={handleFavoriteClick}
-            className={`absolute top-2.5 right-2.5 size-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 z-10 touch-manipulation ${
+            className={`absolute top-2.5 right-2.5 size-8 bg-white rounded-full flex items-center justify-center shadow-sm transition-all duration-300 z-10 touch-manipulation cursor-pointer ${
               isFavorite ? "rotate-360" : ""
             }`}
           >
@@ -369,7 +369,7 @@ export function ListingTourCard({ tour, viewMode, onClick }: ListingTourCardProp
               e.stopPropagation()
               onClick()
             }}
-            className="bg-black text-white px-4 py-2 rounded-full text-[11px] font-medium hover:bg-[#00A792] transition-colors"
+            className="bg-black text-white px-4 py-2 rounded-full text-[11px] font-medium hover:bg-[#00A792] transition-colors cursor-pointer"
           >
             View Now
           </button>

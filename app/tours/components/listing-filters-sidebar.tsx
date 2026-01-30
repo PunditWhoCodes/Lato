@@ -166,7 +166,7 @@ export function ListingFiltersSidebar({
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-semibold text-[18px] text-[#1C2B38]">Filter</h2>
-        <button onClick={onReset} className="text-[#00A792] text-[14px] font-medium">
+        <button onClick={onReset} className="text-[#00A792] text-[14px] font-medium cursor-pointer">
           Reset all
         </button>
       </div>
@@ -176,7 +176,7 @@ export function ListingFiltersSidebar({
         <div className="relative">
           <button
             onClick={() => setOpenDestination(!openDestination)}
-            className="w-full flex justify-between items-center pb-2 border-b border-[#E5E5E5] text-[14px] text-[#1C2B38]"
+            className="w-full flex justify-between items-center pb-2 border-b border-[#E5E5E5] text-[14px] text-[#1C2B38] cursor-pointer"
           >
             {selectedDestination}
             <ChevronDown size={18} className="text-[#778088]" />
@@ -191,7 +191,7 @@ export function ListingFiltersSidebar({
                     setSelectedDestination(d)
                     setOpenDestination(false)
                   }}
-                  className={`w-full text-left px-4 py-2.5 hover:bg-[#F7F7F7] text-[14px] first:rounded-t-lg last:rounded-b-lg ${
+                  className={`w-full text-left px-4 py-2.5 hover:bg-[#F7F7F7] text-[14px] first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
                     selectedDestination === d ? "text-[#00A792] bg-[#F0FAF8]" : "text-[#1C2B38]"
                   }`}
                 >
@@ -208,7 +208,7 @@ export function ListingFiltersSidebar({
             <button
               key={t}
               onClick={() => setPriceType(t as "person" | "day")}
-              className={`flex-1 py-2 rounded-full text-[13px] font-medium transition-all ${
+              className={`flex-1 py-2 rounded-full text-[13px] font-medium transition-all cursor-pointer ${
                 priceType === t
                   ? "bg-white shadow-sm text-[#1C2B38]"
                   : "text-[#778088]"
@@ -278,7 +278,7 @@ export function ListingFiltersSidebar({
         <div className="relative">
           <button
             onClick={() => setOpenOperator(!openOperator)}
-            className="w-full flex justify-between items-center pb-2 border-b border-[#E5E5E5] text-[14px] text-[#1C2B38]"
+            className="w-full flex justify-between items-center pb-2 border-b border-[#E5E5E5] text-[14px] text-[#1C2B38] cursor-pointer"
           >
             {selectedOperator}
             <ChevronDown size={18} className="text-[#778088]" />
@@ -293,7 +293,7 @@ export function ListingFiltersSidebar({
                     setSelectedOperator(o)
                     setOpenOperator(false)
                   }}
-                  className={`w-full text-left px-4 py-2.5 hover:bg-[#F7F7F7] text-[14px] first:rounded-t-lg last:rounded-b-lg ${
+                  className={`w-full text-left px-4 py-2.5 hover:bg-[#F7F7F7] text-[14px] first:rounded-t-lg last:rounded-b-lg cursor-pointer ${
                     selectedOperator === o ? "text-[#00A792] bg-[#F0FAF8]" : "text-[#1C2B38]"
                   }`}
                 >
@@ -361,7 +361,7 @@ export function ListingFiltersSidebar({
                       : [...expandedTravelStyles, cat.name]
                   )
                 }
-                className="w-full flex justify-between items-center py-3 text-[14px] text-[#1C2B38]"
+                className="w-full flex justify-between items-center py-3 text-[14px] text-[#1C2B38] cursor-pointer"
               >
                 {cat.name}
                 {expandedTravelStyles.includes(cat.name) ? (
@@ -401,35 +401,35 @@ export function ListingFiltersSidebar({
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => setDateType("start")}
-            className={`flex-1 py-2.5 px-3 rounded-full text-[12px] font-medium transition-all ${
+            className={`flex-1 min-w-0 py-2.5 px-2 rounded-full text-[11px] font-medium transition-all cursor-pointer text-center ${
               dateType === "start"
                 ? "bg-[#00A792] text-white"
                 : "border border-[#00A792] text-[#00A792]"
             }`}
           >
-            Select Start Date*
+            Start Date*
           </button>
           <button
             onClick={() => setDateType("end")}
-            className={`flex-1 py-2.5 px-3 rounded-full text-[12px] font-medium transition-all ${
+            className={`flex-1 min-w-0 py-2.5 px-2 rounded-full text-[11px] font-medium transition-all cursor-pointer text-center ${
               dateType === "end"
                 ? "bg-[#00A792] text-white"
                 : "border border-[#00A792] text-[#00A792]"
             }`}
           >
-            Select End Date*
+            End Date*
           </button>
         </div>
 
         {/* Calendar Header */}
         <div className="flex justify-between items-center mb-3">
-          <button onClick={handlePrevMonth} className="p-1 hover:bg-[#F5F5F5] rounded">
+          <button onClick={handlePrevMonth} className="p-1 hover:bg-[#F5F5F5] rounded cursor-pointer">
             <ChevronLeft size={18} className="text-[#778088]" />
           </button>
           <span className="font-medium text-[14px] text-[#1C2B38]">
             {selectedMonth} {selectedYear}
           </span>
-          <button onClick={handleNextMonth} className="p-1 hover:bg-[#F5F5F5] rounded">
+          <button onClick={handleNextMonth} className="p-1 hover:bg-[#F5F5F5] rounded cursor-pointer">
             <ChevronRight size={18} className="text-[#778088]" />
           </button>
         </div>
@@ -454,7 +454,7 @@ export function ListingFiltersSidebar({
             return (
               <button
                 key={day}
-                className={`h-8 w-8 rounded-full text-[12px] mx-auto transition-all ${
+                className={`h-8 w-8 rounded-full text-[12px] mx-auto transition-all cursor-pointer ${
                   isSelected
                     ? "bg-[#00A792] text-white"
                     : isInRange
@@ -474,7 +474,7 @@ export function ListingFiltersSidebar({
       <div className="group mt-6">
         <button
           onClick={onApply}
-          className="relative overflow-hidden w-full py-3.5 bg-black text-white rounded-full text-[14px] font-medium"
+          className="relative overflow-hidden w-full py-3.5 bg-black text-white rounded-full text-[14px] font-medium cursor-pointer"
         >
           <span className="relative z-10">Apply</span>
           <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-700 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
@@ -511,7 +511,7 @@ function CustomCheckbox({
   return (
     <button
       onClick={onChange}
-      className="w-full flex items-center justify-between group"
+      className="w-full flex items-center justify-between group cursor-pointer"
     >
       <div className="flex items-center gap-3">
         <div

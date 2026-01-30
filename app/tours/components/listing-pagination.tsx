@@ -59,7 +59,7 @@ export function ListingPagination({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex items-center justify-center w-8 h-8 rounded-[6px] text-[#495560] hover:bg-[#F7F7F7] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center justify-center w-8 h-8 rounded-[6px] text-[#495560] hover:bg-[#F7F7F7] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
         aria-label="Previous page"
       >
         <ChevronLeft className="w-4 h-4" />
@@ -74,10 +74,10 @@ export function ListingPagination({
           className={`
             flex items-center justify-center min-w-[32px] h-8 text-lg font-semibold transition-colors
             ${page === currentPage
-              ? "text-[#00A792]"
+              ? "text-[#00A792] cursor-pointer"
               : typeof page === "string"
                 ? "text-[#495560] cursor-default"
-                : "text-black hover:bg-[#F7F7F7]"
+                : "text-black hover:bg-[#F7F7F7] cursor-pointer"
             }
           `}
           aria-current={page === currentPage ? "page" : undefined}
@@ -90,7 +90,7 @@ export function ListingPagination({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex items-center justify-center w-8 h-8 rounded-[6px] text-[#495560] hover:bg-[#F7F7F7] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center justify-center w-8 h-8 rounded-[6px] text-[#495560] hover:bg-[#F7F7F7] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
         aria-label="Next page"
       >
         <ChevronRight className="w-4 h-4" />
