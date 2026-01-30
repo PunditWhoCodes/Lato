@@ -98,7 +98,7 @@ export default function LoginPage() {
       <button
         type="button"
         onClick={() => router.back()}
-        className="absolute top-[78px] left-4 md:top-8 md:left-8 z-20 w-[38px] h-[37px] md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors touch-manipulation"
+        className="absolute top-[78px] left-4 md:top-8 md:left-8 z-20 w-[38px] h-[37px] md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors touch-manipulation cursor-pointer"
       >
         <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white pointer-events-none" />
       </button>
@@ -172,7 +172,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280]"
+                    className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280] cursor-pointer"
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4 md:w-5 md:h-5" />
@@ -188,7 +188,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setRememberMe(!rememberMe)}
-                  className={`w-[10px] h-[10px] border border-black rounded-[2px] flex items-center justify-center ${
+                  className={`w-[10px] h-[10px] border border-black rounded-[2px] flex items-center justify-center cursor-pointer ${
                     rememberMe ? "bg-[#00A792] border-[#00A792]" : "bg-white"
                   }`}
                 >
@@ -208,7 +208,10 @@ export default function LoginPage() {
                     </svg>
                   )}
                 </button>
-                <span className="text-[9px] text-black">
+                <span
+                  className="text-[9px] text-black cursor-pointer"
+                  onClick={() => setRememberMe(!rememberMe)}
+                >
                   Remember for 30 days
                 </span>
               </div>
@@ -224,7 +227,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#00A792] hover:bg-[#008F84] text-white font-semibold py-1.5 md:py-3.5 h-[26px] md:h-auto text-[10px] md:text-base rounded-full transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-[#00A792] hover:bg-[#008F84] text-white font-semibold py-1.5 md:py-3.5 h-[26px] md:h-auto text-[10px] md:text-base rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>
@@ -250,7 +253,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-1.5 md:gap-3 px-3 md:px-5 py-0.5 md:py-3 h-[26px] md:h-[50px] border border-[#D9D9D9] rounded-full hover:bg-[#F9FAFB] transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-1.5 md:gap-3 px-3 md:px-5 py-0.5 md:py-3 h-[26px] md:h-[50px] border border-[#D9D9D9] rounded-full hover:bg-[#F9FAFB] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-3 h-3 md:w-6 md:h-6" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -267,7 +270,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleAppleSignIn}
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-1.5 md:gap-3 px-3 md:px-5 py-0.5 md:py-3 h-[26px] md:h-[50px] border border-[#D9D9D9] rounded-full hover:bg-[#F9FAFB] transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-1.5 md:gap-3 px-3 md:px-5 py-0.5 md:py-3 h-[26px] md:h-[50px] border border-[#D9D9D9] rounded-full hover:bg-[#F9FAFB] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-3 h-3 md:w-6 md:h-6" viewBox="0 0 24 24" fill="#000">
                   <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>

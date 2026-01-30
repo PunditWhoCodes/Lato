@@ -2,22 +2,27 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { toast } from "sonner"
 
 export function EmailSubscriptionSection() {
   const [email, setEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubscribed, setIsSubscribed] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // TODO: Implement actual subscription logic
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      // TODO: Implement actual subscription logic
+      await new Promise(resolve => setTimeout(resolve, 1000))
 
-    setIsSubscribed(true)
-    setIsSubmitting(false)
-    setEmail("")
+      toast.success("Thank you for subscribing! Check your email for confirmation.")
+      setEmail("")
+    } catch {
+      toast.error("Failed to subscribe. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -39,53 +44,45 @@ export function EmailSubscriptionSection() {
               </p>
             </div>
 
-            {isSubscribed ? (
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-left w-[204px]">
-                <p className="text-white font-poppins font-semibold text-[10px]">
-                  Thank you for subscribing!
-                </p>
-              </div>
-            ) : (
-              <div className="w-[204px] flex flex-col gap-[7.24px]">
-                {/* Stay up to date - Figma: 6.582px, 150% line-height, #ECECEC */}
+            <div className="w-[204px] flex flex-col gap-[7.24px]">
+              {/* Stay up to date - Figma: 6.582px, 150% line-height, #ECECEC */}
+              <p className="font-poppins font-normal text-[6.58px] leading-[150%] text-[#ECECEC] text-left">
+                Stay up to date
+              </p>
+
+              <form onSubmit={handleSubmit} className="flex flex-col gap-[7.24px]">
+                {/* Input Row - Figma: 203.55px x 21.72px */}
+                <div className="flex items-stretch h-[21.72px] w-[204px] rounded-[6.58px]">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    className="w-[155px] px-[10.53px] py-[8.89px] bg-white/10 text-white placeholder:text-white text-[5.92px] font-inter rounded-l-[9.87px] border-0 outline-none focus:ring-1 focus:ring-white/30"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-[48px] bg-white text-[#00A792] font-inter font-bold text-[5.27px] px-[10.53px] rounded-r-[9.87px] hover:bg-white/95 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shadow-[0px_3.29px_3.29px_rgba(16,137,255,0.1)] cursor-pointer"
+                  >
+                    {isSubmitting ? "..." : "Subscribe"}
+                  </button>
+                </div>
+
+                {/* Privacy text - Figma: 6.582px, 150% line-height, #ECECEC */}
                 <p className="font-poppins font-normal text-[6.58px] leading-[150%] text-[#ECECEC] text-left">
-                  Stay up to date
+                  by subscribing you agree to our{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="underline hover:text-white transition-colors"
+                  >
+                    Privacy and Policy
+                  </Link>
+                  .
                 </p>
-
-                <form onSubmit={handleSubmit} className="flex flex-col gap-[7.24px]">
-                  {/* Input Row - Figma: 203.55px x 21.72px */}
-                  <div className="flex items-stretch h-[21.72px] w-[204px] rounded-[6.58px]">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      required
-                      className="w-[155px] px-[10.53px] py-[8.89px] bg-white/10 text-white placeholder:text-white text-[5.92px] font-inter rounded-l-[9.87px] border-0 outline-none focus:ring-1 focus:ring-white/30"
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-[48px] bg-white text-[#00A792] font-inter font-bold text-[5.27px] px-[10.53px] rounded-r-[9.87px] hover:bg-white/95 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shadow-[0px_3.29px_3.29px_rgba(16,137,255,0.1)]"
-                    >
-                      {isSubmitting ? "..." : "Subscribe"}
-                    </button>
-                  </div>
-
-                  {/* Privacy text - Figma: 6.582px, 150% line-height, #ECECEC */}
-                  <p className="font-poppins font-normal text-[6.58px] leading-[150%] text-[#ECECEC] text-left">
-                    by subscribing you agree to our{" "}
-                    <Link
-                      href="/privacy-policy"
-                      className="underline hover:text-white transition-colors"
-                    >
-                      Privacy and Policy
-                    </Link>
-                    .
-                  </p>
-                </form>
-              </div>
-            )}
+              </form>
+            </div>
           </div>
         </div>
 
@@ -109,51 +106,41 @@ export function EmailSubscriptionSection() {
 
             {/* Right Side - Form */}
             <div>
-              {isSubscribed ? (
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 text-left">
-                  <p className="text-white font-poppins font-semibold text-lg">
-                    Thank you for subscribing! Check your email for confirmation.
-                  </p>
+              <p className="font-poppins font-normal text-lg text-white mb-4">
+                Stay up to date
+              </p>
+              <form onSubmit={handleSubmit}>
+                <div className="relative mb-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    className="w-full pl-6 pr-36 py-5 rounded-full border-0 bg-white/10 backdrop-blur-sm text-white placeholder:text-white/70 outline-none focus:ring-2 focus:ring-white/50 font-poppins text-base h-[62px]"
+                    style={{
+                      backdropFilter: 'blur(10px)',
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="absolute right-0 top-0 bottom-0 bg-white text-[#1BA098] hover:bg-white/95 rounded-r-full px-8 font-poppins font-semibold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    {isSubmitting ? "Subscribing..." : "Subscribe"}
+                  </button>
                 </div>
-              ) : (
-                <div>
-                  <p className="font-poppins font-normal text-lg text-white mb-4">
-                    Stay up to date
-                  </p>
-                  <form onSubmit={handleSubmit}>
-                    <div className="relative mb-4">
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                        required
-                        className="w-full pl-6 pr-36 py-5 rounded-full border-0 bg-white/10 backdrop-blur-sm text-white placeholder:text-white/70 outline-none focus:ring-2 focus:ring-white/50 font-poppins text-base"
-                        style={{
-                          backdropFilter: 'blur(10px)',
-                        }}
-                      />
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-white text-[#1BA098] hover:bg-white/95 rounded-tl-none rounded-tr-full rounded-br-full rounded-bl-none px-8 py-5 font-poppins font-semibold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isSubmitting ? "Subscribing..." : "Subscribe"}
-                      </button>
-                    </div>
-                    <p className="text-white/90 text-sm font-poppins">
-                      by subscribing you agree to our{" "}
-                      <Link
-                        href="/privacy-policy"
-                        className="underline hover:text-white transition-colors"
-                      >
-                        Privacy and Policy
-                      </Link>
-                      .
-                    </p>
-                  </form>
-                </div>
-              )}
+                <p className="text-white/90 text-sm font-poppins">
+                  by subscribing you agree to our{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="underline hover:text-white transition-colors"
+                  >
+                    Privacy and Policy
+                  </Link>
+                  .
+                </p>
+              </form>
             </div>
           </div>
         </div>

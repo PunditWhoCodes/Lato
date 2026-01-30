@@ -368,6 +368,8 @@ export function ListingClient() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
 
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
     // Update URL with page and maintain countries filter
     const params = new URLSearchParams()
     if (countriesParam) params.set("countries", countriesParam)
@@ -675,7 +677,7 @@ export function ListingClient() {
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-1.5 rounded-[6px] transition-colors ${
+                    className={`p-1.5 rounded-md transition-colors ${
                       viewMode === "list"
                         ? "bg-[#00A792] text-white"
                         : "text-[#495560] hover:bg-[#F7F7F7]"
