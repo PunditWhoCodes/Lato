@@ -39,7 +39,7 @@ export default function RegisterPage() {
   const [currentStep, setCurrentStep] = useState<RegistrationStep>("select_type")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [country, setCountry] = useState("Greece")
+  const [country, setCountry] = useState("")
   const [mobileNumber, setMobileNumber] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -50,7 +50,7 @@ export default function RegisterPage() {
   const [localLoading, setLocalLoading] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const selectedCountry = countries.find(c => c.name === country) || countries[0]
+  const selectedCountry = country ? countries.find(c => c.name === country) : null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,6 +60,11 @@ export default function RegisterPage() {
     // Email format validation
     if (!EMAIL_REGEX.test(email)) {
       setLocalError("Please enter a valid email address")
+      return
+    }
+
+    if (!country) {
+      setLocalError("Please select a country")
       return
     }
 
@@ -297,10 +302,12 @@ export default function RegisterPage() {
                     type="button"
                     onClick={() => setShowCountryDropdown(!showCountryDropdown)}
                     disabled={showLoading}
-                    className="w-full px-[14px] md:px-6 py-[6px] md:py-3 h-[27px] md:h-auto border border-[#D9D9D9] rounded-[28px] md:rounded-full text-[10px] md:text-base text-black text-left flex items-center justify-between focus:outline-none focus:border-[#00A792] transition-colors cursor-pointer disabled:opacity-50"
+                    className="w-full px-3.5 md:px-6 py-1.5 md:py-3 h-[27px] md:h-auto border border-[#D9D9D9] rounded-[28px] md:rounded-full text-[10px] md:text-base text-black text-left flex items-center justify-between focus:outline-none focus:border-[#00A792] transition-colors disabled:opacity-50"
                   >
-                    <span className="font-medium">{country}</span>
-                    <ChevronDown className={`w-3 h-3 md:w-5 md:h-5 text-black transition-transform cursor-pointer ${showCountryDropdown ? 'rotate-180' : ''}`} />
+                    <span className={country ? '' : 'text-[#D9D9D9]'}>
+                      {country || "Select Country"}
+                    </span>
+                    <ChevronDown className={`w-3 h-3 md:w-5 md:h-5 text-black transition-transform ${showCountryDropdown ? 'rotate-180' : ''}`} />
                   </button>
 
                   {showCountryDropdown && (
