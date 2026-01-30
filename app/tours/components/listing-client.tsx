@@ -368,6 +368,8 @@ export function ListingClient() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
 
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
     // Update URL with page and maintain countries filter
     const params = new URLSearchParams()
     if (countriesParam) params.set("countries", countriesParam)
