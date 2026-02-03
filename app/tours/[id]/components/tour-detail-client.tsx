@@ -170,10 +170,14 @@ export function TourDetailClient({ tourId }: TourDetailClientProps) {
     difficulty: tourDetail?.difficulty || tour?.difficulty || staticFallbackData.difficulty,
     minAge: staticFallbackData.minAge,
     languages: tourDetail?.languages || staticFallbackData.languages,
-    // Use real images from API if available
-    images: (tourDetail?.images && tourDetail.images.length > 0)
-      ? tourDetail.images
-      : (tour?.image ? [tour.image, ...staticFallbackData.images.slice(1)] : staticFallbackData.images),
+    images: (() => {
+      const VIDEO_EXT = /\.(mp4|webm|ogg|mov|avi|mkv)(\?|$)/i
+      const raw = (tourDetail?.images && tourDetail.images.length > 0)
+        ? tourDetail.images
+        : (tour?.image ? [tour.image, ...staticFallbackData.images.slice(1)] : staticFallbackData.images)
+      const filtered = raw.filter((url: string) => !VIDEO_EXT.test(url))
+      return filtered.length > 0 ? filtered : staticFallbackData.images
+    })(),
     // Use real highlights from API
     highlights: (tourDetail?.highlights && tourDetail.highlights.length > 0)
       ? tourDetail.highlights
