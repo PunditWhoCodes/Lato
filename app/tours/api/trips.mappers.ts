@@ -387,6 +387,12 @@ function mapLocation(location: APILocation | undefined | null): LocationCoordina
   }
 }
 
+const VIDEO_EXTENSIONS = /\.(mp4|webm|ogg|mov|avi|mkv)(\?|$)/i
+
+function isImageUrl(url: string): boolean {
+  return !VIDEO_EXTENSIONS.test(url)
+}
+
 /**
  * Extract image URLs from API images or library image relations
  */
@@ -396,21 +402,19 @@ function extractImageUrls(
 ): string[] {
   const urls: string[] = []
 
-  // Add direct images
   if (images && images.length > 0) {
     images.forEach(img => {
-      if (img.url) urls.push(img.url)
-      else if (img.originUrl) urls.push(img.originUrl)
+      const url = img.url || img.originUrl
+      if (url && isImageUrl(url)) urls.push(url)
     })
   }
 
-  // Add library images
   if (libraryRelations && libraryRelations.length > 0) {
     libraryRelations
       .sort((a, b) => a.ord - b.ord)
       .forEach(rel => {
-        if (rel.libraryImage?.url) urls.push(rel.libraryImage.url)
-        else if (rel.libraryImage?.originUrl) urls.push(rel.libraryImage.originUrl)
+        const url = rel.libraryImage?.url || rel.libraryImage?.originUrl
+        if (url && isImageUrl(url)) urls.push(url)
       })
   }
 
@@ -530,26 +534,23 @@ function mapTripdayToItineraryDay(tripday: APITripday): ItineraryDay {
 export function extractAllTripImages(tripDetail: APITripDetailResponse): string[] {
   const images: string[] = []
 
-  // Collect images from all tripdays
   tripDetail.tripdays?.forEach(tripday => {
-    // Tripday background image
-    if (tripday.image?.url) images.push(tripday.image.url)
+    if (tripday.image?.url && isImageUrl(tripday.image.url)) {
+      images.push(tripday.image.url)
+    }
 
-    // Destination images
     if (tripday.destination?.images) {
       tripday.destination.images.forEach(img => {
-        if (img.url) images.push(img.url)
+        if (img.url && isImageUrl(img.url)) images.push(img.url)
       })
     }
 
-    // Hotel images
     tripday.hotels?.forEach(hotel => {
       hotel.images?.forEach(img => {
-        if (img.url) images.push(img.url)
+        if (img.url && isImageUrl(img.url)) images.push(img.url)
       })
     })
 
-    // Event images
     tripday.events?.forEach(event => {
       extractImageUrls(event.images, event.libraryImageRelations).forEach(url => {
         images.push(url)
@@ -557,7 +558,6 @@ export function extractAllTripImages(tripDetail: APITripDetailResponse): string[
     })
   })
 
-  // Remove duplicates
   return [...new Set(images)]
 }
 

@@ -10,6 +10,7 @@ export interface TourCardData {
   image: string
   title: string
   subtitle: string
+  company: string
   location: string
   rating: number
   groupSize: string
