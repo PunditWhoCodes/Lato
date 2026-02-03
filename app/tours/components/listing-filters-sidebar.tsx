@@ -231,6 +231,17 @@ export function ListingFiltersSidebar({
         </div>
       </Section>
 
+      {/* Duration */}
+      <Section title="Duration">
+        <DualRangeSlider
+          min={1}
+          max={30}
+          values={durationRange}
+          onChange={setDurationRange}
+          formatLabel={(v, type) => type === "min" ? `Min. ${v} days` : `${v}+ Days`}
+        />
+      </Section>
+
       {/* Group */}
       <Section title="Group">
         <div className="space-y-3">
@@ -335,17 +346,6 @@ export function ListingFiltersSidebar({
             count={3809}
           />
         </div>
-      </Section>
-
-      {/* Duration */}
-      <Section title="Duration">
-        <DualRangeSlider
-          min={1}
-          max={30}
-          values={durationRange}
-          onChange={setDurationRange}
-          formatLabel={(v, type) => type === "min" ? `Min. ${v} days` : `${v}+ Days`}
-        />
       </Section>
 
       {/* Travel Style Accordion */}
