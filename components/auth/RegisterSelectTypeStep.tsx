@@ -49,7 +49,7 @@ export function RegisterSelectTypeStep({ onSelect, isLoading = false }: Register
           <button
             type="button"
             onClick={() => setSelectedType("traveler")}
-            className={`relative h-[141px] md:h-auto md:p-6 rounded-[10px] md:rounded-xl border transition-all ${
+            className={`relative h-[141px] md:h-auto md:p-6 rounded-[10px] md:rounded-xl border transition-all cursor-pointer ${
               selectedType === "traveler"
                 ? "border-[#00A792] bg-[#F0FDFC]"
                 : "border-[#D9D9D9] hover:border-[#D1D5DB]"
@@ -86,7 +86,7 @@ export function RegisterSelectTypeStep({ onSelect, isLoading = false }: Register
           <button
             type="button"
             onClick={() => setSelectedType("tour_operator")}
-            className={`relative h-[141px] md:h-auto md:p-6 rounded-[10px] md:rounded-xl border transition-all ${
+            className={`relative h-[141px] md:h-auto md:p-6 rounded-[10px] md:rounded-xl border transition-all cursor-pointer ${
               selectedType === "tour_operator"
                 ? "border-[#00A792] bg-[#F0FDFC]"
                 : "border-[#D9D9D9] hover:border-[#D1D5DB]"
@@ -124,7 +124,7 @@ export function RegisterSelectTypeStep({ onSelect, isLoading = false }: Register
         <button
           type="submit"
           disabled={!selectedType || isLoading}
-          className="w-full max-w-[245px] md:max-w-full mx-auto block bg-[#00A792] hover:bg-[#008F84] text-white font-semibold py-2 md:py-3.5 h-[30px] md:h-auto text-[8px] md:text-base rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full max-w-[245px] md:max-w-full mx-auto block bg-[#00A792] hover:bg-[#008F84] text-white font-semibold py-2 md:py-3.5 h-[30px] md:h-auto text-[8px] md:text-base rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Creating Account..." : "Create Account"}
         </button>

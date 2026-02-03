@@ -42,7 +42,7 @@ export function AppliedFilters({
             <button
               onClick={() => onRemoveFilter(filter.id, filter.type)}
               aria-label="Remove filter"
-              className="p-1 hover:opacity-60 transition"
+              className="p-1 hover:opacity-60 transition cursor-pointer"
             >
               <X className="w-4 h-4 text-[#6B7280]" />
             </button>
@@ -53,7 +53,7 @@ export function AppliedFilters({
       {/* Clear all */}
       <button
         onClick={onClearAll}
-        className="mt-6 w-full rounded-full bg-[#EFEFEF] py-3 text-center text-[14px] font-medium text-[#00A792] hover:bg-[#E5E5E5] transition"
+        className="mt-6 w-full rounded-full bg-[#EFEFEF] py-3 text-center text-[14px] font-medium text-[#00A792] hover:bg-[#E5E5E5] transition cursor-pointer"
       >
         Clear all
       </button>

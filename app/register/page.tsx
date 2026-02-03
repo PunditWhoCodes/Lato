@@ -39,7 +39,7 @@ export default function RegisterPage() {
   const [currentStep, setCurrentStep] = useState<RegistrationStep>("select_type")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [country, setCountry] = useState("Greece")
+  const [country, setCountry] = useState("")
   const [mobileNumber, setMobileNumber] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -50,7 +50,7 @@ export default function RegisterPage() {
   const [localLoading, setLocalLoading] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const selectedCountry = countries.find(c => c.name === country) || countries[0]
+  const selectedCountry = country ? countries.find(c => c.name === country) : null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,6 +60,11 @@ export default function RegisterPage() {
     // Email format validation
     if (!EMAIL_REGEX.test(email)) {
       setLocalError("Please enter a valid email address")
+      return
+    }
+
+    if (!country) {
+      setLocalError("Please select a country")
       return
     }
 
@@ -297,9 +302,11 @@ export default function RegisterPage() {
                     type="button"
                     onClick={() => setShowCountryDropdown(!showCountryDropdown)}
                     disabled={showLoading}
-                    className="w-full px-[14px] md:px-6 py-[6px] md:py-3 h-[27px] md:h-auto border border-[#D9D9D9] rounded-[28px] md:rounded-full text-[10px] md:text-base text-black text-left flex items-center justify-between focus:outline-none focus:border-[#00A792] transition-colors disabled:opacity-50"
+                    className="w-full px-3.5 md:px-6 py-1.5 md:py-3 h-[27px] md:h-auto border border-[#D9D9D9] rounded-[28px] md:rounded-full text-[10px] md:text-base text-black text-left flex items-center justify-between focus:outline-none focus:border-[#00A792] transition-colors disabled:opacity-50"
                   >
-                    <span className="font-medium">{country}</span>
+                    <span className={country ? '' : 'text-[#D9D9D9]'}>
+                      {country || "Select Country"}
+                    </span>
                     <ChevronDown className={`w-3 h-3 md:w-5 md:h-5 text-black transition-transform ${showCountryDropdown ? 'rotate-180' : ''}`} />
                   </button>
 
@@ -353,7 +360,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280]"
+                    className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280] cursor-pointer"
                   >
                     {showPassword ? <EyeOff className="w-3.5 h-3.5 md:w-5 md:h-5" /> : <Eye className="w-3.5 h-3.5 md:w-5 md:h-5" />}
                   </button>
@@ -366,7 +373,7 @@ export default function RegisterPage() {
                   type="button"
                   onClick={() => setAcceptTerms(!acceptTerms)}
                   disabled={showLoading}
-                  className={`w-[9px] h-[10px] md:w-4 md:h-4 border border-black rounded-[2px] md:rounded flex items-center justify-center shrink-0 ${
+                  className={`w-[9px] h-[10px] md:w-4 md:h-4 border border-black rounded-[2px] md:rounded flex items-center justify-center shrink-0 cursor-pointer ${
                     acceptTerms ? "bg-[#00A792] border-[#00A792]" : "bg-white"
                   }`}
                 >
@@ -386,11 +393,14 @@ export default function RegisterPage() {
                     </svg>
                   )}
                 </button>
-                <span className="text-[9px] md:text-sm text-black leading-tight">
+                <span
+                  className="text-[9px] md:text-sm text-black leading-tight cursor-pointer"
+                  onClick={() => !showLoading && setAcceptTerms(!acceptTerms)}
+                >
                   By proceeding, you accept our{" "}
-                  <Link href="/terms" className="text-[#00A792] hover:underline">Terms of Use</Link>
+                  <Link href="/terms" className="text-[#00A792] hover:underline" onClick={(e) => e.stopPropagation()}>Terms of Use</Link>
                   {" "}and{" "}
-                  <Link href="/privacy" className="text-[#00A792] hover:underline">Data Policy</Link>
+                  <Link href="/privacy" className="text-[#00A792] hover:underline" onClick={(e) => e.stopPropagation()}>Data Policy</Link>
                 </span>
               </div>
 
@@ -398,7 +408,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={showLoading}
-                className="w-full max-w-[245px] md:max-w-full mx-auto bg-[#00A792] hover:bg-[#008F84] text-white font-semibold py-[7px] md:py-3.5 h-[30px] md:h-auto text-[8.5px] md:text-base rounded-full transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-1"
+                className="w-full max-w-[245px] md:max-w-full mx-auto bg-[#00A792] hover:bg-[#008F84] text-white font-semibold py-[7px] md:py-3.5 h-[30px] md:h-auto text-[8.5px] md:text-base rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-1"
               >
                 {showLoading ? (
                   <>
@@ -424,7 +434,7 @@ export default function RegisterPage() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={showLoading}
-                className="w-full flex items-center justify-center gap-[6px] md:gap-3 px-3 md:px-5 py-[2px] md:py-3 h-[29px] md:h-[50px] border border-[#D9D9D9] rounded-[20px] md:rounded-full hover:bg-[#F9FAFB] transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-[6px] md:gap-3 px-3 md:px-5 py-[2px] md:py-3 h-[29px] md:h-[50px] border border-[#D9D9D9] rounded-[20px] md:rounded-full hover:bg-[#F9FAFB] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-[14px] h-[14px] md:w-6 md:h-6" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -439,7 +449,7 @@ export default function RegisterPage() {
                 type="button"
                 onClick={handleAppleSignIn}
                 disabled={showLoading}
-                className="w-full flex items-center justify-center gap-[6px] md:gap-3 px-3 md:px-5 py-[2px] md:py-3 h-[29px] md:h-[50px] border border-[#D9D9D9] rounded-[20px] md:rounded-full hover:bg-[#F9FAFB] transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-[6px] md:gap-3 px-3 md:px-5 py-[2px] md:py-3 h-[29px] md:h-[50px] border border-[#D9D9D9] rounded-[20px] md:rounded-full hover:bg-[#F9FAFB] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-[14px] h-[14px] md:w-6 md:h-6" viewBox="0 0 24 24" fill="#000">
                   <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
@@ -492,7 +502,7 @@ export default function RegisterPage() {
       <button
         type="button"
         onClick={handleBack}
-        className="absolute top-[78px] left-4 md:top-8 md:left-8 z-20 w-[38px] h-[37px] md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors touch-manipulation"
+        className="absolute top-[78px] left-4 md:top-8 md:left-8 z-20 w-[38px] h-[37px] md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors touch-manipulation cursor-pointer"
       >
         <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white pointer-events-none" />
       </button>
