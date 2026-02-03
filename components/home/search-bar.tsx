@@ -2,7 +2,7 @@
 
 import { MapPin, ChevronLeft, ChevronRight, Calendar, Minus, Plus, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 // Destination names with their country codes for URL navigation
@@ -49,12 +49,10 @@ export function SearchBar() {
   const [destination, setDestination] = useState("")
   const [showDestinationDropdown, setShowDestinationDropdown] = useState(false)
 
-  // Date state - Start and End dates
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
-  const [dateType, setDateType] = useState<"start" | "end">("start")
+  // Month picker state
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [showCalendar, setShowCalendar] = useState(false)
-  const [currentMonth, setCurrentMonth] = useState(new Date())
 
   // Passengers state
   const [adults, setAdults] = useState(1)
@@ -121,14 +119,9 @@ export function SearchBar() {
       }
     }
 
-    // Add dates if selected (format: YYYY-MM-DD)
-    if (startDate) {
-      const startDateStr = startDate.toISOString().split("T")[0]
-      params.set("startDate", startDateStr)
-    }
-    if (endDate) {
-      const endDateStr = endDate.toISOString().split("T")[0]
-      params.set("endDate", endDateStr)
+    if (selectedMonth) {
+      params.set("month", selectedMonth)
+      params.set("year", String(selectedYear))
     }
 
     // Add passengers
@@ -144,108 +137,35 @@ export function SearchBar() {
     router.push(`/tours${queryString ? `?${queryString}` : ""}`)
   }
 
-  // Calendar helpers
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear()
-    const month = date.getMonth()
-    const firstDay = new Date(year, month, 1)
-    const lastDay = new Date(year, month + 1, 0)
-    const daysInMonth = lastDay.getDate()
-    const startingDay = firstDay.getDay()
-    return { daysInMonth, startingDay }
+  const MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ]
+
+  const MONTH_SHORT = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  ]
+
+  const getMonthDisplay = () => {
+    if (!selectedMonth) return "Select Month"
+    return `${selectedMonth} ${selectedYear}`
   }
 
-  const formatDate = (date: Date | null) => {
-    if (!date) return ""
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-  }
-
-  const isToday = (day: number) => {
-    const today = new Date()
-    return (
-      day === today.getDate() &&
-      currentMonth.getMonth() === today.getMonth() &&
-      currentMonth.getFullYear() === today.getFullYear()
-    )
-  }
-
-  const isStartDate = (day: number) => {
-    if (!startDate) return false
-    return (
-      day === startDate.getDate() &&
-      currentMonth.getMonth() === startDate.getMonth() &&
-      currentMonth.getFullYear() === startDate.getFullYear()
-    )
-  }
-
-  const isEndDate = (day: number) => {
-    if (!endDate) return false
-    return (
-      day === endDate.getDate() &&
-      currentMonth.getMonth() === endDate.getMonth() &&
-      currentMonth.getFullYear() === endDate.getFullYear()
-    )
-  }
-
-  const isInRange = (day: number) => {
-    if (!startDate || !endDate) return false
-    const currentDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
-    return currentDate > startDate && currentDate < endDate
-  }
-
-  const handleDateSelect = useCallback((day: number) => {
-    const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
-
-    if (dateType === "start") {
-      setStartDate(newDate)
-      // If end date is before start date, clear it
-      if (endDate && newDate > endDate) {
-        setEndDate(null)
-      }
-      // Auto-switch to end date selection
-      setDateType("end")
-    } else {
-      // If selected end date is before start date, swap them
-      if (startDate && newDate < startDate) {
-        setEndDate(startDate)
-        setStartDate(newDate)
-      } else {
-        setEndDate(newDate)
-      }
-      // Close calendar after selecting end date
-      setShowCalendar(false)
-      setDateType("start") // Reset for next time
-    }
-  }, [currentMonth, dateType, startDate, endDate])
-
-  // Format date range for display
-  const getDateRangeDisplay = () => {
-    if (!startDate && !endDate) return "Select Dates"
-
-    const formatShort = (date: Date) => {
-      return date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
-    }
-
-    if (startDate && endDate) {
-      return `${formatShort(startDate)} - ${formatShort(endDate)}`
-    }
-    if (startDate) {
-      return `${formatShort(startDate)} - ?`
-    }
-    if (endDate) {
-      return `? - ${formatShort(endDate)}`
-    }
-    return "Select Dates"
-  }
-
-  const goToPrevMonth = (e: React.MouseEvent) => {
+  const handleMonthSelect = (e: React.MouseEvent, month: string) => {
     e.stopPropagation()
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
+    setSelectedMonth(month)
+    setShowCalendar(false)
   }
 
-  const goToNextMonth = (e: React.MouseEvent) => {
+  const goToPrevYear = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
+    setSelectedYear(selectedYear - 1)
+  }
+
+  const goToNextYear = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSelectedYear(selectedYear + 1)
   }
 
   // Passenger summary text
@@ -279,14 +199,6 @@ export function SearchBar() {
     setDestination(dest)
     setShowDestinationDropdown(false)
   }
-
-  // Handle day select
-  const handleDayClick = (e: React.MouseEvent, day: number) => {
-    e.stopPropagation()
-    handleDateSelect(day)
-  }
-
-  const { daysInMonth, startingDay } = getDaysInMonth(currentMonth)
 
   return (
     <div className="mx-auto w-full max-w-[1462px] p-0 md:p-8 lg:py-[46px] lg:px-8 bg-transparent md:bg-white/8 md:backdrop-blur-[55.55px] rounded-[19.69px]">
@@ -340,116 +252,53 @@ export function SearchBar() {
               }}
               className="w-full h-full flex items-center justify-between outline-none bg-transparent font-montserrat text-sm lg:text-base cursor-pointer"
             >
-              <span className={startDate || endDate ? "text-[#112211]" : "text-[#112211]/50"}>
-                {getDateRangeDisplay()}
+              <span className={selectedMonth ? "text-[#112211]" : "text-[#112211]/50"}>
+                {getMonthDisplay()}
               </span>
               <Calendar className="w-5 h-5 text-[#00A792]" />
             </button>
 
-            {/* Calendar Dropdown */}
+            {/* Month Picker Dropdown */}
             {showCalendar && (
               <div
                 className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4 w-[320px]"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Date Type Toggle */}
-                <div className="flex gap-2 mb-4">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setDateType("start")
-                    }}
-                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
-                      dateType === "start"
-                        ? "bg-[#00A792] text-white"
-                        : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
-                    }`}
-                  >
-                    Start Date {startDate ? "✓" : "*"}
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setDateType("end")
-                    }}
-                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
-                      dateType === "end"
-                        ? "bg-[#00A792] text-white"
-                        : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
-                    }`}
-                  >
-                    End Date {endDate ? "✓" : "*"}
-                  </button>
-                </div>
-
-                {/* Calendar Header */}
+                {/* Year Navigation */}
                 <div className="flex items-center justify-between mb-4">
                   <button
-                    onClick={goToPrevMonth}
+                    onClick={goToPrevYear}
                     className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5 text-[#112211]" />
                   </button>
                   <span className="font-medium text-[#112211]">
-                    {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                    {selectedYear}
                   </span>
                   <button
-                    onClick={goToNextMonth}
+                    onClick={goToNextYear}
                     className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5 text-[#112211]" />
                   </button>
                 </div>
 
-                {/* Day Headers */}
-                <div className="grid grid-cols-7 gap-1 mb-2">
-                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                    <div key={day} className="text-center text-xs font-medium text-gray-500 py-1">
-                      {day}
-                    </div>
+                {/* Month Grid (4x3) */}
+                <div className="grid grid-cols-4 gap-2">
+                  {MONTH_NAMES.map((month, index) => (
+                    <button
+                      key={month}
+                      onClick={(e) => handleMonthSelect(e, month)}
+                      className={`py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                        selectedMonth === month && selectedYear === selectedYear
+                          ? "bg-[#00A792] text-white"
+                          : "hover:bg-[#E6F7F5] text-[#112211]"
+                      }`}
+                    >
+                      {MONTH_SHORT[index]}
+                    </button>
                   ))}
                 </div>
-
-                {/* Calendar Days */}
-                <div className="grid grid-cols-7 gap-1">
-                  {/* Empty cells for days before the first day of the month */}
-                  {Array.from({ length: startingDay }).map((_, index) => (
-                    <div key={`empty-${index}`} className="w-9 h-9" />
-                  ))}
-                  {/* Actual days */}
-                  {Array.from({ length: daysInMonth }).map((_, index) => {
-                    const day = index + 1
-                    const isStart = isStartDate(day)
-                    const isEnd = isEndDate(day)
-                    const inRange = isInRange(day)
-
-                    return (
-                      <button
-                        key={day}
-                        onClick={(e) => handleDayClick(e, day)}
-                        className={`w-9 h-9 rounded-full text-sm transition-colors cursor-pointer ${
-                          isStart || isEnd
-                            ? "bg-[#00A792] text-white"
-                            : inRange
-                            ? "bg-[#E6F7F5] text-[#00A792]"
-                            : isToday(day)
-                            ? "ring-1 ring-[#00A792] text-[#00A792]"
-                            : "hover:bg-gray-100 text-[#112211]"
-                        }`}
-                      >
-                        {day}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {/* Selected dates summary */}
-                {(startDate || endDate) && (
-                  <div className="mt-4 pt-3 border-t border-gray-100 text-sm text-[#6B7280]">
-                    {startDate && <div>Start: {formatDate(startDate)}</div>}
-                    {endDate && <div>End: {formatDate(endDate)}</div>}
-                  </div>
-                )}
               </div>
             )}
           </div>
@@ -612,8 +461,8 @@ export function SearchBar() {
               }}
               className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-0 cursor-pointer"
             >
-              <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${startDate || endDate ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
-                {startDate || endDate ? getDateRangeDisplay() : "Travel Style"}
+              <span className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${selectedMonth ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}>
+                {selectedMonth ? getMonthDisplay() : "Select Month"}
               </span>
               {/* Calendar Icon Container */}
               <div className="flex items-center justify-center w-[44.6px] h-[44.6px] p-[11.15px]">
@@ -626,108 +475,47 @@ export function SearchBar() {
               </div>
             </button>
 
-            {/* Calendar Dropdown - Mobile */}
+            {/* Month Picker Dropdown - Mobile */}
             {showCalendar && (
               <div
                 className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[20px] shadow-lg z-50 p-4"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Date Type Toggle */}
-                <div className="flex gap-2 mb-4">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setDateType("start")
-                    }}
-                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all cursor-pointer ${
-                      dateType === "start"
-                        ? "bg-[#00A792] text-white"
-                        : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
-                    }`}
-                  >
-                    Start Date {startDate ? "✓" : "*"}
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setDateType("end")
-                    }}
-                    className={`flex-1 py-2 rounded-full text-[12.08px] font-medium transition-all cursor-pointer ${
-                      dateType === "end"
-                        ? "bg-[#00A792] text-white"
-                        : "border border-[#00A792] text-[#00A792] hover:bg-[#E6F7F5]"
-                    }`}
-                  >
-                    End Date {endDate ? "✓" : "*"}
-                  </button>
-                </div>
-
-                {/* Calendar Header */}
+                {/* Year Navigation */}
                 <div className="flex items-center justify-between mb-4">
                   <button
-                    onClick={goToPrevMonth}
+                    onClick={goToPrevYear}
                     className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5 text-[#112211]" />
                   </button>
                   <span className="font-medium text-[#112211] text-[12.08px]">
-                    {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                    {selectedYear}
                   </span>
                   <button
-                    onClick={goToNextMonth}
+                    onClick={goToNextYear}
                     className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5 text-[#112211]" />
                   </button>
                 </div>
 
-                {/* Day Headers */}
-                <div className="grid grid-cols-7 gap-1 mb-2">
-                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                    <div key={day} className="text-center text-[10px] font-medium text-gray-500 py-1">
-                      {day}
-                    </div>
+                {/* Month Grid (4x3) */}
+                <div className="grid grid-cols-4 gap-2">
+                  {MONTH_NAMES.map((month, index) => (
+                    <button
+                      key={month}
+                      onClick={(e) => handleMonthSelect(e, month)}
+                      className={`py-2 rounded-lg text-[12px] font-medium transition-colors cursor-pointer ${
+                        selectedMonth === month
+                          ? "bg-[#00A792] text-white"
+                          : "hover:bg-[#E6F7F5] text-[#112211]"
+                      }`}
+                    >
+                      {MONTH_SHORT[index]}
+                    </button>
                   ))}
                 </div>
-
-                {/* Calendar Days */}
-                <div className="grid grid-cols-7 gap-1">
-                  {Array.from({ length: startingDay }).map((_, index) => (
-                    <div key={`empty-mobile-${index}`} className="w-8 h-8" />
-                  ))}
-                  {Array.from({ length: daysInMonth }).map((_, index) => {
-                    const day = index + 1
-                    const isStart = isStartDate(day)
-                    const isEnd = isEndDate(day)
-                    const inRange = isInRange(day)
-
-                    return (
-                      <button
-                        key={day}
-                        onClick={(e) => handleDayClick(e, day)}
-                        className={`w-8 h-8 rounded-full text-[12px] transition-colors cursor-pointer ${
-                          isStart || isEnd
-                            ? "bg-[#00A792] text-white"
-                            : inRange
-                            ? "bg-[#E6F7F5] text-[#00A792]"
-                            : isToday(day)
-                            ? "ring-1 ring-[#00A792] text-[#00A792]"
-                            : "hover:bg-gray-100 text-[#112211]"
-                        }`}
-                      >
-                        {day}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {/* Selected dates summary */}
-                {(startDate || endDate) && (
-                  <div className="mt-4 pt-3 border-t border-gray-100 text-[12.08px] text-[#6B7280]">
-                    {startDate && <div>Start: {formatDate(startDate)}</div>}
-                    {endDate && <div>End: {formatDate(endDate)}</div>}
-                  </div>
-                )}
               </div>
             )}
           </div>
