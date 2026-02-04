@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { PassengerCounter } from "./passenger-counter";
 
 // Destination names with their country codes for URL navigation
 const DESTINATIONS: { name: string; code: string }[] = [
@@ -67,7 +68,7 @@ export function SearchBar() {
 	// Passengers state
 	const [adults, setAdults] = useState(0);
 	const [children, setChildren] = useState(0);
-	// const [rooms, setRooms] = useState(1) -- unused
+	const [rooms, setRooms] = useState(0);
 
 	// Refs for desktop
 	const destinationDesktopRef = useRef<HTMLDivElement>(null);
@@ -224,6 +225,10 @@ export function SearchBar() {
 	const handleChildrenChange = (e: React.MouseEvent, delta: number) => {
 		e.stopPropagation();
 		setChildren((prev) => Math.max(0, prev + delta));
+	};
+
+	const handleRoomsChange = (e: React.MouseEvent, delta: number) => {
+		setRooms((prev) => Math.max(0, prev + delta));
 	};
 
 	// Handle done button
@@ -404,64 +409,30 @@ export function SearchBar() {
 								onClick={(e) => e.stopPropagation()}
 							>
 								{/* Adults Row */}
-								<div className="flex items-center justify-between py-3">
-									<span className="text-[#112211] ">
-										Adults
-									</span>
-									<div className="flex items-center border border-gray-200 rounded-lg">
-										<button
-											disabled={adults === 0}
-											onClick={(e) =>
-												adults > 0 &&
-												handleAdultsChange(e, -1)
-											}
-											className={`w-9 h-9 flex items-center justify-center ${adults === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
-										>
-											<Minus className="w-4 h-4" />
-										</button>
-										<span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
-											{adults}
-										</span>
-										<button
-											onClick={(e) =>
-												handleAdultsChange(e, 1)
-											}
-											className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
-										>
-											<Plus className="w-4 h-4" />
-										</button>
-									</div>
-								</div>
+								<PassengerCounter
+									label="Adults"
+									value={adults}
+									size="desktop"
+									onChange={handleAdultsChange}
+								/>
 
 								{/* Children Row */}
-								<div className="flex items-center justify-between py-3">
-									<span className="text-[#112211]">
-										Children
-									</span>
-									<div className="flex items-center border border-gray-200 rounded-lg">
-										<button
-											disabled={children === 0}
-											onClick={(e) =>
-												children > 0 &&
-												handleChildrenChange(e, -1)
-											}
-											className={`w-9 h-9 flex items-center justify-center ${children === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
-										>
-											<Minus className="w-4 h-4" />
-										</button>
-										<span className="w-9 h-9 flex items-center justify-center text-[#112211] font-medium border-x border-gray-200">
-											{children}
-										</span>
-										<button
-											onClick={(e) =>
-												handleChildrenChange(e, 1)
-											}
-											className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
-										>
-											<Plus className="w-4 h-4" />
-										</button>
-									</div>
-								</div>
+								<PassengerCounter
+									label="Children"
+									value={children}
+									size="desktop"
+									onChange={handleChildrenChange}
+								/>
+
+								{/* Rooms Row */}
+								<PassengerCounter
+									label="Rooms"
+									value={rooms}
+									size="desktop"
+									onChange={handleRoomsChange}
+								/>
+
+								<div className="h-px bg-gray-300"></div>
 
 								{/* Done Button */}
 								<div className="group pt-3">
@@ -681,7 +652,7 @@ export function SearchBar() {
 						)}
 					</div>
 
-					{/* Text Field 3 - Select Duration */}
+					{/* Passengers */}
 					<div
 						ref={passengerMobileRef}
 						className="relative w-[301px]"
@@ -750,64 +721,20 @@ export function SearchBar() {
 								onClick={(e) => e.stopPropagation()}
 							>
 								{/* Adults Row */}
-								<div className="flex items-center justify-between py-3">
-									<span className="text-[#112211] font-medium text-[12.08px]">
-										Adults
-									</span>
-									<div className="flex items-center border border-gray-200 rounded-lg">
-										<button
-											disabled={adults === 0}
-											onClick={(e) =>
-												adults > 0 &&
-												handleAdultsChange(e, -1)
-											}
-											className={`w-9 h-9 flex items-center justify-center ${adults === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
-										>
-											<Minus className="w-4 h-4" />
-										</button>
-										<span className="w-8 h-8 flex items-center justify-center text-[#112211] font-medium text-[12.08px] border-x border-gray-200">
-											{adults}
-										</span>
-										<button
-											onClick={(e) =>
-												handleAdultsChange(e, 1)
-											}
-											className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
-										>
-											<Plus className="w-4 h-4" />
-										</button>
-									</div>
-								</div>
+								<PassengerCounter
+									label="Adults"
+									value={adults}
+									size="mobile"
+									onChange={handleAdultsChange}
+								/>
 
 								{/* Children Row */}
-								<div className="flex items-center justify-between py-3">
-									<span className="text-[#112211] font-medium text-[12.08px]">
-										Children
-									</span>
-									<div className="flex items-center border border-gray-200 rounded-lg">
-										<button
-											disabled={children === 0}
-											onClick={(e) =>
-												children > 0 &&
-												handleChildrenChange(e, -1)
-											}
-											className={`w-9 h-9 flex items-center justify-center ${children === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
-										>
-											<Minus className="w-4 h-4" />
-										</button>
-										<span className="w-8 h-8 flex items-center justify-center text-[#112211] font-medium text-[12.08px] border-x border-gray-200">
-											{children}
-										</span>
-										<button
-											onClick={(e) =>
-												handleChildrenChange(e, 1)
-											}
-											className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-r-lg cursor-pointer"
-										>
-											<Plus className="w-4 h-4" />
-										</button>
-									</div>
-								</div>
+								<PassengerCounter
+									label="Children"
+									value={children}
+									size="mobile"
+									onChange={handleChildrenChange}
+								/>
 
 								{/* Done Button */}
 								<div className="group pt-3">
