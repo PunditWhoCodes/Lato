@@ -442,6 +442,7 @@ export function SearchBar() {
 										<button
 											disabled={children === 0}
 											onClick={(e) =>
+												children > 0 &&
 												handleChildrenChange(e, -1)
 											}
 											className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
@@ -787,6 +788,7 @@ export function SearchBar() {
 										<button
 											disabled={children === 0}
 											onClick={(e) =>
+												children > 0 &&
 												handleChildrenChange(e, -1)
 											}
 											className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
