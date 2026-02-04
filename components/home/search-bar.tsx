@@ -208,9 +208,19 @@ export function SearchBar() {
 	// Passenger summary text
 	const getPassengerSummary = () => {
 		const parts = [];
-		if (adults > 0) parts.push(`${adults} Adult${adults > 1 ? "s" : ""}`);
-		if (children > 0)
+
+		if (adults > 0) {
+			parts.push(`${adults} Adult${adults > 1 ? "s" : ""}`);
+		}
+
+		if (children > 0) {
 			parts.push(`${children} Child${children > 1 ? "ren" : ""}`);
+		}
+
+		if (rooms > 0) {
+			parts.push(`${rooms} Room${rooms > 1 ? "s" : ""}`);
+		}
+
 		return parts.length > 0 ? parts.join(", ") : "Passengers";
 	};
 
@@ -390,12 +400,12 @@ export function SearchBar() {
 						>
 							<span
 								className={
-									adults > 0 || children > 0
+									adults > 0 || children > 0 || rooms > 0
 										? "text-[#112211]"
 										: "text-[#112211]/50"
 								}
 							>
-								{adults > 0 || children > 0
+								{adults > 0 || children > 0 || rooms > 0
 									? getPassengerSummary()
 									: "Passengers"}
 							</span>
@@ -431,9 +441,21 @@ export function SearchBar() {
 									size="desktop"
 									onChange={handleRoomsChange}
 								/>
-
-								<div className="h-px bg-gray-300"></div>
-
+								{/* Additional text */}
+								<div>
+									<div className="border-t border-black/30 opacity-90"></div>
+									<p className="text-sm my-2 text-[#112211]">
+										Travelling with Pets?
+									</p>
+									<p className="text-xs my-1 text-[#112211]">
+										Assitance animals aren't considered
+										pets.
+									</p>
+									<p className="text-xs text-[#00A792] ">
+										Read more about Travelling with
+										assistance animals
+									</p>
+								</div>
 								{/* Done Button */}
 								<div className="group pt-3">
 									<button
@@ -667,9 +689,9 @@ export function SearchBar() {
 							className="w-[301px] h-[52px] bg-white rounded-full border border-black/[0.09] flex items-center pl-[15px] pr-0 cursor-pointer"
 						>
 							<span
-								className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${adults > 0 || children > 0 ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}
+								className={`flex-1 font-montserrat font-normal text-[12.08px] leading-[15px] text-left ${adults > 0 || children > 0 || rooms > 0 ? "text-[#1C1B1F]" : "text-[#1C1B1F]"}`}
 							>
-								{adults > 1 || children > 0
+								{adults > 1 || children > 0 || rooms > 0
 									? getPassengerSummary()
 									: "Passengers"}
 							</span>
@@ -735,6 +757,29 @@ export function SearchBar() {
 									size="mobile"
 									onChange={handleChildrenChange}
 								/>
+								{/* Rooms Row */}
+								<PassengerCounter
+									label="Rooms"
+									value={rooms}
+									size="mobile"
+									onChange={handleRoomsChange}
+								/>
+
+								{/* Additional text */}
+								<div>
+									<div className="border-t border-black/30 opacity-90"></div>
+									<p className="text-sm my-2 text-[#112211]">
+										Travelling with Pets?
+									</p>
+									<p className="text-xs my-1 text-[#112211]">
+										Assitance animals aren't considered
+										pets.
+									</p>
+									<p className="text-xs text-[#00A792] ">
+										Read more about Travelling with
+										assistance animals
+									</p>
+								</div>
 
 								{/* Done Button */}
 								<div className="group pt-3">
