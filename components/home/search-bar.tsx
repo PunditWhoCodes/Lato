@@ -415,7 +415,7 @@ export function SearchBar() {
 												adults > 0 &&
 												handleAdultsChange(e, -1)
 											}
-											className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
+											className={`w-9 h-9 flex items-center justify-center ${adults === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
 										>
 											<Minus className="w-4 h-4" />
 										</button>
@@ -445,7 +445,7 @@ export function SearchBar() {
 												children > 0 &&
 												handleChildrenChange(e, -1)
 											}
-											className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
+											className={`w-9 h-9 flex items-center justify-center ${children === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
 										>
 											<Minus className="w-4 h-4" />
 										</button>
@@ -761,7 +761,7 @@ export function SearchBar() {
 												adults > 0 &&
 												handleAdultsChange(e, -1)
 											}
-											className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
+											className={`w-9 h-9 flex items-center justify-center ${adults === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
 										>
 											<Minus className="w-4 h-4" />
 										</button>
@@ -791,7 +791,7 @@ export function SearchBar() {
 												children > 0 &&
 												handleChildrenChange(e, -1)
 											}
-											className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
+											className={`w-9 h-9 flex items-center justify-center ${children === 0 ? "text-gray-400 cursor-not-allowed" : "text-[#00A792] hover:bg-gray-50 cursor-pointer"} transition-colors rounded-l-lg`}
 										>
 											<Minus className="w-4 h-4" />
 										</button>
