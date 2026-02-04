@@ -215,8 +215,10 @@ export function SearchBar() {
 
 	// Handle passenger count changes
 	const handleAdultsChange = (e: React.MouseEvent, delta: number) => {
-		e.stopPropagation();
-		setAdults((prev) => Math.max(0, prev + delta));
+		setAdults((prev) => {
+			const next = prev + delta;
+			return Math.max(0, next);
+		});
 	};
 
 	const handleChildrenChange = (e: React.MouseEvent, delta: number) => {
@@ -410,6 +412,7 @@ export function SearchBar() {
 										<button
 											disabled={adults === 0}
 											onClick={(e) =>
+												adults > 0 &&
 												handleAdultsChange(e, -1)
 											}
 											className="w-9 h-9 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
@@ -499,7 +502,6 @@ export function SearchBar() {
 			<div className="md:hidden w-full bg-[rgba(217,217,217,0.2)] backdrop-blur-[20px] border border-white rounded-[10px] py-[18px]">
 				{/* Inner Container */}
 				<div className="flex flex-col items-center gap-[18px] w-[317px] mx-auto">
-					{/* Text Field 1 - Destination */}
 					<div
 						ref={destinationMobileRef}
 						className="relative w-[301px]"
@@ -569,7 +571,6 @@ export function SearchBar() {
 						)}
 					</div>
 
-					{/* Text Field 2 - Travel Style */}
 					<div ref={calendarMobileRef} className="relative w-[301px]">
 						<button
 							onClick={(e) => {
@@ -698,7 +699,7 @@ export function SearchBar() {
 							>
 								{adults > 1 || children > 0
 									? getPassengerSummary()
-									: "Select Duration"}
+									: "Passengers"}
 							</span>
 							{/* Users Icon Container */}
 							<div className="flex items-center justify-center w-[44.6px] h-[44.6px] p-[11.15px]">
@@ -756,6 +757,7 @@ export function SearchBar() {
 										<button
 											disabled={adults === 0}
 											onClick={(e) =>
+												adults > 0 &&
 												handleAdultsChange(e, -1)
 											}
 											className="w-8 h-8 flex items-center justify-center text-[#00A792] hover:bg-gray-50 transition-colors rounded-l-lg cursor-pointer"
