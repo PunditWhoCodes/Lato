@@ -54,7 +54,10 @@ export function TourCard({
 
 						{/* Frame 2608742 - Title and Rating Row */}
 						<div className="flex flex-row justify-between items-start w-[203.96px] h-[14px] gap-[13.55px]">
-							<h3 className="font-poppins font-medium text-[7.46px] leading-[9px] text-[#1C2B38] w-[153.61px] h-[14px] line-clamp-2">
+							<h3
+								className="font-poppins font-medium text-[7.46px] leading-[9px] text-[#1C2B38] w-[153.61px] h-[14px] line-clamp-1 truncate"
+								title={tour.title}
+							>
 								{tour.title}
 							</h3>
 							{/* Frame 2608741 - Rating */}
@@ -141,8 +144,9 @@ export function TourCard({
 						{/* Title and Rating Row */}
 						<div className="flex items-start justify-between gap-4">
 							<h3
-								className="font-poppins font-medium text-[#1C2B38] leading-tight flex-1"
+								className="font-poppins font-medium text-[#1C2B38] leading-tight flex-1 line-clamp-1"
 								style={{ fontSize: "17.86px", lineHeight: "22px" }}
+								title={tour.title}
 							>
 								{tour.title}
 							</h3>
