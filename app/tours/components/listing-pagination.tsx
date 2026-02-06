@@ -71,7 +71,7 @@ export function ListingPagination({
 			{/* Page Numbers */}
 			{pageNumbers.map((page, idx) => (
 				<button
-					key={idx}
+					key={typeof page === "number" ? `page-${page}` : `ellipsis-${idx}`}
 					onClick={() => typeof page === "number" && onPageChange(page)}
 					disabled={typeof page === "string"}
 					className={`
