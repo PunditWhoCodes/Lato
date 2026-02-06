@@ -15,6 +15,11 @@ export function ListingPagination({
 	totalPages,
 	onPageChange,
 }: ListingPaginationProps) {
+	// Guard clause
+	if (totalPages <= 0 || currentPage < 1 || currentPage > totalPages) {
+		return null;
+	}
+
 	const getPageNumbers = () => {
 		const pages: (number | string)[] = [];
 
@@ -49,7 +54,7 @@ export function ListingPagination({
 		return pages;
 	};
 
-	const pageNumbers = getPageNumbers();
+	const pageNumbers = getPageNumbers(); // auto memoized by React Compiler
 
 	const handlePrevious = () => onPageChange(currentPage - 1);
 	const handleNext = () => onPageChange(currentPage + 1);
