@@ -103,6 +103,23 @@ export function CompanySection({ company }: CompanySectionProps) {
               <span className="text-[7.3px] font-semibold text-[#A7A9AF]">{company.responseRate || "96%"}</span>
             </div>
           </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-[7.27px] mt-[9.1px]">
+            <Link
+              href={`/companies/${company.id}`}
+              className="flex-1 text-center py-[5.46px] border border-[#1C1B1F] rounded-full text-[7.86px] font-medium text-[#1C1B1F] hover:bg-[#00A792] hover:text-white hover:border-[#00A792] transition-colors"
+            >
+              View Profile
+            </Link>
+            <Link
+              href={`/messages/conv-${company.id}`}
+              className="flex-1 flex items-center justify-center gap-[3.64px] py-[5.46px] bg-[#1C1B1F] text-white rounded-full text-[7.86px] font-medium hover:bg-[#00A792] transition-colors"
+            >
+              <MessageCircle className="w-[8px] h-[8px]" />
+              Chat Now
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -145,10 +162,14 @@ export function CompanySection({ company }: CompanySectionProps) {
                   <span className="relative z-10 group-hover:text-white transition-colors duration-300">View Profile</span>
                   <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
                 </Link>
-                <button className="group relative overflow-hidden px-5 py-2 bg-[#1C1B1F] text-white rounded-full text-sm font-medium transition-colors flex items-center gap-2">
+                <Link
+                  href={`/messages/conv-${company.id}`}
+                  className="group relative overflow-hidden px-5 py-2 bg-[#1C1B1F] text-white rounded-full text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  <MessageCircle className="relative z-10 w-4 h-4" />
                   <span className="relative z-10">Chat Now</span>
                   <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
-                </button>
+                </Link>
               </div>
             </div>
 
