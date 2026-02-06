@@ -19,36 +19,32 @@ export function ListingPagination({
 		const pages: (number | string)[] = [];
 
 		if (totalPages <= MAX_VISIBLE_PAGES) {
-			for (let i = 1; i <= totalPages; i++) {
-				pages.push(i);
-			}
-		} else {
-			// Always show first page
-			pages.push(1);
-
-			if (currentPage > 3) {
-				pages.push("...");
-			}
-
-			// Show pages around current page
-			const start = Math.max(2, currentPage - 1);
-			const end = Math.min(totalPages - 1, currentPage + 1);
-
-			for (let i = start; i <= end; i++) {
-				if (!pages.includes(i)) {
-					pages.push(i);
-				}
-			}
-
-			if (currentPage < totalPages - 2) {
-				pages.push("...");
-			}
-
-			// Always show last page
-			if (!pages.includes(totalPages)) {
-				pages.push(totalPages);
-			}
+			return Array.from({ length: totalPages }, (_, i) => i + 1);
 		}
+
+		// First page
+		pages.push(1);
+
+		// Left ellipsis
+		if (currentPage > 3) {
+			pages.push("...");
+		}
+
+		// Middle pages
+		const start = Math.max(2, currentPage - 1);
+		const end = Math.min(totalPages - 1, currentPage + 1);
+
+		for (let i = start; i <= end; i++) {
+			pages.push(i);
+		}
+
+		// Right ellipsis
+		if (currentPage < totalPages - 2) {
+			pages.push("...");
+		}
+
+		// Last page (always add if totalPages > 1)
+		pages.push(totalPages);
 
 		return pages;
 	};
