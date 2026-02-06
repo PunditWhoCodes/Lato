@@ -55,6 +55,14 @@ export function ListingPagination({
 
 	const pageNumbers = getPageNumbers();
 
+	const handlePrevious = () => onPageChange(currentPage - 1);
+	const handleNext = () => onPageChange(currentPage + 1);
+	const handlePageClick = (page: number | string) => {
+		if (typeof page === "number") {
+			onPageChange(page);
+		}
+	};
+
 	return (
 		<nav
 			className="flex items-center justify-center gap-1 mt-8"
@@ -62,7 +70,7 @@ export function ListingPagination({
 		>
 			{/* Previous Button */}
 			<button
-				onClick={() => onPageChange(currentPage - 1)}
+				onClick={handlePrevious}
 				disabled={currentPage === 1}
 				className="flex items-center justify-center w-8 h-8 rounded-md text-[#495560] hover:bg-[#F7F7F7] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
 				aria-label="Previous page"
@@ -74,7 +82,7 @@ export function ListingPagination({
 			{pageNumbers.map((page, idx) => (
 				<button
 					key={typeof page === "number" ? `page-${page}` : `ellipsis-${idx}`}
-					onClick={() => typeof page === "number" && onPageChange(page)}
+					onClick={() => handlePageClick(page)}
 					disabled={typeof page === "string"}
 					className={`
             flex items-center justify-center min-w-8 h-8 text-base font-medium  transition-colors
@@ -94,7 +102,7 @@ export function ListingPagination({
 
 			{/* Next Button */}
 			<button
-				onClick={() => onPageChange(currentPage + 1)}
+				onClick={handleNext}
 				disabled={currentPage === totalPages}
 				className="flex items-center justify-center w-8 h-8 rounded-md text-[#495560] hover:bg-[#F7F7F7] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
 				aria-label="Next page"
