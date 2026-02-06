@@ -107,13 +107,13 @@ export function CompanySection({ company }: CompanySectionProps) {
           {/* Action Buttons */}
           <div className="flex items-center gap-[7.27px] mt-[9.1px]">
             <Link
-              href={`/companies/${company.id}`}
+              href="/investor/explore-co"
               className="flex-1 text-center py-[5.46px] border border-[#1C1B1F] rounded-full text-[7.86px] font-medium text-[#1C1B1F] hover:bg-[#00A792] hover:text-white hover:border-[#00A792] transition-colors"
             >
               View Profile
             </Link>
             <Link
-              href={`/messages/conv-${company.id}`}
+              href="/chats"
               className="flex-1 flex items-center justify-center gap-[3.64px] py-[5.46px] bg-[#1C1B1F] text-white rounded-full text-[7.86px] font-medium hover:bg-[#00A792] transition-colors"
             >
               <MessageCircle className="w-[8px] h-[8px]" />
@@ -156,14 +156,14 @@ export function CompanySection({ company }: CompanySectionProps) {
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
                 <Link
-                  href={`/companies/${company.id}`}
+                  href="/investor/explore-co"
                   className="group relative overflow-hidden px-5 py-2 border border-[#1C1B1F] rounded-full text-sm font-medium text-[#1C1B1F] transition-colors"
                 >
                   <span className="relative z-10 group-hover:text-white transition-colors duration-300">View Profile</span>
                   <span className="absolute inset-0 bg-[#00A792] rounded-full scale-0 opacity-0 transition-all duration-500 ease-out group-hover:scale-150 group-hover:opacity-100 z-0"></span>
                 </Link>
                 <Link
-                  href={`/messages/conv-${company.id}`}
+                  href="/chats"
                   className="group relative overflow-hidden px-5 py-2 bg-[#1C1B1F] text-white rounded-full text-sm font-medium transition-colors flex items-center gap-2"
                 >
                   <MessageCircle className="relative z-10 w-4 h-4" />
