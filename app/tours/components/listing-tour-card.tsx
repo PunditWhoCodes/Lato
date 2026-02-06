@@ -104,7 +104,7 @@ export function ListingTourCard({
 				className="bg-white rounded-[10px] overflow-hidden cursor-pointer group flex flex-col sm:flex-row border border-[#E8E8E8] hover:shadow-md transition-shadow"
 			>
 				{/* Image - Top on mobile, Left side on desktop */}
-				<div className="relative w-full h-[200px] sm:w-[50%] sm:h-auto sm:min-h-[180px] rounded-lg overflow-hidden shrink-0 m-2">
+				<div className="relative w-full aspect-square lg:w-[215px] lg:h-[215px] lg:aspect-auto rounded-lg overflow-hidden shrink-0 m-2">
 					<Image
 						src={tour.image}
 						alt={tour.title}
@@ -269,7 +269,7 @@ export function ListingTourCard({
 		>
 			{/* Image Container - with inner padding and rounded corners */}
 			<div className="p-2 pb-0">
-				<div className="relative h-[160px] rounded-[10px] overflow-hidden">
+				<div className="relative aspect-square rounded-[10px] overflow-hidden">
 					<Image
 						src={tour.image}
 						alt={tour.title}
